@@ -13,7 +13,7 @@ const AuthForm = ({ type }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#4E2A25] items-center justify-center px-4">
+    <div className="flex min-h-screen bg-[#edf6f9] items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-w-3xl w-full">
         
         {/* Left Form Section */}

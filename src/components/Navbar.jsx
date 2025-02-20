@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react"; // Icons for mobile menu
+import { Menu, X } from "lucide-react"; 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-[#ffffff] shadow-lg">
+    <nav className="bg-[#fdfdfd] shadow-lg">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         
         {/* Logo & Name Section */}
         <Link to="/" className="flex items-center space-x-3">
           <img src="src/assets/images/logo1.png" alt="Moringa Logo" className="w-12 h-12" />
-          <span className="text-black text-2xl font-bold">Moringa School</span>
+          <span className="text-[#000000] text-2xl font-bold">Moringa School</span>
         </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
-          <Link to="/" className="text-black hover:text-blue-600 transition text-base">Home</Link>
-          <Link to="/login" className="text-black hover:text-blue-600 transition text-base">Login</Link>
+          <Link to="/" className="text-black hover:text-[#ff7d00] transition text-base">Home</Link>
+          <Link to="/login" className="text-black hover:text-[#ff7d00] transition text-base">Login</Link>
           <Link 
             to="/signup" 
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-base"
+            className="bg-[#ff7d00] text-white px-4 py-2 rounded-lg hover:bg-black transition text-base"
           >
             Sign Up
           </Link>
@@ -35,13 +35,13 @@ const Navbar = () => {
 
       {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-blue-600 py-4 text-center">
-          <Link to="/" className="block text-white py-2 hover:bg-blue-500 text-base">Home</Link>
-          <Link to="/login" className="block text-white py-2 hover:bg-blue-500 text-base">Login</Link>
-          <Link to="/manage-payments" className="block text-white py-2 hover:bg-blue-500 text-base">Payments</Link>
+        <div className="md:hidden bg-[#df872e] py-4 text-center">
+          <Link to="/" className="block text-white py-2 hover:bg-[#000000] text-base">Home</Link>
+          <Link to="/login" className="block text-white py-2 hover:bg-[#000000] text-base">Login</Link>
+
           <Link 
             to="/signup" 
-            className="block bg-white text-blue-600 py-2 mx-4 mt-2 rounded-lg hover:bg-gray-200 text-base"
+            className="block bg-[#df872e] text-[#ffffff] py-2 mx-4 mt-2 rounded-lg hover:bg-[#000000] text-base"
           >
             Sign Up
           </Link>
