@@ -10,6 +10,9 @@ export default {
         ubuntu: ['Ubuntu', 'sans-serif'], 
         gotham: ['Gotham Rounded', 'sans-serif'], 
       },
+      gridTemplateColumns: {
+        "70/30" : "70% 28%"
+      }
     },
   },
   plugins: [],

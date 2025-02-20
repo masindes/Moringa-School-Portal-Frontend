@@ -1,30 +1,26 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Login from "./components/Auth/Login";
-import Signup from "./components/Auth/Signup";
-import StudentDashboard from "./components/Dashboard/StudentDashboard";
-import AdminDashboard from "./components/Dashboard/AdminDashboard";
-import ManageStudents from "./components/Admin/ManageStudents";
-import ManagePayments from "./components/Admin/ManagePayments";
+import AuthForm from "./components/AuthForm";
+import ResetPassword from "./components/ResetPassword";
+import ManagePayments from "./components/ManagePayments";
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <Navbar />
-      <div className="p-4">
+      <div className="min-h-screen bg-gray-100">
+        {/* Navbar Always Visible */}
+        <Navbar />
+
+        {/* Route-based Rendering */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<StudentDashboard />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/students" element={<ManageStudents />} />
-          <Route path="/admin/payments" element={<ManagePayments />} />
+          <Route path="/login" element={<AuthForm />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/manage-payments" element={<ManagePayments />} />
         </Routes>
       </div>
     </Router>
   );
-}
+};
 
 export default App;
