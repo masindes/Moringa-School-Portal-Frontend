@@ -17,6 +17,10 @@ const App = () => {
           <Route path="/login" element={<AuthForm />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/manage-payments" element={<ManagePayments />} />
+          <Route path="/" element={<h1>Home Page</h1>} />
+          <Route path="/login" element={<AuthForm />} />
+          <Route path="/signup" element={<AuthForm type="signup" />} />
+        
         </Routes>
       </div>
     </Router>
