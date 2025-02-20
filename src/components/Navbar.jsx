@@ -15,5 +15,5 @@ const Navbar = () => {
   );
 };
 
-// ✅ Make sure to export it as default
+
 export default Navbar;
