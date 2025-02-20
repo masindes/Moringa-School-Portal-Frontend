@@ -13,18 +13,18 @@ const AuthForm = ({ type }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#edf6f9] items-center justify-center px-4">
+    <div className="flex min-h-screen bg-[#051923] items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-w-3xl w-full">
         
         {/* Left Form Section */}
-        <div className="w-full md:w-1/2 pt-4 px-8 pb-8 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 p-6 flex flex-col justify-center">
           <div className="text-center mb-4">
             <img 
               src="src/assets/images/moringa-01.png" 
               alt="Moringa Logo" 
               className="mx-auto w-24"
             />
-            <p className="text-gray-600">Welcome to our student portal</p>
+            <p className="text-black">Welcome to our student portal</p>
           </div>
 
           <h3 className="text-2xl font-semibold text-center mb-3">
@@ -33,10 +33,10 @@ const AuthForm = ({ type }) => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="block text-gray-700 text-sm font-medium">Email</label>
+              <label className="block text-black text-sm font-medium">Email</label>
               <input
                 type="email"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:bg-[#ffffff]"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -44,10 +44,10 @@ const AuthForm = ({ type }) => {
             </div>
 
             <div className="mb-3">
-              <label className="block text-gray-700 text-sm font-medium">Password</label>
+              <label className="block text-black text-sm font-medium">Password</label>
               <input
                 type="password"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:bg-[#ffffff]"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -56,12 +56,12 @@ const AuthForm = ({ type }) => {
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
+              className="w-full bg-black text-white py-2 rounded-lg hover:focus:bg-[#df872e] transition"
             >
               {isSignUp ? "Create Account" : "Sign In"}
             </button>
 
-            <div className="flex justify-between items-center mt-3 text-sm text-gray-600">
+            <div className="flex justify-between items-center mt-3 text-sm text-black">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" className="mr-1" />
                 Remember Me
