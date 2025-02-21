@@ -28,39 +28,51 @@ const Payment = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold">💳 Make a Payment</h1>
-      <p className="text-gray-700">Enter details to pay your fee balance.</p>
+      {/* Title */}
+      <h1 className="text-4xl font-bold mb-2 text-center">💳 Make a Payment</h1>
+      <p className="text-lg text-gray-700 mb-6 text-center">
+        Enter details to pay your fee balance.
+      </p>
 
-      <form onSubmit={handlePayment} className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md mt-6">
-        <label className="block text-gray-700 font-semibold">Phone Number</label>
-        <input
-          type="tel"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder="07XXXXXXXX"
-          className="p-2 border border-gray-300 rounded-lg w-full mb-4"
-          required
-        />
+      {/* Card */}
+      <form onSubmit={handlePayment} className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-lg">
+        {/* Phone Number Input */}
+        <div className="mb-6">
+          <label className="block text-gray-700 font-semibold text-xl">Phone Number</label>
+          <input
+            type="tel"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            placeholder="07XXXXXXXX"
+            className="p-3 border border-gray-300 rounded-lg w-full text-lg"
+            required
+          />
+        </div>
 
-        <label className="block text-gray-700 font-semibold">Amount (Ksh)</label>
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Enter amount"
-          className="p-2 border border-gray-300 rounded-lg w-full mb-4"
-          required
-        />
+        {/* Amount Input */}
+        <div className="mb-6">
+          <label className="block text-gray-700 font-semibold text-xl">Amount (Ksh)</label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter amount"
+            className="p-3 border border-gray-300 rounded-lg w-full text-lg"
+            required
+          />
+        </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-[#ff7d00] text-white py-2 rounded-lg"
+          className="w-full bg-[#ff7d00] text-white py-3 rounded-lg text-xl"
           disabled={loading}
         >
           {loading ? "Processing..." : "Pay Now"}
         </button>
 
-        {message && <p className="mt-4 text-center text-gray-800">{message}</p>}
+        {/* Payment Message */}
+        {message && <p className="mt-4 text-center text-gray-800 text-lg">{message}</p>}
       </form>
     </div>
   );

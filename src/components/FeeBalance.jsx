@@ -11,12 +11,25 @@ const studentFeeData = {
 
 const FeeBalance = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
-      <div className="bg-white shadow-2xl rounded-2xl p-12 w-full max-w-2xl">
-        <h2 className="text-4xl font-bold text-center text-gray-800">💰 Fee Balance</h2>
-        <p className="text-gray-600 text-center text-2xl mb-8">{studentFeeData.studentName}</p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      {/* Title */}
+      <h1 className="text-4xl font-bold mb-2 text-center">💰 Fee Balance</h1>
+      <p className="text-lg text-gray-700 mb-6 text-center">
+        Check your fee balance details below.
+      </p>
 
-        <div className="space-y-6 text-2xl">
+      {/* Card */}
+      <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-lg">
+        {/* Student Name and Outstanding Balance */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-800">{studentFeeData.studentName}</h2>
+          <p className="text-xl text-red-600 font-semibold">
+            Outstanding: Ksh {studentFeeData.outstandingAmount.toLocaleString()}
+          </p>
+        </div>
+
+        {/* Fee Details */}
+        <div className="space-y-6 text-xl">
           <div className="flex justify-between">
             <span className="text-gray-700">Total Fees:</span>
             <span className="font-semibold text-gray-900">
@@ -30,20 +43,13 @@ const FeeBalance = () => {
               Ksh {studentFeeData.paidAmount.toLocaleString()}
             </span>
           </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-700">Outstanding:</span>
-            <span className="text-red-600 font-semibold">
-              Ksh {studentFeeData.outstandingAmount.toLocaleString()}
-            </span>
-          </div>
         </div>
 
         {/* Payment Button */}
-        <div className="mt-10">
+        <div className="mt-8">
           <Link
             to="/payment"
-            className="w-full block text-center bg-black text-white py-4 rounded-xl text-2xl hover:text-[#ff7d00] transition"
+            className="w-full block text-center bg-[#ff7d00] text-white py-3 rounded-lg text-xl"
           >
             💳 Make a Payment
           </Link>
