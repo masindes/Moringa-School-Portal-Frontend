@@ -5,9 +5,9 @@ const CurrentPhase = () => {
   const currentPhase = "Phase 3 - Advanced Web Development";
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-semibold">🚀 Current Phase</h2>
-      <p className="text-gray-700 mt-2">{currentPhase}</p>
+    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 pt-16">
+      <h2 className="text-3xl font-bold text-gray-800">🚀 Current Phase</h2>
+      <p className="text-gray-700 mt-4 text-xl">{currentPhase}</p>
     </div>
   );
 };

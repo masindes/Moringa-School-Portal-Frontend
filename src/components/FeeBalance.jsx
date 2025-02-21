@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 // Mock Data
 const studentFeeData = {
-  studentName: "John Doe",
+  studentName: "Masinde",
   totalFees: 50000,
   paidAmount: 35000,
   outstandingAmount: 15000,
@@ -43,7 +43,7 @@ const FeeBalance = () => {
         <div className="mt-10">
           <Link
             to="/payment"
-            className="w-full block text-center bg-blue-600 text-white py-4 rounded-xl text-2xl hover:bg-blue-700 transition"
+            className="w-full block text-center bg-black text-white py-4 rounded-xl text-2xl hover:text-[#ff7d00] transition"
           >
             💳 Make a Payment
           </Link>
