@@ -15,19 +15,23 @@ const AuthForm = ({ type }) => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-[#e9ebec] px-4">
+    <div className="flex flex-col items-center min-h-screen bg-[#e9ebec] px-7 py-7">
       {/* Heading */}
-      <h2 className="text-black text-center text-2xl font-bold my-6">
-      Stay Connected, Stay Informed
-      </h2>
+      <h1 className="font-montserrat text-4xl font-bold text-center ">
+        Welcome to Moringa School
+      </h1>
+      <p className="font-nunito text-gray-700 text-lg text-center mb-6 px-6">
+        Your student portal for success.
+      </p>
 
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-w-3xl w-full">
         
         {/* Left Form Section */}
         <div className="w-full md:w-1/2 p-6 flex flex-col justify-center">
           <div className="text-center mb-4">
-            
-            <p className="text-black">Welcome to our student portal</p>
+            <p className="text-black text-lg font-semibold">
+              Welcome to our student portal
+            </p>
           </div>
 
           <h3 className="text-2xl font-semibold text-center mb-3">
@@ -85,7 +89,7 @@ const AuthForm = ({ type }) => {
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-2 rounded-lg hover:focus:bg-[#df872e] transition"
+              className="w-full bg-black text-white py-2 rounded-lg hover:bg-[#df872e] transition"
             >
               {isSignUp ? "Create Account" : "Sign In"}
             </button>
