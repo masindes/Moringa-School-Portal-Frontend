@@ -6,7 +6,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-[#fdfdfd] shadow-lg">
+    <nav className="bg-[#646463] shadow-lg">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         
         {/* Logo & Name Section */}
@@ -14,7 +14,7 @@ const Navbar = () => {
           <img 
             src="src/assets/images/moringa-01.png" 
             alt="Moringa Logo" 
-            className="w-48 h-auto object-contain" // ✅ Larger size, keeps aspect ratio
+            className="w-48 h-auto object-contain" 
           />
         </Link>
 
