@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const AuthForm = ({ type }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -9,21 +11,23 @@ const AuthForm = ({ type }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted:", { email, password });
+    console.log("Submitted:", { firstName, lastName, email, password });
   };
 
   return (
-    <div className="flex min-h-screen bg-[#051923] items-center justify-center px-4">
+    <div className="flex flex-col items-center min-h-screen bg-[#e9ebec] px-4">
+      {/* Heading */}
+      <h2 className="text-black text-center text-2xl font-bold my-6">
+        Welcome to Moringa School <br />
+        Empowering Tech Students, Simplifying Success!
+      </h2>
+
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-w-3xl w-full">
         
         {/* Left Form Section */}
         <div className="w-full md:w-1/2 p-6 flex flex-col justify-center">
           <div className="text-center mb-4">
-            <img 
-              src="src/assets/images/moringa-01.png" 
-              alt="Moringa Logo" 
-              className="mx-auto w-24"
-            />
+            
             <p className="text-black">Welcome to our student portal</p>
           </div>
 
@@ -32,6 +36,32 @@ const AuthForm = ({ type }) => {
           </h3>
 
           <form onSubmit={handleSubmit}>
+            {isSignUp && (
+              <>
+                <div className="mb-3">
+                  <label className="block text-black text-sm font-medium">First Name</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:bg-[#ffffff]"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="block text-black text-sm font-medium">Last Name</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:bg-[#ffffff]"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                  />
+                </div>
+              </>
+            )}
+
             <div className="mb-3">
               <label className="block text-black text-sm font-medium">Email</label>
               <input
