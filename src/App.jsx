@@ -5,7 +5,8 @@ import AuthForm from "./components/AuthForm";
 import ResetPassword from "./components/ResetPassword";
 import ManagePayments from "./components/ManagePayments";
 import Footer from "./components/Footer";
-import Contact from "./components/Contact"; 
+import Contact from "./components/Contact";
+import About from "./components/About"; // Import About Page
 
 const App = () => {
   return (
@@ -14,14 +15,15 @@ const App = () => {
         {/* Navbar Always Visible */}
         <Navbar />
 
-        {/* Main Content (flex-grow ensures it pushes the footer down) */}
+        {/* Main Content */}
         <div className="flex-grow">
           <Routes>
             <Route path="/login" element={<AuthForm />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/manage-payments" element={<ManagePayments />} />
             <Route path="/signup" element={<AuthForm type="signup" />} />
-            <Route path="/contact" element={<Contact />} /> {/* Contact Page Route */}
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} /> {/* About Page Route */}
             <Route path="/" element={<h1 className="text-center mt-10">Home Page</h1>} />
           </Routes>
         </div>

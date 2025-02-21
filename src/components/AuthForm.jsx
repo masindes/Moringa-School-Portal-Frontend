@@ -107,7 +107,7 @@ const AuthForm = ({ type }) => {
         </div>
 
         {/* Right Image Section */}
-        <div className="md:w-1/2 hidden md:flex justify-center bg-[#D3C7A2] p-0">
+        <div className="md:w-1/2 hidden md:flex justify-center bg-[#D3C7A2] p-4">
           <img
             src="src/assets/images/student.png"
             alt="Graduate"
