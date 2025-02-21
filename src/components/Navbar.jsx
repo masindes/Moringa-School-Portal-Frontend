@@ -11,8 +11,11 @@ const Navbar = () => {
         
         {/* Logo & Name Section */}
         <Link to="/" className="flex items-center space-x-3">
-          <img src="src/assets/images/logo1.png" alt="Moringa Logo" className="w-12 h-12" />
-          <span className="text-[#000000] text-2xl font-bold">Moringa School</span>
+          <img 
+            src="src/assets/images/moringa-01.png" 
+            alt="Moringa Logo" 
+            className="w-48 h-auto object-contain" // ✅ Larger size, keeps aspect ratio
+          />
         </Link>
 
         {/* Desktop Menu */}
@@ -21,7 +24,7 @@ const Navbar = () => {
           <Link to="/login" className="text-black hover:text-[#ff7d00] transition text-base">Login</Link>
           <Link 
             to="/signup" 
-            className="bg-[#ff7d00] text-white px-4 py-2 rounded-lg hover:bg-black transition text-base"
+            className="bg-[#ff7d00] text-white px-6 py-2 rounded-lg hover:bg-black transition text-base"
           >
             Sign Up
           </Link>
