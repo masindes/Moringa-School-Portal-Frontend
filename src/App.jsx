@@ -4,7 +4,8 @@ import Navbar from "./components/Navbar";
 import AuthForm from "./components/AuthForm";
 import ResetPassword from "./components/ResetPassword";
 import ManagePayments from "./components/ManagePayments";
-import Footer from "./components/Footer"; 
+import Footer from "./components/Footer";
+import Contact from "./components/Contact"; 
 
 const App = () => {
   return (
@@ -19,8 +20,9 @@ const App = () => {
             <Route path="/login" element={<AuthForm />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/manage-payments" element={<ManagePayments />} />
-            <Route path="/" element={<h1 className="text-center mt-10">Home Page</h1>} />
             <Route path="/signup" element={<AuthForm type="signup" />} />
+            <Route path="/contact" element={<Contact />} /> {/* Contact Page Route */}
+            <Route path="/" element={<h1 className="text-center mt-10">Home Page</h1>} />
           </Routes>
         </div>
 
