@@ -18,8 +18,7 @@ const AuthForm = ({ type }) => {
     <div className="flex flex-col items-center min-h-screen bg-[#e9ebec] px-4">
       {/* Heading */}
       <h2 className="text-black text-center text-2xl font-bold my-6">
-        Welcome to Moringa School <br />
-        Empowering Tech Students, Simplifying Success!
+      Stay Connected, Stay Informed
       </h2>
 
       <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-w-3xl w-full">
