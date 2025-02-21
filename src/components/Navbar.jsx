@@ -20,7 +20,6 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
-          <Link to="/" className="text-black hover:text-[#ff7d00] transition text-base">Home</Link>
           <Link to="/login" className="text-black hover:text-[#ff7d00] transition text-base">Login</Link>
           <Link 
             to="/signup" 
