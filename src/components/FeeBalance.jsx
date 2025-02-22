@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 // Mock Data
 const studentFeeData = {
-  studentName: "Abdisalan Ali",
+  studentName: "John Doe",
   totalFees: 50000,
   paidAmount: 35000,
   outstandingAmount: 15000,
@@ -11,49 +11,37 @@ const studentFeeData = {
 
 const FeeBalance = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      {/* Title */}
-      <h1 className="text-4xl font-bold mb-2 text-center">💰 Fee Balance</h1>
-      <p className="text-lg text-gray-700 mb-6 text-center">
-        Check your fee balance details below.
-      </p>
+    <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mx-auto">
+      {/* Student Name */}
+      <h2 className="text-xl font-bold text-gray-800 text-center">💰 Fee Balance</h2>
+      <p className="text-gray-600 text-sm text-center mb-4">Student: {studentFeeData.studentName}</p>
 
-      {/* Card */}
-      <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-lg">
-        {/* Student Name and Outstanding Balance */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800">{studentFeeData.studentName}</h2>
-          <p className="text-xl text-red-600 font-semibold">
-            Outstanding: Ksh {studentFeeData.outstandingAmount.toLocaleString()}
-          </p>
+      {/* Fee Details */}
+      <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+        <div className="flex justify-between text-gray-700 text-sm">
+          <span>Total Fees:</span>
+          <span className="font-semibold">Ksh {studentFeeData.totalFees.toLocaleString()}</span>
         </div>
 
-        {/* Fee Details */}
-        <div className="space-y-6 text-xl">
-          <div className="flex justify-between">
-            <span className="text-gray-700">Total Fees:</span>
-            <span className="font-semibold text-gray-900">
-              Ksh {studentFeeData.totalFees.toLocaleString()}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-700">Paid Amount:</span>
-            <span className="text-green-600 font-semibold">
-              Ksh {studentFeeData.paidAmount.toLocaleString()}
-            </span>
-          </div>
+        <div className="flex justify-between text-gray-700 text-sm mt-2">
+          <span>Paid Amount:</span>
+          <span className="text-green-600 font-semibold">Ksh {studentFeeData.paidAmount.toLocaleString()}</span>
         </div>
 
-        {/* Payment Button */}
-        <div className="mt-8">
-          <Link
-            to="/payment"
-            className="w-full block text-center bg-[#ff7d00] text-white py-3 rounded-lg text-xl"
-          >
-            💳 Make a Payment
-          </Link>
+        <div className="flex justify-between text-red-600 font-bold text-sm mt-2">
+          <span>Outstanding Balance:</span>
+          <span>Ksh {studentFeeData.outstandingAmount.toLocaleString()}</span>
         </div>
+      </div>
+
+      {/* Payment Link */}
+      <div className="mt-4 text-center">
+        {/* <Link 
+          to="/payment" 
+          className="inline-block bg-[#ff7d00] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#e66d00] transition"
+        >
+          💳 Make a Payment
+        </Link> */}
       </div>
     </div>
   );

@@ -1,15 +1,19 @@
-import React from "react";
+  import React from "react";
 
-const CurrentPhase = () => {
-  // Mock Data
-  const currentPhase = "Phase 3 - Advanced Web Development";
+  const CurrentPhase = () => {
+    const currentPhase = "Phase 1 - Software Engineering";
 
-  return (
-    <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 pt-16">
-      <h2 className="text-3xl font-bold text-gray-800">🚀 Current Phase</h2>
-      <p className="text-gray-700 mt-4 text-xl">{currentPhase}</p>
-    </div>
-  );
-};
+    return (
+      <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mx-auto">
+        {/* Title */}
+        <h2 className="text-xl font-bold text-gray-800 text-center mb-3">🚀 Current Phase</h2>
 
-export default CurrentPhase;
+        {/* Current Phase Text */}
+        <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+          <p className="text-lg font-semibold text-blue-600 text-center">{currentPhase}</p>
+        </div>
+      </div>
+    );
+  };
+
+  export default CurrentPhase;

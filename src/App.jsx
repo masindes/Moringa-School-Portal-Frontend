@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AuthForm from "./components/AuthForm";
 import ResetPassword from "./components/ResetPassword";
-import ManagePayments from "./components/ManagePayments";
 import Contact from "./components/Contact";
 import About from "./components/About";
 import HomePage from "./components/HomePage";
@@ -13,6 +12,7 @@ import Grades from "./components/Grades";
 import FeeBalance from "./components/FeeBalance";
 import CurrentPhase from "./components/CurrentPhase";
 import Payment from "./components/Payment";
+import Logout from "./components/Logout"; // ✅ Import Logout Component
 
 const App = () => {
   return (
@@ -26,6 +26,7 @@ const App = () => {
           <Routes>
             {/* Authentication Routes */}
             <Route path="/login" element={<AuthForm />} />
+            <Route path="/" element={<AuthForm type="signup" />} />
             <Route path="/signup" element={<AuthForm type="signup" />} />
             <Route path="/reset-password" element={<ResetPassword />} />
 
@@ -38,9 +39,11 @@ const App = () => {
             <Route path="/payment" element={<Payment />} />
 
             {/* Other Routes */}
-            <Route path="/manage-payments" element={<ManagePayments />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
+
+            {/* Logout Route */}
+            <Route path="/logout" element={<Logout />} /> {/* ✅ Add Logout Route */}
           </Routes>
         </div>
 
