@@ -8,7 +8,9 @@ export default {
     extend: {
       fontFamily: {
         ubuntu: ['Ubuntu', 'sans-serif'], 
-        gotham: ['Gotham Rounded', 'sans-serif'], 
+        poppins: ['Poppins', 'sans-serif'], 
+        inter: ['Inter', 'sans-serif'], 
+        montserrat: ['Montserrat', 'sans-serif'],
       },
       gridTemplateColumns: {
         "70/30" : "70% 28%"
