@@ -1,4 +1,4 @@
-import React from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -13,7 +13,7 @@ import FeeBalance from "./components/FeeBalance";
 import CurrentPhase from "./components/CurrentPhase";
 import Payment from "./components/Payment";
 import Logout from "./components/Logout";
-import AdminDashboard from "./components/AdminDashboard";
+import AdminDashboard from "./components/Admin/AdminDashboard";
 
 const App = () => {
   return (
