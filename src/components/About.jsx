@@ -29,18 +29,18 @@ const About = () => {
             <p className="text-gray-700 mt-4 text-center md:text-left">
               For administrators, the portal offers tools to manage student records, update details, and monitor payments effortlessly. This platform enhances transparency, streamlines communication, and simplifies academic management, creating a better experience for both students and administrators at Moringa School.
             </p>
-
-            {/* Contact Button */}
-            <div className="text-center md:text-left mt-6">
-              <a
-                href="/contact"
-                className="inline-block bg-black text-white py-2 px-6 rounded-lg hover:text-[#ff7d00] transition"
-              >
-                Contact Us
-              </a>
-            </div>
           </div>
         </div>
+      </div>
+
+      {/* Contact Button Outside the Card */}
+      <div className="text-center mt-8">
+        <a
+          href="/contact"
+          className="inline-block bg-black text-white py-2 px-6 rounded-lg hover:text-[#ff7d00] transition"
+        >
+          Contact Us
+        </a>
       </div>
     </div>
   );
