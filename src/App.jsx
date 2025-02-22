@@ -14,9 +14,11 @@ import CurrentPhase from "./components/CurrentPhase";
 import Payment from "./components/Payment";
 import Logout from "./components/Logout";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import StudentDetails from "./components/Admin/StudentDetails";
+         
 
 const App = () => {
-  return (
+  return (                  
     <Router>
       <div className="min-h-screen flex flex-col bg-gray-100">
         {/* Navbar Always Visible */}
@@ -44,8 +46,10 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/logout" element={<Logout />} />
 
-            {/* Admin Dashboard Route */}
-            <Route path="/admin" element={<AdminDashboard />} /> 
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/student-details/:id" element={<StudentDetails />} />
+
           </Routes>
         </div>
 
