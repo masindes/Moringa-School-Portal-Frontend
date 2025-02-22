@@ -4,31 +4,31 @@ import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // State for mobile menu toggle
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
   const navigate = useNavigate();
 
   // Check authentication status on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("Token from localStorage:", token); // Debugging
-    setIsAuthenticated(!!token); // Set isAuthenticated to true if token exists
+    console.log("Token from localStorage:", token); 
+    setIsAuthenticated(!!token); 
   }, []);
 
   // Handle Logout
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
-      localStorage.removeItem("token"); // Remove token from localStorage
-      setIsAuthenticated(false); // Update authentication state
-      console.log("User logged out. Token removed."); // Debugging
-      navigate("/login"); // Redirect to login page
+      localStorage.removeItem("token"); 
+      setIsAuthenticated(false); 
+      console.log("User logged out. Token removed."); 
+      navigate("/login"); 
     }
   };
 
-  console.log("isAuthenticated:", isAuthenticated); // Debugging
+  console.log("isAuthenticated:", isAuthenticated); 
 
   return (
-    <nav className="bg-[#D3C7A2] shadow-lg">
+    <nav className="bg-[#ffffff] shadow-lg">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         {/* Logo Section */}
         <Link to="/" className="flex items-center space-x-3">
