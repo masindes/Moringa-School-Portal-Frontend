@@ -3,7 +3,8 @@ import { useParams,Link} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 const students = [
- 
+    { id: 1, name: 'John Doe', email: 'john@example.com', grade: 'A', currentPhase: ['Phase-1 Software Engineering'] },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', grade: 'A', currentPhase: ['Phase-2 Cyber Security'] }
 ];
 
 const StudentDetails = () => {
@@ -22,10 +23,10 @@ const StudentDetails = () => {
       <h2 className="text-2xl font-semibold mb-4">Student Details</h2>
       <p><strong>Name:</strong> {student.name}</p>
       <p><strong>Email:</strong> {student.email}</p>
-      <p><strong>Grade:</strong> {student.status}</p>
+      <p><strong>Grade:</strong> {student.grade}</p>
       <h3 className="text-lg font-semibold mt-4">Current Phase:</h3>
       <ul className="list-disc pl-5">
-        {student.courses.map((course, index) => (
+        {student.currentPhase.map((course, index) => (
           <li key={index}>{course}</li>
         ))}
       </ul>
