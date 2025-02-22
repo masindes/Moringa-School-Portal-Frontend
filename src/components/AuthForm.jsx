@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios"; 
+import axios from "axios";
 
 const AuthForm = ({ type }) => {
   const [firstName, setFirstName] = useState("");
@@ -14,7 +14,7 @@ const AuthForm = ({ type }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); 
+    setError(null);
 
     try {
       const endpoint = isSignUp
