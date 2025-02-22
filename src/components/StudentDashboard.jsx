@@ -6,7 +6,7 @@ import CurrentPhase from "./CurrentPhase";
 
 const StudentDashboard = () => {
   return (
-    <div className="p-6">
+    <div className="p-6 center-top">
       <h1 className="text-3xl font-bold">📊 Student Dashboard</h1>
       <p className="text-gray-700">Your academic and financial overview.</p>
 
@@ -18,9 +18,9 @@ const StudentDashboard = () => {
       </div>
 
       {/* Payment Link */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <Link to="/payment" className="p-4 bg-black text-white rounded-lg block text-center">💳 Make a Payment</Link>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 // Mock Data
 const studentFeeData = {
-  studentName: "Masinde",
+  studentName: "Abdisalan Ali",
   totalFees: 50000,
   paidAmount: 35000,
   outstandingAmount: 15000,
