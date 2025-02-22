@@ -7,7 +7,7 @@ const AdminDashboard = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState(""); // "student", "payment"
+  const [modalType, setModalType] = useState(""); 
 
   useEffect(() => {
     fetch("http://localhost:3001/students")
