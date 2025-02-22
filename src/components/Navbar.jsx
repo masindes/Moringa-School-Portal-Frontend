@@ -3,27 +3,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // State for mobile menu toggle
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
   const navigate = useNavigate();
 
-  // Check authentication status
+  // Check authentication status on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    console.log("Token from localStorage:", token); // Debugging
+    setIsAuthenticated(!!token); // Set isAuthenticated to true if token exists
   }, []);
 
   // Handle Logout
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove token
-    setIsAuthenticated(false);
-    navigate("/login"); // Redirect to login page
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (confirmLogout) {
+      localStorage.removeItem("token"); // Remove token from localStorage
+      setIsAuthenticated(false); // Update authentication state
+      console.log("User logged out. Token removed."); // Debugging
+      navigate("/login"); // Redirect to login page
+    }
   };
+
+  console.log("isAuthenticated:", isAuthenticated); // Debugging
 
   return (
     <nav className="bg-[#D3C7A2] shadow-lg">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        
         {/* Logo Section */}
         <Link to="/" className="flex items-center space-x-3">
           <img 
@@ -36,22 +42,21 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
           {isAuthenticated ? (
+            // Display Logout button if authenticated
             <button 
               onClick={handleLogout} 
-              className="text-red-600 font-semibold hover:text-black transition text-base"
+              className="text-red-600 font-semibold hover:text-black transition text-base border border-red-600 px-4 py-2 rounded-lg"
             >
               Logout
             </button>
           ) : (
+            // Display Sign Up and Login buttons if not authenticated
             <>
+              <Link to="/signup" className="bg-[#ff7d00] text-white px-6 py-2 rounded-lg hover:bg-black transition text-base">
+                Sign Up
+              </Link>
               <Link to="/login" className="text-black hover:text-[#ff7d00] transition text-base">
                 Login
-              </Link>
-              <Link 
-                to="/signup" 
-                className="bg-[#ff7d00] text-white px-6 py-2 rounded-lg hover:bg-black transition text-base"
-              >
-                Sign Up
               </Link>
             </>
           )}
@@ -67,18 +72,20 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-[#df872e] py-4 text-center">
           {!isAuthenticated ? (
+            // Display Sign Up and Login buttons if not authenticated
             <>
-              <Link to="/login" className="block text-white py-2 hover:bg-[#000000] text-base">
-                Login
-              </Link>
               <Link 
                 to="/signup" 
                 className="block bg-[#df872e] text-[#ffffff] py-2 mx-4 mt-2 rounded-lg hover:bg-[#000000] text-base"
               >
                 Sign Up
               </Link>
+              <Link to="/login" className="block text-white py-2 hover:bg-[#000000] text-base">
+                Login
+              </Link>
             </>
           ) : (
+            // Display Logout button if authenticated
             <button 
               onClick={handleLogout} 
               className="block text-red-600 py-2 w-full hover:bg-black text-base"

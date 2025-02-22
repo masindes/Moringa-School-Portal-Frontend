@@ -16,6 +16,12 @@ const AuthForm = ({ type }) => {
     e.preventDefault();
     setError(null);
 
+    // Basic validation
+    if (!email || !password || (isSignUp && (!firstName || !lastName))) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
     try {
       const endpoint = isSignUp
         ? "http://localhost:5000/api/signup"
@@ -28,11 +34,21 @@ const AuthForm = ({ type }) => {
       }
 
       const response = await axios.post(endpoint, payload);
-      localStorage.setItem("token", response.data.token); // Store token
 
-      navigate("/dashboard"); // Redirect to dashboard
+      // Store token in localStorage
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        navigate("/dashboard"); // Redirect to dashboard
+      } else {
+        setError("No token received. Please try again.");
+      }
     } catch (err) {
-      setError("Invalid credentials. Please try again.");
+      // Handle specific errors from the server
+      if (err.response && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("An error occurred. Please try again.");
+      }
     }
   };
 
@@ -134,7 +150,7 @@ const AuthForm = ({ type }) => {
           {/* Right Image Section */}
           <div className="md:w-1/2 hidden md:flex justify-center bg-[#D3C7A2] p-4">
             <img
-              src="src/assets/images/student.png"
+              src="src/assets/images/student.png" // Ensure this path is correct
               alt="Graduate"
               className="w-full h-full object-cover"
             />
