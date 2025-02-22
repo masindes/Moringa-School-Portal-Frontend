@@ -12,7 +12,8 @@ import Grades from "./components/Grades";
 import FeeBalance from "./components/FeeBalance";
 import CurrentPhase from "./components/CurrentPhase";
 import Payment from "./components/Payment";
-import Logout from "./components/Logout"; // ✅ Import Logout Component
+import Logout from "./components/Logout";
+import AdminDashboard from "./components/AdminDashboard";
 
 const App = () => {
   return (
@@ -41,9 +42,10 @@ const App = () => {
             {/* Other Routes */}
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
+            <Route path="/logout" element={<Logout />} />
 
-            {/* Logout Route */}
-            <Route path="/logout" element={<Logout />} /> {/* ✅ Add Logout Route */}
+            {/* Admin Dashboard Route */}
+            <Route path="/admin" element={<AdminDashboard />} /> 
           </Routes>
         </div>
 
