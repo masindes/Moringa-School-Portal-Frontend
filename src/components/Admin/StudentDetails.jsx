@@ -1,5 +1,5 @@
-// StudentDetails.jsx
-import { useParams,} from 'react-router-dom';
+
+import { useParams,Link} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 const students = [
@@ -29,7 +29,7 @@ const StudentDetails = () => {
           <li key={index}>{course}</li>
         ))}
       </ul>
-     
+      <Link to="/manage-student" className="mt-4 inline-block text-blue-500 hover:underline">Back to Manage Students</Link>
     </div>
   );
 };
