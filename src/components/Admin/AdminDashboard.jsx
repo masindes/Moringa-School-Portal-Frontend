@@ -7,8 +7,8 @@ const AdminDashboard = () => {
 
   // Mock student data
   const [students] = useState([
-    { id: 1, name: "John Doe", email: "john@example.com", grade: "A", currentPhase: ["Phase-1 Software Engineering"] },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", grade: "B", currentPhase: ["Phase-2 Cyber Security"] }
+    { id: 1, name: "John Doe", email: "john@example.com", grade: "A", currentPhase: ["Phase-1, Software Engineering"] },
+    { id: 2, name: "Jane Smith", email: "jane@example.com", grade: "A", currentPhase: ["Phase-2 ,Cyber Security"] }
   ]);
 
   // State to control whether student details are displayed
