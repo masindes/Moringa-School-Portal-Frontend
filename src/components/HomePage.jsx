@@ -9,6 +9,7 @@ const HomePage = () => {
         className="bg-gradient-to-r from-blue-600 to-purple-600 py-20 text-center text-white"
         style={{
           backgroundImage: `url('src/assets/images/pexels-dylan-leagh-86004871-9039845.jpg')`, 
+          backgroundSize: "cover",
           // backgroundPosition: "center",
         }}
       >
