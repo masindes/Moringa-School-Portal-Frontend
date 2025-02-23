@@ -49,7 +49,7 @@ const AdminDashboard = () => {
           <h2 className="text-xl font-semibold">Payments</h2>
           <button 
             className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-            onClick={() => navigate("/manage-payments")}
+            onClick={() => navigate("/admin-payments")}
           >
             Manage Payments
           </button>
