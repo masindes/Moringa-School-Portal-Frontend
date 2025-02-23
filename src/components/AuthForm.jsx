@@ -56,11 +56,11 @@ const AuthForm = ({ type }) => {
     <div
       className="flex flex-col min-h-screen"
       style={{
-        backgroundImage: `url('src/assets/images/pexels-cytonn-955402.jpg')`,
+        backgroundImage: `url('src/assets/images/bachground.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
+        // backgroundRepeat: "no-repeat",
+        // backgroundAttachment: "fixed",
       }}
     >
       {/* Main Content */}
