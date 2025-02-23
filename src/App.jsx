@@ -1,4 +1,4 @@
-import React from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -13,10 +13,13 @@ import FeeBalance from "./components/FeeBalance";
 import CurrentPhase from "./components/CurrentPhase";
 import Payment from "./components/Payment";
 import Logout from "./components/Logout";
-import AdminDashboard from "./components/AdminDashboard";
+import AdminDashboard from "./components/Admin/AdminDashboard";
+import StudentDetails from "./components/Admin/StudentDetails";
+import ManageStudent from "./components/Admin/ManageStudent";
+         
 
 const App = () => {
-  return (
+  return (                  
     <Router>
       <div className="min-h-screen flex flex-col bg-gray-100">
         {/* Navbar Always Visible */}
@@ -44,8 +47,11 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/logout" element={<Logout />} />
 
-            {/* Admin Dashboard Route */}
-            <Route path="/admin" element={<AdminDashboard />} /> 
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/student-details/:id" element={<StudentDetails />} />
+            <Route path="/manage-student" element={<ManageStudent />} />
+
           </Routes>
         </div>
 
