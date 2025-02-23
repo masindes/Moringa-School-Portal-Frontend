@@ -15,6 +15,7 @@ import Payment from "./components/Payment";
 import Logout from "./components/Logout";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import StudentDetails from "./components/Admin/StudentDetails";
+import ManageStudent from "./components/Admin/ManageStudent";
          
 
 const App = () => {
@@ -49,6 +50,7 @@ const App = () => {
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/student-details/:id" element={<StudentDetails />} />
+            <Route path="/manage-student" element={<ManageStudent />} />
 
           </Routes>
         </div>
