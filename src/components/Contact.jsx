@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import pexelsImage from "../assets/images/pexels.jpg"; // Import the image
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -18,8 +19,13 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="max-w-3xl w-full bg-white rounded-2xl shadow-lg p-8">
+    <div
+      className="min-h-screen flex items-center justify-center px-4 bg-cover bg-center bg-fixed"
+      style={{
+        backgroundImage: `url(${pexelsImage})`, 
+      }}
+    >
+      <div className="max-w-3xl w-full bg-white bg-opacity-90 rounded-2xl shadow-lg p-8 backdrop-blur-sm">
         <h2 className="text-3xl font-semibold text-center text-gray-800">Contact Us</h2>
         <p className="text-center text-gray-600 mt-2">
           Have questions? We'd love to hear from you.

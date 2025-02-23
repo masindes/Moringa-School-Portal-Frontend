@@ -41,11 +41,11 @@ const App = () => {
             <Route path="/fee-balance" element={<FeeBalance />} />
             <Route path="/current-phase" element={<CurrentPhase />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/logout" element={<Logout />} />
 
             {/* Other Routes */}
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
-            <Route path="/logout" element={<Logout />} />
 
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
