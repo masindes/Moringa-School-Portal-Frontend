@@ -73,7 +73,9 @@ const StudentDetails = () => {
             <button onClick={handleEdit} className="bg-blue-500 text-white px-4 py-2 mt-4 mr-2">Edit</button>
             <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 mt-4">Delete</button>
             <br />
-            <Link to="/manage-student" className="mt-4 inline-block text-blue-500 hover:underline">Back to Manage Students</Link>
+            <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+             <Link to="/manage-student">Back to Manage Students</Link>
+             </button>
         </div>
     );
 };

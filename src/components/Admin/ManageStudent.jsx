@@ -82,6 +82,9 @@ const ManageStudent = () => {
           ))}
         </tbody>
       </table>
+      <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+        <Link to="/Admin">Back to Admin Dashboard</Link>
+      </button>
     </div>
   );
 };
