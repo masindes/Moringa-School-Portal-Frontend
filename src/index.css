@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+<<<<<<< HEAD
 /* @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap'); */
 @keyframes moveBackground {
     0% {
@@ -10,3 +11,22 @@
       background-position: 100% 100%;
     }
   }
+=======
+
+/* Custom keyframes for background animation */
+@keyframes moveBackground {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Custom class for the animated background */
+.animated-background {
+  background-size: cover;
+  background-position: center;
+  animation: moveBackground 20s linear infinite;
+}
+>>>>>>> backup-recovery
