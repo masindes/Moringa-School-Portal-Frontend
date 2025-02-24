@@ -8,6 +8,7 @@ const AuthForm = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const isSignUp = type === "signup";
@@ -15,10 +16,12 @@ const AuthForm = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     // Basic validation
     if (!email || !password || (isSignUp && (!firstName || !lastName))) {
       setError("Please fill in all fields.");
+      setLoading(false);
       return;
     }
 
@@ -49,6 +52,8 @@ const AuthForm = ({ type }) => {
       } else {
         setError("An error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,8 +142,17 @@ const AuthForm = ({ type }) => {
                 <button
                   type="submit"
                   className="w-full bg-black text-white py-2 rounded-lg hover:bg-[#df872e] transition"
+                  disabled={loading}
                 >
-                  {isSignUp ? "Create Account" : "Sign In"}
+                  {loading ? (
+                    <div className="flex justify-center">
+                      <div className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full text-white" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                  ) : (
+                    isSignUp ? "Create Account" : "Sign In"
+                  )}
                 </button>
 
                 <div className="flex justify-between items-center mt-3 text-sm text-black">
