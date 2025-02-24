@@ -56,20 +56,19 @@ const AuthForm = ({ type }) => {
     <div
       className="flex flex-col min-h-screen"
       style={{
-        backgroundImage: `url('src/assets/images/bachground.jpg')`,
+        backgroundImage: `url('src/assets/images/cod.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        // backgroundRepeat: "no-repeat",
-        // backgroundAttachment: "fixed",
+        transition: '15s linear'
       }}
     >
       {/* Main Content */}
-      <div className="flex flex-grow items-center justify-center px-7 py-7 bg-white bg-opacity-70">
+      <div className="flex flex-grow items-center justify-center px-7 py-7 bg-black bg-opacity-40">
         <div className="w-full max-w-3xl">
-          <h1 className="font-montserrat text-4xl font-bold text-center">
+          <h1 className="font-montserrat text-white text-4xl font-bold text-center">
             Welcome to Moringa School
           </h1>
-          <p className="font-nunito text-gray-700 text-lg text-center mb-6 px-6">
+          <p className="font-nunito text-white text-lg text-center mb-6 px-6">
             Your student portal for success.
           </p>
 

@@ -8,9 +8,9 @@ const HomePage = () => {
       <div
         className="bg-gradient-to-r from-blue-600 to-purple-600 py-20 text-center text-white"
         style={{
-          backgroundImage: `url('src/assets/images/pexels-dylan-leagh-86004871-9039845.jpg')`, 
+          backgroundImage: `url('src/assets/images/cod.jpg')`, 
           backgroundSize: "cover",
-          // backgroundPosition: "center",
+          
         }}
       >
         <h1 className="text-5xl font-bold mb-4">Welcome to Moringa Students Portal</h1>
