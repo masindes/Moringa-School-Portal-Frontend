@@ -1,138 +1,174 @@
-import { useState, useEffect } from "react";
-import { UserCheck, Users, DollarSign } from "lucide-react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const AdminDashboard = () => {
-  const [students, setStudents] = useState([]);
-  const [payments, setPayments] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [selectedPayment, setSelectedPayment] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState(""); 
+const AuthForm = ({ type }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch("http://localhost:3001/students")
-      .then((res) => res.json())
-      .then((data) => setStudents(data));
-  }, []);
+  const isSignUp = type === "signup";
 
-  useEffect(() => {
-    fetch("http://localhost:3001/payments")
-      .then((res) => res.json())
-      .then((data) => setPayments(data));
-  }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-  const handleEditStudent = (student) => {
-    setSelectedStudent(student);
-    setModalType("student");
-    setShowModal(true);
-  };
+    // Basic validation
+    if (!email || !password || (isSignUp && (!firstName || !lastName))) {
+      setError("Please fill in all fields.");
+      return;
+    }
 
-  const handleEditPayment = (payment) => {
-    setSelectedPayment(payment);
-    setModalType("payment");
-    setShowModal(true);
+    try {
+      const endpoint = isSignUp
+        ? "http://localhost:5000/api/signup"
+        : "http://localhost:5000/api/login";
+
+      const payload = { email, password };
+      if (isSignUp) {
+        payload.firstName = firstName;
+        payload.lastName = lastName;
+      }
+
+      const response = await axios.post(endpoint, payload);
+
+      // Store token in localStorage
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        navigate("/dashboard"); // Redirect to dashboard
+      } else {
+        setError("No token received. Please try again.");
+      }
+    } catch (err) {
+      // Handle specific errors from the server
+      if (err.response && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    }
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold mb-6 flex items-center">
-        Admin Dashboard
-      </h1>
+    <div
+      className="flex flex-col min-h-screen"
+      style={{
+        backgroundImage: `url('src/assets/images/bachground.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        animation: "moveBackground 20s linear infinite",
+      }}
+    >
+      {/* Main Content */}
+      <div className="flex flex-grow items-center justify-center px-7 py-7 bg-white bg-opacity-70">
+        <div className="w-full max-w-3xl">
+          <h1 className="font-montserrat text-4xl font-bold text-center">
+            Welcome to Moringa School
+          </h1>
+          <p className="font-nunito text-gray-700 text-lg text-center mb-6 px-6">
+            Your student portal for success.
+          </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
-          <UserCheck className="w-12 h-12 text-blue-600 mb-4" />
-          <h2 className="text-xl font-semibold">Manage Students</h2>
-          <button
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            onClick={() => handleEditStudent(students[0])}
-          >
-            View Students
-          </button>
-        </div>
+          <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden min-h-[500px]">
+            {/* Left Form Section */}
+            <div className="w-full md:w-1/2 p-6 flex flex-col justify-center overflow-y-auto">
+              <h3 className="text-2xl font-semibold text-center mb-3">
+                {isSignUp ? "Create Account" : "Sign In"}
+              </h3>
 
-        <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
-          <Users className="w-12 h-12 text-green-600 mb-4" />
-          <h2 className="text-xl font-semibold">Student Details</h2>
-          <button
-            className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            onClick={() => handleEditStudent(students[1])}
-          >
-            View Details
-          </button>
-        </div>
+              {error && <p className="text-red-500 text-center">{error}</p>}
 
-        <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
-          <DollarSign className="w-12 h-12 text-yellow-600 mb-4" />
-          <h2 className="text-xl font-semibold">Payments</h2>
-          <button
-            className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-            onClick={() => handleEditPayment(payments[0])}
-          >
-            Manage Payments
-          </button>
-        </div>
-      </div>
+              <form onSubmit={handleSubmit}>
+                {isSignUp && (
+                  <>
+                    <div className="mb-3">
+                      <label className="block text-black text-sm font-medium">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="block text-black text-sm font-medium">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </>
+                )}
 
-      {showModal && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            {modalType === "student" && selectedStudent && (
-              <>
-                <h2 className="text-xl font-bold mb-4">Edit Student</h2>
-                <input
-                  type="text"
-                  className="w-full border p-2 mb-3"
-                  value={selectedStudent.name}
-                  onChange={(e) =>
-                    setSelectedStudent({ ...selectedStudent, name: e.target.value })
-                  }
-                />
+                <div className="mb-3">
+                  <label className="block text-black text-sm font-medium">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="block text-black text-sm font-medium">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
-                  onClick={() => setShowModal(false)}
+                  type="submit"
+                  className="w-full bg-black text-white py-2 rounded-lg hover:bg-[#df872e] transition"
                 >
-                  Save
+                  {isSignUp ? "Create Account" : "Sign In"}
                 </button>
-                <button
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
-              </>
-            )}
 
-            {modalType === "payment" && selectedPayment && (
-              <>
-                <h2 className="text-xl font-bold mb-4">Edit Payment</h2>
-                <input
-                  type="text"
-                  className="w-full border p-2 mb-3"
-                  value={selectedPayment.amount}
-                  onChange={(e) =>
-                    setSelectedPayment({ ...selectedPayment, amount: e.target.value })
-                  }
-                />
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
-                  onClick={() => setShowModal(false)}
-                >
-                  Save
-                </button>
-                <button
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
-              </>
-            )}
+                <div className="flex justify-between items-center mt-3 text-sm text-black">
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" className="mr-1" />
+                    Remember Me
+                  </label>
+                  <Link to="/reset-password" className="hover:underline text-black">
+                    Forgot Password?
+                  </Link>
+                </div>
+              </form>
+            </div>
+
+            {/* Right Image Section */}
+            <div className="md:w-1/2 hidden md:flex justify-center items-end bg-[#df872e] p-4 relative">
+              <img
+                src="src/assets/images/student.png"
+                alt="Graduate"
+                className="w-full max-h-[80%] object-contain absolute bottom-0 left-1/2 transform -translate-x-1/2"
+              />
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default AuthForm;

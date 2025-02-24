@@ -54,13 +54,9 @@ const AuthForm = ({ type }) => {
 
   return (
     <div
-      className="flex flex-col min-h-screen"
+      className="flex flex-col min-h-screen w-full h-screen animated-background"
       style={{
         backgroundImage: `url('src/assets/images/bachground.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        // backgroundRepeat: "no-repeat",
-        // backgroundAttachment: "fixed",
       }}
     >
       {/* Main Content */}
