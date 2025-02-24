@@ -1,4 +1,4 @@
- import React, { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -16,7 +16,6 @@ const AuthForm = ({ type }) => {
     e.preventDefault();
     setError(null);
 
-    // Basic validation
     if (!email || !password || (isSignUp && (!firstName || !lastName))) {
       setError("Please fill in all fields.");
       return;
@@ -35,15 +34,13 @@ const AuthForm = ({ type }) => {
 
       const response = await axios.post(endpoint, payload);
 
-      // Store token in localStorage
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-        navigate("/dashboard"); // Redirect to dashboard
+        navigate("/dashboard");
       } else {
         setError("No token received. Please try again.");
       }
     } catch (err) {
-      // Handle specific errors from the server
       if (err.response && err.response.data.message) {
         setError(err.response.data.message);
       } else {
@@ -53,16 +50,24 @@ const AuthForm = ({ type }) => {
   };
 
   return (
-    <div
-      className="flex flex-col min-h-screen"
-      style={{
-        backgroundImage: `url('src/assets/images/bachground.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        animation: "moveBackground 20s linear infinite",
-      }}
-    >
-      {/* Main Content */}
+    <div className="flex flex-col min-h-screen relative bg-animation">
+      <style>
+        {`
+          @keyframes backgroundSlide {
+            0% { background-image: url('src/assets/images/computer.png'); }
+            33% { background-image: url('src/assets/images/laptop.jpg'); }
+            66% { background-image: url('src/assets/images/pexels-cytonn-955402.jpg'); }
+            100% { background-image: url('src/assets/images/bachground.jpg'); }
+          }
+
+          .bg-animation {
+            background-size: cover;
+            background-position: center;
+            animation: backgroundSlide 20s infinite ease-in-out;
+          }
+        `}
+      </style>
+
       <div className="flex flex-grow items-center justify-center px-7 py-7 bg-white bg-opacity-70">
         <div className="w-full max-w-3xl">
           <h1 className="font-montserrat text-4xl font-bold text-center">
@@ -73,7 +78,6 @@ const AuthForm = ({ type }) => {
           </p>
 
           <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden min-h-[500px]">
-            {/* Left Form Section */}
             <div className="w-full md:w-1/2 p-6 flex flex-col justify-center overflow-y-auto">
               <h3 className="text-2xl font-semibold text-center mb-3">
                 {isSignUp ? "Create Account" : "Sign In"}
@@ -156,7 +160,6 @@ const AuthForm = ({ type }) => {
               </form>
             </div>
 
-            {/* Right Image Section */}
             <div className="md:w-1/2 hidden md:flex justify-center items-end bg-[#df872e] p-4 relative">
               <img
                 src="src/assets/images/student.png"
