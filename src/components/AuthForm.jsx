@@ -59,8 +59,9 @@ const AuthForm = ({ type }) => {
         backgroundImage: `url('src/assets/images/cod.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        transition: '15s linear'
-      }}
+        animation: "moveBackground 20s linear infinite",
+      }
+      }
     >
       {/* Main Content */}
       <div className="flex flex-grow items-center justify-center px-7 py-7 bg-black bg-opacity-40">
