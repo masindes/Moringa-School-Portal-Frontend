@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,7 +8,6 @@ const AuthForm = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const isSignUp = type === "signup";
@@ -16,12 +15,10 @@ const AuthForm = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
 
     // Basic validation
     if (!email || !password || (isSignUp && (!firstName || !lastName))) {
       setError("Please fill in all fields.");
-      setLoading(false);
       return;
     }
 
@@ -52,16 +49,17 @@ const AuthForm = ({ type }) => {
       } else {
         setError("An error occurred. Please try again.");
       }
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div
-      className="flex flex-col min-h-screen w-full h-screen animated-background"
+      className="flex flex-col min-h-screen"
       style={{
         backgroundImage: `url('src/assets/images/bachground.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        animation: "moveBackground 20s linear infinite",
       }}
     >
       {/* Main Content */}
@@ -142,17 +140,8 @@ const AuthForm = ({ type }) => {
                 <button
                   type="submit"
                   className="w-full bg-black text-white py-2 rounded-lg hover:bg-[#df872e] transition"
-                  disabled={loading}
                 >
-                  {loading ? (
-                    <div className="flex justify-center">
-                      <div className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full text-white" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </div>
-                  ) : (
-                    isSignUp ? "Create Account" : "Sign In"
-                  )}
+                  {isSignUp ? "Create Account" : "Sign In"}
                 </button>
 
                 <div className="flex justify-between items-center mt-3 text-sm text-black">
