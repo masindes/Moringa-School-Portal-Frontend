@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -16,6 +15,7 @@ import Logout from "./components/Logout";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import StudentDetails from "./components/Admin/StudentDetails";
 import ManageStudent from "./components/Admin/ManageStudent";
+import AdminPayments from "./components/Admin/AdminPayments";
          
 
 const App = () => {
@@ -51,6 +51,9 @@ const App = () => {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/student-details/:id" element={<StudentDetails />} />
             <Route path="/manage-student" element={<ManageStudent />} />
+            <Route path="/admin-payments" element={<AdminPayments />} />
+
+
 
           </Routes>
         </div>
