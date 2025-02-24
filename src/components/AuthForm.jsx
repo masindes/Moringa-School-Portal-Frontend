@@ -55,8 +55,8 @@ const AuthForm = ({ type }) => {
         {`
           @keyframes backgroundSlide {
             0% { background-image: url('src/assets/images/computer.png'); }
-            33% { background-image: url('src/assets/images/laptop.jpg'); }
-            66% { background-image: url('src/assets/images/pexels-cytonn-955402.jpg'); }
+            33% { background-image: url('src/assets/images/technology.jpg'); }
+            66% { background-image: url('src/assets/images/data.jpg'); }
             100% { background-image: url('src/assets/images/bachground.jpg'); }
           }
 
