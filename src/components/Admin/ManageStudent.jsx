@@ -18,7 +18,8 @@ const ManageStudent = () => {
 
   const handleAddStudent = () => {
     if (!newStudent.name || !newStudent.email || !newStudent.grade) return;
-    setStudents([...students, { ...newStudent, id: students.length + 1 }]);
+    const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
+    setStudents([...students, { ...newStudent, id: newId }]);
     setNewStudent({ name: '', email: '', grade: '' });
   };
 
