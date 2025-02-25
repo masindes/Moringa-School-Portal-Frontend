@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 
 const StudentDetails = () => {
     const { id } = useParams();
-    const [students, setStudents] = useState(initialStudents);
     const [student, setStudent] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({ name: '', email: '', grade: '', currentPhase: '' });
