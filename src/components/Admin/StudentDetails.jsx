@@ -74,7 +74,7 @@ const StudentDetails = () => {
                     <p><strong>Grade:</strong> {student.grade}</p>
                     <h3 className="text-lg font-semibold mt-4">Current Phase:</h3>
                     <ul className="list-disc pl-5">
-                        {student.currentPhase.map((course, index) => (
+                        {student.currentPhase?.map((course, index) => (
                             <li key={index}>{course}</li>
                         ))}
                     </ul>
