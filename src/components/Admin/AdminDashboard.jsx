@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, UserCheck, DollarSign } from "lucide-react";
+import { Users, UserCheck } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const AdminDashboard = () => {
   // Function to handle payments navigation
   const handlePaymentsNavigation = (e) => {
     e.stopPropagation(); // Prevent interference
-    navigate("/admin-payments"); // Ensure this route exists
+    navigate("/admin-payments"); 
   };
 
   return (
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
 
         {/* Payments Card */}
         <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300">
-          <DollarSign className="w-12 h-12 text-yellow-400 mb-4" />
+          <span className="text-4xl font-bold text-yellow-400 mb-4">KSH</span>
           <h2 className="text-xl font-semibold text-gray-100">Payments</h2>
           <button
             className="mt-4 bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors duration-300"
