@@ -16,8 +16,8 @@ const AdminDashboard = () => {
 
   // Function to handle payments navigation
   const handlePaymentsNavigation = (e) => {
-    e.stopPropagation(); // Prevent interference
-    navigate("/admin-payments"); // Ensure this route exists
+    e.stopPropagation();
+    navigate("/admin-payments"); 
   };
 
   return (
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
           <h2 className="text-xl font-semibold">Payments</h2>
           <button 
             className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-            onClick={handlePaymentsNavigation} // Use function
+            onClick={handlePaymentsNavigation} 
           >
             Manage Payments
           </button>
