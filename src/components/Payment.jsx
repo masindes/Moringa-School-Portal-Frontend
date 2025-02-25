@@ -1,79 +1,114 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 const Payment = () => {
-  const [amount, setAmount] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const totalFees = 50000;
+  const [outstandingAmount, setOutstandingAmount] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(0);
+  const [payment, setPayment] = useState("");
+  const [isFullyPaid, setIsFullyPaid] = useState(false);
 
-  const handlePayment = async (e) => {
+  useEffect(() => {
+    // Load balance from localStorage
+    const savedBalance = localStorage.getItem("feeBalance");
+
+    if (savedBalance) {
+      const balance = parseFloat(savedBalance);
+      setOutstandingAmount(balance);
+      setPaidAmount(totalFees - balance);
+
+      // Check if payment is completed
+      if (balance === 0) {
+        setIsFullyPaid(true);
+      }
+    } else {
+      setOutstandingAmount(totalFees);
+      setPaidAmount(0);
+    }
+  }, []);
+
+  // Handle Payment Submission
+  const handlePayment = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage("");
 
-    try {
-      const response = await axios.post("http://localhost:5000/api/mpesa/pay", {
-        phone: phoneNumber,
-        amount: amount,
-      });
-
-      setMessage(response.data.message);
-    } catch (error) {
-      setMessage("Payment request failed. Try again.");
+    const paymentAmount = parseFloat(payment);
+    if (isNaN(paymentAmount) || paymentAmount <= 0) {
+      alert("Please enter a valid payment amount.");
+      return;
     }
 
-    setLoading(false);
+    if (paymentAmount > outstandingAmount) {
+      alert("Payment exceeds outstanding balance!");
+      return;
+    }
+
+    const newOutstandingAmount = outstandingAmount - paymentAmount;
+    const newPaidAmount = totalFees - newOutstandingAmount;
+
+    // Update state
+    setOutstandingAmount(newOutstandingAmount);
+    setPaidAmount(newPaidAmount);
+
+    // Save new balance to localStorage
+    localStorage.setItem("feeBalance", newOutstandingAmount.toString());
+
+    // Check if full payment is completed
+    if (newOutstandingAmount === 0) {
+      setIsFullyPaid(true);
+    }
+
+    // Reset input field
+    setPayment("");
+
+    alert(`Payment of Ksh ${paymentAmount.toLocaleString()} recorded successfully!`);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      {/* Title */}
-      <h1 className="text-4xl font-bold mb-2 text-center">💳 Make a Payment</h1>
-      <p className="text-lg text-gray-700 mb-6 text-center">
-        Enter details to pay your fee balance.
-      </p>
+    <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mx-auto">
+      <h2 className="text-xl font-bold text-gray-800 text-center">💳 Student Payment</h2>
+      <p className="text-gray-600 text-sm text-center mb-4">Masinde Sylvester's Payment Status</p>
 
-      {/* Card */}
-      <form onSubmit={handlePayment} className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-lg">
-        {/* Phone Number Input */}
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold text-xl">Phone Number</label>
-          <input
-            type="tel"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="07XXXXXXXX"
-            className="p-3 border border-gray-300 rounded-lg w-full text-lg"
-            required
-          />
+      {/* Fee Details */}
+      <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+        <div className="flex justify-between text-gray-700 text-sm">
+          <span>Total Fees:</span>
+          <span className="font-semibold">Ksh {totalFees.toLocaleString()}</span>
         </div>
 
-        {/* Amount Input */}
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold text-xl">Amount (Ksh)</label>
+        <div className="flex justify-between text-gray-700 text-sm mt-2">
+          <span>Paid Amount:</span>
+          <span className="text-green-600 font-semibold">Ksh {paidAmount.toLocaleString()}</span>
+        </div>
+
+        <div className="flex justify-between text-red-600 font-bold text-sm mt-2">
+          <span>Outstanding Balance:</span>
+          <span>Ksh {outstandingAmount.toLocaleString()}</span>
+        </div>
+      </div>
+
+      {/* Show "Successfully Paid" if balance is 0 */}
+      {isFullyPaid ? (
+        <div className="mt-4 text-center text-green-600 font-bold text-lg">
+          🎉 Successfully Paid!
+        </div>
+      ) : (
+        <form onSubmit={handlePayment} className="mt-4">
+          <label className="block text-gray-700 text-sm font-medium">Enter Payment Amount:</label>
           <input
             type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-            className="p-3 border border-gray-300 rounded-lg w-full text-lg"
-            required
+            value={payment}
+            onChange={(e) => setPayment(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-[#ff7d00] focus:border-[#ff7d00]"
+            placeholder="Enter amount in Ksh"
           />
-        </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-[#ff7d00] text-white py-3 rounded-lg text-xl"
-          disabled={loading}
-        >
-          {loading ? "Processing..." : "Pay Now"}
-        </button>
-
-        {/* Payment Message */}
-        {message && <p className="mt-4 text-center text-gray-800 text-lg">{message}</p>}
-      </form>
+          <button
+            type="submit"
+            className="mt-3 w-full bg-[#ff7d00] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#e66d00] transition"
+          >
+            ✅ Make Payment
+          </button>
+        </form>
+      )}
     </div>
   );
 };

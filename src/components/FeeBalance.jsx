@@ -1,47 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-// Mock Data
-const studentFeeData = {
-  studentName: "Masinde Sylvester",
-  totalFees: 50000,
-  paidAmount: 35000,
-  outstandingAmount: 15000,
-};
-
 const FeeBalance = () => {
+  const [outstandingAmount, setOutstandingAmount] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(0);
+  const totalFees = 50000;
+
+  useEffect(() => {
+    const savedBalance = localStorage.getItem("feeBalance");
+    if (savedBalance) {
+      const balance = parseFloat(savedBalance);
+      setOutstandingAmount(balance);
+      setPaidAmount(totalFees - balance);
+    }
+  }, []);
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mx-auto">
-      {/* Student Name */}
       <h2 className="text-xl font-bold text-gray-800 text-center">💰 Fee Balance</h2>
-      <p className="text-gray-600 text-sm text-center mb-4">Student: {studentFeeData.studentName}</p>
+      <p className="text-gray-600 text-sm text-center mb-4">Student: Masinde Sylvester</p>
 
-      {/* Fee Details */}
       <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
         <div className="flex justify-between text-gray-700 text-sm">
           <span>Total Fees:</span>
-          <span className="font-semibold">Ksh {studentFeeData.totalFees.toLocaleString()}</span>
+          <span className="font-semibold">Ksh {totalFees.toLocaleString()}</span>
         </div>
 
         <div className="flex justify-between text-gray-700 text-sm mt-2">
           <span>Paid Amount:</span>
-          <span className="text-green-600 font-semibold">Ksh {studentFeeData.paidAmount.toLocaleString()}</span>
+          <span className="text-green-600 font-semibold">Ksh {paidAmount.toLocaleString()}</span>
         </div>
 
         <div className="flex justify-between text-red-600 font-bold text-sm mt-2">
           <span>Outstanding Balance:</span>
-          <span>Ksh {studentFeeData.outstandingAmount.toLocaleString()}</span>
+          <span>Ksh {outstandingAmount.toLocaleString()}</span>
         </div>
       </div>
 
       {/* Payment Link */}
       <div className="mt-4 text-center">
-        {/* <Link 
+        <Link 
           to="/payment" 
           className="inline-block bg-[#ff7d00] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#e66d00] transition"
         >
           💳 Make a Payment
-        </Link> */}
+        </Link>
       </div>
     </div>
   );
