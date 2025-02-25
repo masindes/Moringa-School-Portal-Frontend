@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const ManageStudent = () => {
-  const [students, setStudents] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', grade: 'A' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', grade: 'B' }
-  ]);
+    const [students, setStudents] = useState(() => {
+      const savedStudents = localStorage.getItem('students');
+      return savedStudents ? JSON.parse(savedStudents) : [];
+    });
+
 
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '' });
   const [editingStudent, setEditingStudent] = useState(null);
