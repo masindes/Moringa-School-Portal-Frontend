@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-    const [students, setStudents] = useState(() => {
-      const savedStudents = localStorage.getItem('students');
-      return savedStudents ? JSON.parse(savedStudents) : [];
-    });
-
-
+const ManageStudent = () => {
+  const [students, setStudents] = useState(() => {
+    const savedStudents = localStorage.getItem('students');
+    return savedStudents ? JSON.parse(savedStudents) : [
+      
+    ];
+  });
+  
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '' });
   const [editingStudent, setEditingStudent] = useState(null);
+
 
   const handleAddStudent = () => {
     if (!newStudent.name || !newStudent.email || !newStudent.grade) return;
