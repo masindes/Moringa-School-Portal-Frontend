@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+// Manage students
 const ManageStudent = () => {
   const [students, setStudents] = useState(() => {
     const savedStudents = localStorage.getItem('students');

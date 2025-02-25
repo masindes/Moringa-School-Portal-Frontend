@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { FaMoneyCheckAlt, FaEdit, FaTrash } from "react-icons/fa";
-
+// admin
 const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
