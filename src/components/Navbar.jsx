@@ -1,37 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-
+import { Menu, X, Bell } from "lucide-react";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // State for mobile menu toggle
-  const [isAuthenticated, setIsAuthenticated] = useState(false); 
+  const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
-  // Check authentication status on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("Token from localStorage:", token); 
-    setIsAuthenticated(!!token); 
+    setIsAuthenticated(!!token);
+
+    if (token) {
+      loadMockNotifications(); // Load mock data instead of API call
+    }
   }, []);
+
+  // Load Mock Notifications
+  const loadMockNotifications = () => {
+    const mockNotifications = [
+      { id: 1, message: "Your grades have been updated!" },
+      { id: 2, message: "Your fee balance is due next week." },
+      { id: 3, message: "You have been moved to Phase 2!" },
+    ];
+    setNotifications(mockNotifications);
+  };
 
   // Handle Logout
   const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to log out?");
-    if (confirmLogout) {
-      localStorage.removeItem("token"); 
-      setIsAuthenticated(false); 
-      console.log("User logged out. Token removed."); 
-      navigate("/login"); 
+    if (window.confirm("Are you sure you want to log out?")) {
+      localStorage.removeItem("token");
+      setIsAuthenticated(false);
+      navigate("/login");
     }
   };
-
-  console.log("isAuthenticated:", isAuthenticated); 
 
   return (
     <nav className="bg-[#ffffff] shadow-lg">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        {/* Logo Section */}
+        {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
           <img 
             src="src/assets/images/moringa-01.png" 
@@ -42,8 +51,37 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
+          {isAuthenticated && (
+            <div className="relative">
+              {/* Notification Bell */}
+              <button onClick={() => setShowDropdown(!showDropdown)} className="relative text-black">
+                <Bell size={24} />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-2">
+                    {notifications.length}
+                  </span>
+                )}
+              </button>
+
+              {/* Notifications Dropdown */}
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-2">
+                  <h3 className="text-gray-700 font-semibold mb-2">Notifications</h3>
+                  {notifications.length > 0 ? (
+                    notifications.map((notif) => (
+                      <div key={notif.id} className="border-b border-gray-200 p-2 text-sm">
+                        {notif.message}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-sm">No new notifications</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {isAuthenticated ? (
-            // Display Logout button if authenticated
             <button 
               onClick={handleLogout} 
               className="text-red-600 font-semibold hover:text-black transition text-base border border-red-600 px-4 py-2 rounded-lg"
@@ -51,7 +89,6 @@ const Navbar = () => {
               Logout
             </button>
           ) : (
-            // Display Sign Up and Login buttons if not authenticated
             <>
               <Link to="/signup" className="bg-[#ff7d00] text-white px-6 py-2 rounded-lg hover:bg-black transition text-base">
                 Sign Up
@@ -73,7 +110,6 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-[#df872e] py-4 text-center">
           {!isAuthenticated ? (
-            // Display Sign Up and Login buttons if not authenticated
             <>
               <Link 
                 to="/signup" 
@@ -86,7 +122,6 @@ const Navbar = () => {
               </Link>
             </>
           ) : (
-            // Display Logout button if authenticated
             <button 
               onClick={handleLogout} 
               className="block text-red-600 py-2 w-full hover:bg-black text-base"
