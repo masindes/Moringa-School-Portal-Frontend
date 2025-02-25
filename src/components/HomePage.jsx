@@ -10,12 +10,10 @@ const HomePage = () => {
         style={{
           backgroundImage: `url('src/assets/images/cod.jpg')`, 
           backgroundSize: "cover",
-          
         }}
       >
         <h1 className="text-5xl font-bold mb-4">Welcome to Moringa Students Portal</h1>
         <p className="text-xl mb-6">Stay updated with the latest announcements and access key features.</p>
-        {/* Removed the "Go to Dashboard" link */}
       </div>
 
       {/* Main Content */}
@@ -53,6 +51,32 @@ const HomePage = () => {
           </div>
         </div>
 
+        {/* Notifications Section */}
+        <div className="mt-12">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+            <span className="mr-2">🔔</span> Notifications
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Notification 1 */}
+            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition">
+              <h3 className="text-xl font-semibold mb-2">New Grade Released</h3>
+              <p className="text-gray-600">Your latest exam grade has been updated.</p>
+            </div>
+
+            {/* Notification 2 */}
+            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition">
+              <h3 className="text-xl font-semibold mb-2">Fee Payment Reminder</h3>
+              <p className="text-gray-600">Your tuition fee is due on February 28th.</p>
+            </div>
+
+            {/* Notification 3 */}
+            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition">
+              <h3 className="text-xl font-semibold mb-2">Phase Change Alert</h3>
+              <p className="text-gray-600">Your course has moved to the next phase.</p>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Links Section */}
         <div className="mt-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">Quick Links</h2>
@@ -86,8 +110,6 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer Removed */}
     </div>
   );
 };
