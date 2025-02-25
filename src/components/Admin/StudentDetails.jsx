@@ -2,7 +2,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-
 const StudentDetails = () => {
     const { id } = useParams();
     const [student, setStudent] = useState(null);
@@ -10,10 +9,10 @@ const StudentDetails = () => {
     const [formData, setFormData] = useState({ name: '', email: '', grade: '', currentPhase: '' });
 
     useEffect(() => {
-        
+        // Retrieve students from localStorage
         const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
         const foundStudent = storedStudents.find(s => s.id === parseInt(id));
-    
+
         if (foundStudent) {
             setStudent(foundStudent);
             setFormData({
@@ -24,14 +23,13 @@ const StudentDetails = () => {
             });
         }
     }, [id]);
-    
 
     const handleDelete = () => {
         const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
         const updatedStudents = storedStudents.filter(s => s.id !== parseInt(id));
         
         localStorage.setItem('students', JSON.stringify(updatedStudents));
-        setStudent(null); 
+        setStudent(null); // Redirect logic should be handled in routing
     };
 
     const handleEdit = () => {
@@ -47,12 +45,11 @@ const StudentDetails = () => {
         const updatedStudents = storedStudents.map(s => 
             s.id === parseInt(id) ? { ...s, ...formData, currentPhase: formData.currentPhase.split(', ') } : s
         );
-    
+
         localStorage.setItem('students', JSON.stringify(updatedStudents));
         setStudent(updatedStudents.find(s => s.id === parseInt(id)));
         setEditMode(false);
     };
-    
 
     if (!student) return <div className="p-6">Student not found</div>;
 
@@ -83,11 +80,9 @@ const StudentDetails = () => {
             <button onClick={handleEdit} className="bg-blue-500 text-white px-4 py-2 mt-4 mr-2">Edit</button>
             <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 mt-4">Delete</button>
             <br />
-            <Link to="/manage-student">
-                <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
-                    Back to Manage Students
-                </button>
-            </Link>
+            <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+             <Link to="/manage-student">Back to Manage Students</Link>
+             </button>
         </div>
     );
 };

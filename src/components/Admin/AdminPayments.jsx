@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { FaMoneyCheckAlt, FaEdit, FaTrash } from "react-icons/fa";
-// admin
+
 const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
@@ -29,7 +29,7 @@ const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   );
 };
 
-
+// ✅ Define PropTypes for validation
 StudentPaymentCard.propTypes = {
   student: PropTypes.shape({
     id: PropTypes.number.isRequired,
@@ -42,7 +42,7 @@ StudentPaymentCard.propTypes = {
 };
 
 const AdminPayments = () => {
-
+  // ✅ Load payments from localStorage when the component mounts
   const [payments, setPayments] = useState(() => {
     const savedPayments = localStorage.getItem("payments");
     return savedPayments ? JSON.parse(savedPayments) : [];
@@ -57,7 +57,7 @@ const AdminPayments = () => {
   const [editingPayment, setEditingPayment] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("payments", JSON.stringify(payments)); 
+    localStorage.setItem("payments", JSON.stringify(payments)); // ✅ Save payments to localStorage when updated
   }, [payments]);
 
   const handleChange = (e) => {
