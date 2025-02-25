@@ -8,10 +8,13 @@ const ManageStudent = () => {
       
     ];
   });
-  
+
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '' });
   const [editingStudent, setEditingStudent] = useState(null);
 
+  useEffect(() => {
+    localStorage.setItem('students', JSON.stringify(students));
+  }, [students]);
 
   const handleAddStudent = () => {
     if (!newStudent.name || !newStudent.email || !newStudent.grade) return;
