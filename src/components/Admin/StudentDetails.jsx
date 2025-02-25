@@ -10,17 +10,21 @@ const StudentDetails = () => {
     const [formData, setFormData] = useState({ name: '', email: '', grade: '', currentPhase: '' });
 
     useEffect(() => {
-        const foundStudent = students.find(s => s.id === parseInt(id));
-        setStudent(foundStudent);
+        
+        const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
+        const foundStudent = storedStudents.find(s => s.id === parseInt(id));
+    
         if (foundStudent) {
+            setStudent(foundStudent);
             setFormData({
                 name: foundStudent.name,
                 email: foundStudent.email,
                 grade: foundStudent.grade,
-                currentPhase: foundStudent.currentPhase.join(', ')
+                currentPhase: foundStudent.currentPhase ? foundStudent.currentPhase.join(', ') : ''
             });
         }
-    }, [id, students]);
+    }, [id]);
+    
 
     const handleDelete = () => {
         setStudents(students.filter(s => s.id !== parseInt(id)));
