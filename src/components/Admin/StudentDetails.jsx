@@ -27,7 +27,11 @@ const StudentDetails = () => {
     
 
     const handleDelete = () => {
-        setStudents(students.filter(s => s.id !== parseInt(id)));
+        const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
+        const updatedStudents = storedStudents.filter(s => s.id !== parseInt(id));
+        
+        localStorage.setItem('students', JSON.stringify(updatedStudents));
+        setStudent(null); // Redirect logic should be handled in routing
     };
 
     const handleEdit = () => {
