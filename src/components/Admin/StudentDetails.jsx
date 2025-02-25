@@ -31,7 +31,7 @@ const StudentDetails = () => {
         const updatedStudents = storedStudents.filter(s => s.id !== parseInt(id));
         
         localStorage.setItem('students', JSON.stringify(updatedStudents));
-        setStudent(null); // Redirect logic should be handled in routing
+        setStudent(null); 
     };
 
     const handleEdit = () => {
@@ -43,9 +43,16 @@ const StudentDetails = () => {
     };
 
     const handleUpdate = () => {
-        setStudents(students.map(s => s.id === parseInt(id) ? { ...s, ...formData, currentPhase: formData.currentPhase.split(', ') } : s));
+        const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
+        const updatedStudents = storedStudents.map(s => 
+            s.id === parseInt(id) ? { ...s, ...formData, currentPhase: formData.currentPhase.split(', ') } : s
+        );
+    
+        localStorage.setItem('students', JSON.stringify(updatedStudents));
+        setStudent(updatedStudents.find(s => s.id === parseInt(id)));
         setEditMode(false);
     };
+    
 
     if (!student) return <div className="p-6">Student not found</div>;
 
