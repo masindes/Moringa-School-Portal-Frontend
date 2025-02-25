@@ -1,18 +1,26 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const ManageStudent = () => {
-  const [students, setStudents] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', grade: 'A' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', grade: 'B' }
-  ]);
+  const [students, setStudents] = useState(() => {
+    const savedStudents = localStorage.getItem('students');
+    return savedStudents ? JSON.parse(savedStudents) : [
+      
+    ];
+  });
 
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '' });
   const [editingStudent, setEditingStudent] = useState(null);
 
+  useEffect(() => {
+    localStorage.setItem('students', JSON.stringify(students));
+  }, [students]);
+
   const handleAddStudent = () => {
     if (!newStudent.name || !newStudent.email || !newStudent.grade) return;
-    setStudents([...students, { ...newStudent, id: students.length + 1 }]);
+    const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
+    setStudents([...students, { ...newStudent, id: newId }]);
     setNewStudent({ name: '', email: '', grade: '' });
   };
 

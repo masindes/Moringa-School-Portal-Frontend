@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import { FaDollarSign, FaMoneyCheckAlt, FaEdit, FaTrash } from "react-icons/fa";
+import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+import { FaMoneyCheckAlt, FaEdit, FaTrash } from "react-icons/fa";
 
 const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
       <h2 className="text-xl font-semibold">{student.studentName}</h2>
-      <p className="text-gray-500 mt-2">Total Fees: ${student.totalFees}</p>
-      <p className="text-green-500">Paid Amount: ${student.paidAmount}</p>
-      <p className="text-red-500">Outstanding Balance: ${student.totalFees - student.paidAmount}</p>
+      <p className="text-gray-500 mt-2">Total Fees: Ksh {student.totalFees.toLocaleString()}</p>
+      <p className="text-green-500">Paid Amount: Ksh {student.paidAmount.toLocaleString()}</p>
+      <p className="text-red-500">
+        Outstanding Balance: Ksh {(student.totalFees - student.paidAmount).toLocaleString()}
+      </p>
       <div className="mt-4 flex space-x-2">
         <button
           className="bg-yellow-500 text-white px-3 py-1 rounded flex items-center"
@@ -26,30 +29,59 @@ const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   );
 };
 
+
+StudentPaymentCard.propTypes = {
+  student: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    studentName: PropTypes.string.isRequired,
+    totalFees: PropTypes.number.isRequired,
+    paidAmount: PropTypes.number.isRequired,
+  }).isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
 const AdminPayments = () => {
-  const [payments, setPayments] = useState([]);
+
+  const [payments, setPayments] = useState(() => {
+    const savedPayments = localStorage.getItem("payments");
+    return savedPayments ? JSON.parse(savedPayments) : [];
+  });
+
   const [newPayment, setNewPayment] = useState({
     studentName: "",
     totalFees: "",
     paidAmount: "",
   });
-  const [editingPayment, setEditingPayment] = useState(null); // Track the payment being edited
+
+  const [editingPayment, setEditingPayment] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("payments", JSON.stringify(payments)); 
+  }, [payments]);
 
   const handleChange = (e) => {
-    setNewPayment({ ...newPayment, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setNewPayment({ ...newPayment, [name]: value });
   };
 
   const handleAddPayment = (e) => {
     e.preventDefault();
+    const formattedPayment = {
+      studentName: newPayment.studentName,
+      totalFees: parseFloat(newPayment.totalFees) || 0,
+      paidAmount: parseFloat(newPayment.paidAmount) || 0,
+    };
+
     if (editingPayment) {
       setPayments(
         payments.map((payment) =>
-          payment.id === editingPayment.id ? { ...editingPayment, ...newPayment } : payment
+          payment.id === editingPayment.id ? { ...editingPayment, ...formattedPayment } : payment
         )
       );
-      setEditingPayment(null); 
+      setEditingPayment(null);
     } else {
-      const newEntry = { id: Date.now(), ...newPayment };
+      const newEntry = { id: Date.now(), ...formattedPayment };
       setPayments([...payments, newEntry]);
     }
 
@@ -64,8 +96,8 @@ const AdminPayments = () => {
     setEditingPayment(payment);
     setNewPayment({
       studentName: payment.studentName,
-      totalFees: payment.totalFees,
-      paidAmount: payment.paidAmount,
+      totalFees: payment.totalFees.toString(),
+      paidAmount: payment.paidAmount.toString(),
     });
   };
 
@@ -82,7 +114,7 @@ const AdminPayments = () => {
           placeholder="Student Name"
           value={newPayment.studentName}
           onChange={handleChange}
-          className="border p-2 mr-2"
+          className="border p-2 mr-2 rounded"
           required
         />
         <input
@@ -91,8 +123,10 @@ const AdminPayments = () => {
           placeholder="Total Fees"
           value={newPayment.totalFees}
           onChange={handleChange}
-          className="border p-2 mr-2"
+          className="border p-2 mr-2 rounded"
           required
+          min="0"
+          step="0.01"
         />
         <input
           type="number"
@@ -100,8 +134,10 @@ const AdminPayments = () => {
           placeholder="Paid Amount"
           value={newPayment.paidAmount}
           onChange={handleChange}
-          className="border p-2 mr-2"
+          className="border p-2 mr-2 rounded"
           required
+          min="0"
+          step="0.01"
         />
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           {editingPayment ? "Update Payment" : "Add Payment"}
