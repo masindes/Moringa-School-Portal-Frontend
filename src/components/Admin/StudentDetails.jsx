@@ -2,10 +2,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-const initialStudents = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', grade: 'A', currentPhase: ['Phase-1 Software Engineering'] },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', grade: 'A', currentPhase: ['Phase-2 Cyber Security'] }
-];
 
 const StudentDetails = () => {
     const { id } = useParams();
