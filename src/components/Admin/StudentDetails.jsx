@@ -80,79 +80,91 @@ const StudentDetails = () => {
             <Link to="/manage-student" className="text-blue-400 hover:text-blue-300 mb-4 inline-block">
                 &larr; Back to Manage Students
             </Link>
-            <h2 className="text-2xl font-semibold mb-4">Student Details</h2>
 
-            {editMode ? (
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="border p-2 w-full bg-gray-800 text-white"
-                        placeholder="Name"
-                    />
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="border p-2 w-full bg-gray-800 text-white"
-                        placeholder="Email"
-                    />
-                    <input
-                        type="text"
-                        name="grade"
-                        value={formData.grade}
-                        onChange={handleChange}
-                        className="border p-2 w-full bg-gray-800 text-white"
-                        placeholder="Grade"
-                    />
-                    <input
-                        type="text"
-                        name="currentPhase"
-                        value={formData.currentPhase}
-                        onChange={handleChange}
-                        className="border p-2 w-full bg-gray-800 text-white"
-                        placeholder="Current Phase"
-                    />
-                    <button
-                        onClick={handleUpdate}
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                    >
-                        Update
-                    </button>
-                    <button
-                        onClick={handleCancel}
-                        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    <p><strong>Name:</strong> {student?.name}</p>
-                    <p><strong>Email:</strong> {student?.email}</p>
-                    <p><strong>Grade:</strong> {student?.grade}</p>
-                    <p><strong>Current Phase:</strong> {student?.currentPhase}</p>
-                </div>
-            )}
+            <div className="max-w-lg mx-auto bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 className="text-2xl font-semibold text-center mb-4">Student Details</h2>
 
-            <div className="mt-6 space-x-4">
-                {!editMode && (
-                    <button
-                        onClick={handleEdit}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    >
-                        Edit
-                    </button>
+                {editMode ? (
+                    <div className="space-y-4">
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="border p-2 w-full bg-gray-700 text-white rounded-md"
+                            placeholder="Name"
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="border p-2 w-full bg-gray-700 text-white rounded-md"
+                            placeholder="Email"
+                        />
+                        <input
+                            type="text"
+                            name="grade"
+                            value={formData.grade}
+                            onChange={handleChange}
+                            className="border p-2 w-full bg-gray-700 text-white rounded-md"
+                            placeholder="Grade"
+                        />
+                        <input
+                            type="text"
+                            name="currentPhase"
+                            value={formData.currentPhase}
+                            onChange={handleChange}
+                            className="border p-2 w-full bg-gray-700 text-white rounded-md"
+                            placeholder="Current Phase"
+                        />
+                        <div className="flex justify-between mt-4">
+                            <button
+                                onClick={handleUpdate}
+                                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                            >
+                                Update
+                            </button>
+                            <button
+                                onClick={handleCancel}
+                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-2 gap-4 text-lg">
+                        <p className="text-gray-300"><strong>Name:</strong></p>
+                        <p>{student?.name}</p>
+
+                        <p className="text-gray-300"><strong>Email:</strong></p>
+                        <p>{student?.email}</p>
+
+                        <p className="text-gray-300"><strong>Grade:</strong></p>
+                        <p>{student?.grade}</p>
+
+                        <p className="text-gray-300"><strong>Current Phase:</strong></p>
+                        <p>{student?.currentPhase}</p>
+                    </div>
                 )}
-                <button
-                    onClick={handleDelete}
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                >
-                    Delete
-                </button>
+
+                <div className="mt-6 flex justify-between">
+                    {!editMode && (
+                        <button
+                            onClick={handleEdit}
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        >
+                            Edit
+                        </button>
+                    )}
+                    <button
+                        onClick={handleDelete}
+                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-black"
+                    >
+                        Delete
+                    </button>
+                </div>
             </div>
         </div>
     );
