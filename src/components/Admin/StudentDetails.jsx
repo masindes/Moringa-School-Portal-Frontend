@@ -9,7 +9,6 @@ const StudentDetails = () => {
     const [formData, setFormData] = useState({ name: '', email: '', grade: '', currentPhase: '' });
 
     useEffect(() => {
-        // Retrieve students from localStorage
         const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
         const foundStudent = storedStudents.find(s => s.id === parseInt(id));
 
@@ -19,7 +18,7 @@ const StudentDetails = () => {
                 name: foundStudent.name,
                 email: foundStudent.email,
                 grade: foundStudent.grade,
-                currentPhase: foundStudent.currentPhase ? foundStudent.currentPhase.join(', ') : ''
+                currentPhase: foundStudent.currentPhase ? foundStudent.currentPhase.join(', ') : '',
             });
         }
     }, [id]);
@@ -27,9 +26,9 @@ const StudentDetails = () => {
     const handleDelete = () => {
         const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
         const updatedStudents = storedStudents.filter(s => s.id !== parseInt(id));
-        
+
         localStorage.setItem('students', JSON.stringify(updatedStudents));
-        navigate('/manage-student'); // Redirect to Manage Students page
+        navigate('/manage-student');
     };
 
     const handleEdit = () => {
@@ -42,13 +41,23 @@ const StudentDetails = () => {
 
     const handleUpdate = () => {
         const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
-        const updatedStudents = storedStudents.map(s => 
+        const updatedStudents = storedStudents.map(s =>
             s.id === parseInt(id) ? { ...s, ...formData, currentPhase: formData.currentPhase.split(', ') } : s
         );
 
         localStorage.setItem('students', JSON.stringify(updatedStudents));
         setStudent(updatedStudents.find(s => s.id === parseInt(id)));
         setEditMode(false);
+    };
+
+    const toggleActivation = () => {
+        const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
+        const updatedStudents = storedStudents.map(s =>
+            s.id === parseInt(id) ? { ...s, isActive: !s.isActive } : s
+        );
+
+        localStorage.setItem('students', JSON.stringify(updatedStudents));
+        setStudent(updatedStudents.find(s => s.id === parseInt(id)));
     };
 
     if (!student) return <div className="p-6">Student not found</div>;
@@ -108,6 +117,12 @@ const StudentDetails = () => {
                     <p><strong>Name:</strong> {student.name}</p>
                     <p><strong>Email:</strong> {student.email}</p>
                     <p><strong>Grade:</strong> {student.grade}</p>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span className={student.isActive ? 'text-green-400' : 'text-red-400'}>
+                            {student.isActive ? ' Active' : ' Inactive'}
+                        </span>
+                    </p>
                     <h3 className="text-lg font-semibold mt-4">Current Phase:</h3>
                     <ul className="list-disc pl-5">
                         {student.currentPhase?.map((course, index) => (
@@ -125,6 +140,16 @@ const StudentDetails = () => {
                         Edit
                     </button>
                 )}
+                <button
+                    onClick={toggleActivation}
+                    className={`px-4 py-2 rounded ${
+                        student.isActive
+                            ? 'bg-yellow-500 hover:bg-yellow-600'
+                            : 'bg-green-500 hover:bg-green-600'
+                    } text-white`}
+                >
+                    {student.isActive ? 'Deactivate' : 'Activate'}
+                </button>
                 <button
                     onClick={handleDelete}
                     className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"

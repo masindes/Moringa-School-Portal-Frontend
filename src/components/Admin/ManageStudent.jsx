@@ -22,7 +22,7 @@ const ManageStudent = () => {
       return;
     }
     const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
-    setStudents([...students, { ...newStudent, id: newId, isActive: true }]);
+    setStudents([...students, { ...newStudent, id: newId }]);
     setNewStudent({ name: '', email: '', grade: '', currentPhase: '' });
     toast.success("Student added successfully!");
   };
@@ -46,14 +46,6 @@ const ManageStudent = () => {
     ));
     setEditingStudent(null);
     toast.success("Student updated successfully!");
-  };
-
-  // Toggle Student Active/Inactive Status
-  const toggleStudentStatus = (id) => {
-    setStudents(students.map(student => 
-      student.id === id ? { ...student, isActive: !student.isActive } : student
-    ));
-    toast.info("Student status updated.");
   };
 
   return (
@@ -126,6 +118,45 @@ const ManageStudent = () => {
         </div>
       </div>
 
+      {/* Edit Student Form */}
+      {editingStudent && (
+        <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+          <h3 className="text-xl font-semibold mb-4">Edit Student</h3>
+          <div className="space-y-4">
+            <input
+              type="text"
+              value={editingStudent.name}
+              onChange={(e) => setEditingStudent({ ...editingStudent, name: e.target.value })}
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
+            />
+            <input
+              type="email"
+              value={editingStudent.email}
+              onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })}
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
+            />
+            <input
+              type="text"
+              value={editingStudent.grade}
+              onChange={(e) => setEditingStudent({ ...editingStudent, grade: e.target.value })}
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
+            />
+            <input
+              type="text"
+              value={editingStudent.currentPhase}
+              onChange={(e) => setEditingStudent({ ...editingStudent, currentPhase: e.target.value })}
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
+            />
+            <button
+              onClick={handleUpdateStudent}
+              className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            >
+              Update Student
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Student List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {students.map(student => (
@@ -134,9 +165,6 @@ const ManageStudent = () => {
             <p className="text-gray-300 mb-2"><strong>Email:</strong> {student.email}</p>
             <p className="text-gray-300 mb-2"><strong>Grade:</strong> {student.grade}</p>
             <p className="text-gray-300 mb-4"><strong>Current Phase:</strong> {student.currentPhase}</p>
-            <p className={`mb-4 font-semibold ${student.isActive ? 'text-green-400' : 'text-red-400'}`}>
-              Status: {student.isActive ? 'Active' : 'Inactive'}
-            </p>
             <div className="flex space-x-4">
               <Link to={`/student-details/${student.id}`} className="text-blue-400 hover:text-blue-300">
                 View
@@ -146,12 +174,6 @@ const ManageStudent = () => {
               </button>
               <button onClick={() => handleDeleteStudent(student.id)} className="text-red-400 hover:text-red-300">
                 Delete
-              </button>
-              <button 
-                onClick={() => toggleStudentStatus(student.id)}
-                className={`px-3 py-1 rounded text-white ${student.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}`}
-              >
-                {student.isActive ? 'Deactivate' : 'Activate'}
               </button>
             </div>
           </div>
