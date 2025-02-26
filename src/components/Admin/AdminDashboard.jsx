@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, UserCheck, CreditCard, Activity } from "lucide-react";
+import { Users, UserCheck, CreditCard, BookOpen } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -21,17 +21,8 @@ const AdminDashboard = () => {
     navigate("/admin-payments");
   };
 
-  // Function to toggle student activation status
-  const toggleActivation = (id) => {
-    const updatedStudents = students.map((student) =>
-      student.id === id ? { ...student, isActive: !student.isActive } : student
-    );
-    setStudents(updatedStudents);
-    localStorage.setItem("students", JSON.stringify(updatedStudents));
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center items-center p-8">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text inline-block">
@@ -41,14 +32,12 @@ const AdminDashboard = () => {
       </div>
 
       {/* Dashboard Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center mb-12">
         {/* Manage Students Card */}
         <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-purple-500/50">
           <UserCheck className="w-12 h-12 text-blue-400 mb-4" />
           <h2 className="text-xl font-semibold text-gray-100 mb-2">Manage Students</h2>
-          <p className="text-gray-400 text-center mb-4">
-            View and manage all student records.
-          </p>
+          <p className="text-gray-400 text-center mb-4">View and manage all student records.</p>
           <button
             className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
             onClick={() => {
@@ -64,9 +53,7 @@ const AdminDashboard = () => {
         <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-yellow-500/50">
           <CreditCard className="w-12 h-12 text-yellow-400 mb-4" />
           <h2 className="text-xl font-semibold text-gray-100 mb-2">Payments</h2>
-          <p className="text-gray-400 text-center mb-4">
-            Manage and track student payments.
-          </p>
+          <p className="text-gray-400 text-center mb-4">Manage and track student payments.</p>
           <button
             className="mt-4 bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors duration-300"
             onClick={handlePaymentsNavigation}
@@ -75,26 +62,26 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {/* Analytics Card */}
+        {/* View Student Details Card */}
         <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-green-500/50">
-          <Activity className="w-12 h-12 text-green-400 mb-4" />
-          <h2 className="text-xl font-semibold text-gray-100 mb-2">Analytics</h2>
+          <BookOpen className="w-12 h-12 text-green-400 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-100 mb-2">View Student Details</h2>
           <p className="text-gray-400 text-center mb-4">
-            View insights and performance metrics.
+            Access detailed student records including grades, fee balances, and phases.
           </p>
           <button
             className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300"
-            onClick={() => navigate("/admin-analytics")}
+            onClick={() => setShowDetails(!showDetails)}
           >
-            View Analytics
+            {showDetails ? "Hide Details" : "View Details"}
           </button>
         </div>
       </div>
 
       {/* Student Details Section */}
       {showDetails && (
-        <div className="mt-8 p-6 bg-gray-800 shadow-2xl rounded-lg">
-          <h2 className="text-2xl font-bold mb-6 text-gray-100">All Student Details</h2>
+        <div className="mt-8 p-6 bg-gray-800 shadow-2xl rounded-lg max-w-4xl w-full">
+          <h2 className="text-2xl font-bold mb-6 text-gray-100 text-center">All Student Details</h2>
           {students.length > 0 ? (
             <div className="space-y-4">
               {students.map((student) => (
@@ -113,11 +100,16 @@ const AdminDashboard = () => {
                       <p className="text-gray-200">
                         <strong>Grade:</strong> {student.grade}
                       </p>
+                      <p className="text-gray-200">
+                        <strong>Fee Balance:</strong> KSH {student.feeBalance || "0"}
+                      </p>
                       <h3 className="font-semibold mt-2 text-gray-200">Current Phase:</h3>
                       <ul className="list-disc pl-5 text-gray-300">
-                        {student.currentPhase?.map((course, index) => (
-                          <li key={index}>{course}</li>
-                        ))}
+                        {Array.isArray(student.currentPhase) ? (
+                          student.currentPhase.map((course, index) => <li key={index}>{course}</li>)
+                        ) : (
+                          <li>{student.currentPhase}</li>
+                        )}
                       </ul>
                       <p className="text-gray-400 mt-2">
                         <strong>Status:</strong>{" "}
@@ -134,7 +126,13 @@ const AdminDashboard = () => {
                           ? "bg-red-600 hover:bg-red-700"
                           : "bg-green-600 hover:bg-green-700"
                       }`}
-                      onClick={() => toggleActivation(student.id)}
+                      onClick={() =>
+                        setStudents((prev) =>
+                          prev.map((s) =>
+                            s.id === student.id ? { ...s, isActive: !s.isActive } : s
+                          )
+                        )
+                      }
                     >
                       {student.isActive ? "Deactivate" : "Activate"}
                     </button>
@@ -143,7 +141,7 @@ const AdminDashboard = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-300">No students available.</p>
+            <p className="text-gray-300 text-center">No students available.</p>
           )}
         </div>
       )}
