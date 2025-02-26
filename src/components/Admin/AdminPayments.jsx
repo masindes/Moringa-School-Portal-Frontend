@@ -1,25 +1,29 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { FaMoneyCheckAlt, FaEdit, FaTrash } from "react-icons/fa";
+import { FaMoneyCheckAlt, FaEdit, FaTrash, FaMoon, FaSun } from "react-icons/fa";
 
 const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
-      <h2 className="text-xl font-semibold">{student.studentName}</h2>
-      <p className="text-gray-500 mt-2">Total Fees: Ksh {student.totalFees.toLocaleString()}</p>
-      <p className="text-green-500">Paid Amount: Ksh {student.paidAmount.toLocaleString()}</p>
-      <p className="text-red-500">
+    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center transition-all">
+      <h2 className="text-xl font-semibold dark:text-white">{student.studentName}</h2>
+      <p className="text-gray-500 dark:text-gray-300 mt-2">
+        Total Fees: Ksh {student.totalFees.toLocaleString()}
+      </p>
+      <p className="text-green-500 dark:text-green-400">
+        Paid Amount: Ksh {student.paidAmount.toLocaleString()}
+      </p>
+      <p className="text-red-500 dark:text-red-400">
         Outstanding Balance: Ksh {(student.totalFees - student.paidAmount).toLocaleString()}
       </p>
       <div className="mt-4 flex space-x-2">
         <button
-          className="bg-yellow-500 text-white px-3 py-1 rounded flex items-center"
+          className="bg-yellow-500 text-white px-3 py-1 rounded flex items-center hover:bg-yellow-600"
           onClick={() => onEdit(student)}
         >
           <FaEdit className="mr-1" /> Edit
         </button>
         <button
-          className="bg-red-500 text-white px-3 py-1 rounded flex items-center"
+          className="bg-red-500 text-white px-3 py-1 rounded flex items-center hover:bg-red-600"
           onClick={() => onDelete(student.id)}
         >
           <FaTrash className="mr-1" /> Delete
@@ -42,7 +46,11 @@ StudentPaymentCard.propTypes = {
 };
 
 const AdminPayments = () => {
-  // ✅ Load payments from localStorage when the component mounts
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  // ✅ Load payments from localStorage
   const [payments, setPayments] = useState(() => {
     const savedPayments = localStorage.getItem("payments");
     return savedPayments ? JSON.parse(savedPayments) : [];
@@ -57,8 +65,18 @@ const AdminPayments = () => {
   const [editingPayment, setEditingPayment] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("payments", JSON.stringify(payments)); // ✅ Save payments to localStorage when updated
+    localStorage.setItem("payments", JSON.stringify(payments));
   }, [payments]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,19 +120,30 @@ const AdminPayments = () => {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4 flex items-center">
-        <FaMoneyCheckAlt className="text-green-500 mr-2" /> Payment Management
-      </h2>
+    <div className="p-6 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-all">
+      {/* Dark Mode Toggle */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold flex items-center">
+          <FaMoneyCheckAlt className="text-green-500 mr-2" /> Payment Management
+        </h2>
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded flex items-center"
+        >
+          {darkMode ? <FaSun className="mr-1" /> : <FaMoon className="mr-1" />}
+          {darkMode ? "Light Mode" : "Dark Mode"}
+        </button>
+      </div>
 
-      <form onSubmit={handleAddPayment} className="mb-4 p-4 border rounded bg-gray-100">
+      {/* Payment Form */}
+      <form onSubmit={handleAddPayment} className="mb-4 p-4 border rounded bg-gray-200 dark:bg-gray-800 transition-all">
         <input
           type="text"
           name="studentName"
           placeholder="Student Name"
           value={newPayment.studentName}
           onChange={handleChange}
-          className="border p-2 mr-2 rounded"
+          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white"
           required
         />
         <input
@@ -123,7 +152,7 @@ const AdminPayments = () => {
           placeholder="Total Fees"
           value={newPayment.totalFees}
           onChange={handleChange}
-          className="border p-2 mr-2 rounded"
+          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white"
           required
           min="0"
           step="0.01"
@@ -134,16 +163,17 @@ const AdminPayments = () => {
           placeholder="Paid Amount"
           value={newPayment.paidAmount}
           onChange={handleChange}
-          className="border p-2 mr-2 rounded"
+          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white"
           required
           min="0"
           step="0.01"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           {editingPayment ? "Update Payment" : "Add Payment"}
         </button>
       </form>
 
+      {/* Payment Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {payments.map((payment) => (
           <StudentPaymentCard
