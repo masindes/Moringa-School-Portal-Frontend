@@ -17,7 +17,7 @@ const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
           <FaEdit className="mr-1" /> Edit
         </button>
         <button
-          className="bg-red-500 text-white px-3 py-1 rounded flex items-center hover:bg-red-600"
+          className="bg-red-500 text-white px-3 py-1 rounded flex items-center hover:bg-sky-600"
           onClick={() => onDelete(student.id)}
         >
           <FaTrash className="mr-1" /> Delete
