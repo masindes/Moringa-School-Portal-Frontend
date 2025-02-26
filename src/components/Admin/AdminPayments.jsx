@@ -4,20 +4,20 @@ import { FaMoneyCheckAlt, FaEdit, FaTrash, FaMoon, FaSun } from "react-icons/fa"
 
 const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center transition-all">
-      <h2 className="text-xl font-semibold dark:text-white">{student.studentName}</h2>
-      <p className="text-gray-500 dark:text-gray-300 mt-2">
+    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center transition-all border border-gray-300 dark:border-gray-700">
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{student.studentName}</h2>
+      <p className="text-gray-600 dark:text-gray-300 mt-2">
         Total Fees: Ksh {student.totalFees.toLocaleString()}
       </p>
-      <p className="text-green-500 dark:text-green-400">
+      <p className="text-green-600 dark:text-green-400">
         Paid Amount: Ksh {student.paidAmount.toLocaleString()}
       </p>
-      <p className="text-red-500 dark:text-red-400">
+      <p className="text-red-600 dark:text-red-400">
         Outstanding Balance: Ksh {(student.totalFees - student.paidAmount).toLocaleString()}
       </p>
       <div className="mt-4 flex space-x-2">
         <button
-          className="bg-yellow-500 text-white px-3 py-1 rounded flex items-center hover:bg-yellow-600"
+          className="bg-yellow-400 text-gray-900 px-3 py-1 rounded flex items-center hover:bg-yellow-500"
           onClick={() => onEdit(student)}
         >
           <FaEdit className="mr-1" /> Edit
@@ -120,7 +120,7 @@ const AdminPayments = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-all">
+    <div className="p-6 min-h-screen bg-blue-50 dark:bg-gray-900 text-gray-800 dark:text-white transition-all">
       {/* Dark Mode Toggle */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold flex items-center">
@@ -136,14 +136,14 @@ const AdminPayments = () => {
       </div>
 
       {/* Payment Form */}
-      <form onSubmit={handleAddPayment} className="mb-4 p-4 border rounded bg-gray-200 dark:bg-gray-800 transition-all">
+      <form onSubmit={handleAddPayment} className="mb-4 p-4 border rounded bg-white dark:bg-gray-800 transition-all shadow-md">
         <input
           type="text"
           name="studentName"
           placeholder="Student Name"
           value={newPayment.studentName}
           onChange={handleChange}
-          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white"
+          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white text-gray-800"
           required
         />
         <input
@@ -152,7 +152,7 @@ const AdminPayments = () => {
           placeholder="Total Fees"
           value={newPayment.totalFees}
           onChange={handleChange}
-          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white"
+          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white text-gray-800"
           required
           min="0"
           step="0.01"
@@ -163,7 +163,7 @@ const AdminPayments = () => {
           placeholder="Paid Amount"
           value={newPayment.paidAmount}
           onChange={handleChange}
-          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white"
+          className="border p-2 mr-2 rounded bg-white dark:bg-gray-700 dark:text-white text-gray-800"
           required
           min="0"
           step="0.01"
