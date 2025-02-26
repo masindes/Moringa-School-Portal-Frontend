@@ -1,114 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
+  const [amount, setAmount] = useState("");
+  const studentName = "Masinde Sylvester"; // Hardcoded for now
   const totalFees = 50000;
-  const [outstandingAmount, setOutstandingAmount] = useState(0);
-  const [paidAmount, setPaidAmount] = useState(0);
-  const [payment, setPayment] = useState("");
-  const [isFullyPaid, setIsFullyPaid] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    // Load balance from localStorage
-    const savedBalance = localStorage.getItem("feeBalance");
-
-    if (savedBalance) {
-      const balance = parseFloat(savedBalance);
-      setOutstandingAmount(balance);
-      setPaidAmount(totalFees - balance);
-
-      // Check if payment is completed
-      if (balance === 0) {
-        setIsFullyPaid(true);
-      }
-    } else {
-      setOutstandingAmount(totalFees);
-      setPaidAmount(0);
-    }
-  }, []);
-
-  // Handle Payment Submission
   const handlePayment = (e) => {
     e.preventDefault();
-
-    const paymentAmount = parseFloat(payment);
+    
+    const paymentAmount = parseFloat(amount);
     if (isNaN(paymentAmount) || paymentAmount <= 0) {
-      alert("Please enter a valid payment amount.");
+      alert("Enter a valid amount");
       return;
     }
 
-    if (paymentAmount > outstandingAmount) {
-      alert("Payment exceeds outstanding balance!");
-      return;
-    }
+    // Retrieve current payments
+    const storedPayments = JSON.parse(localStorage.getItem("studentPayments")) || [];
 
-    const newOutstandingAmount = outstandingAmount - paymentAmount;
-    const newPaidAmount = totalFees - newOutstandingAmount;
+    // Create new payment entry
+    const newPayment = {
+      id: Date.now(),
+      studentName,
+      amount: paymentAmount,
+      timestamp: new Date().toLocaleString(),
+    };
 
-    // Update state
-    setOutstandingAmount(newOutstandingAmount);
-    setPaidAmount(newPaidAmount);
+    // Save new payment record
+    const updatedPayments = [...storedPayments, newPayment];
+    localStorage.setItem("studentPayments", JSON.stringify(updatedPayments));
 
-    // Save new balance to localStorage
-    localStorage.setItem("feeBalance", newOutstandingAmount.toString());
+    // Update Fee Balance
+    const currentBalance = parseFloat(localStorage.getItem("feeBalance")) || totalFees;
+    const newBalance = Math.max(currentBalance - paymentAmount, 0); // Prevent negative balance
+    localStorage.setItem("feeBalance", newBalance.toString());
 
-    // Check if full payment is completed
-    if (newOutstandingAmount === 0) {
-      setIsFullyPaid(true);
-    }
-
-    // Reset input field
-    setPayment("");
-
-    alert(`Payment of Ksh ${paymentAmount.toLocaleString()} recorded successfully!`);
+    alert("Payment successful!");
+    navigate("/fee-balance"); // Redirect after payment
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mx-auto">
-      <h2 className="text-xl font-bold text-gray-800 text-center">💳 Student Payment</h2>
-      <p className="text-gray-600 text-sm text-center mb-4">Masinde Sylvester's Payment Status</p>
+      <h2 className="text-xl font-bold text-gray-800 text-center">💳 Make a Payment</h2>
+      <p className="text-gray-600 text-sm text-center mb-4">Student: {studentName}</p>
 
-      {/* Fee Details */}
-      <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
-        <div className="flex justify-between text-gray-700 text-sm">
-          <span>Total Fees:</span>
-          <span className="font-semibold">Ksh {totalFees.toLocaleString()}</span>
-        </div>
-
-        <div className="flex justify-between text-gray-700 text-sm mt-2">
-          <span>Paid Amount:</span>
-          <span className="text-green-600 font-semibold">Ksh {paidAmount.toLocaleString()}</span>
-        </div>
-
-        <div className="flex justify-between text-red-600 font-bold text-sm mt-2">
-          <span>Outstanding Balance:</span>
-          <span>Ksh {outstandingAmount.toLocaleString()}</span>
-        </div>
-      </div>
-
-      {/* Show "Successfully Paid" if balance is 0 */}
-      {isFullyPaid ? (
-        <div className="mt-4 text-center text-green-600 font-bold text-lg">
-          🎉 Successfully Paid!
-        </div>
-      ) : (
-        <form onSubmit={handlePayment} className="mt-4">
-          <label className="block text-gray-700 text-sm font-medium">Enter Payment Amount:</label>
-          <input
-            type="number"
-            value={payment}
-            onChange={(e) => setPayment(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-[#ff7d00] focus:border-[#ff7d00]"
-            placeholder="Enter amount in Ksh"
-          />
-
-          <button
-            type="submit"
-            className="mt-3 w-full bg-[#ff7d00] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#e66d00] transition"
-          >
-            ✅ Make Payment
-          </button>
-        </form>
-      )}
+      <form onSubmit={handlePayment}>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm mb-4 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter payment amount"
+        />
+        <button
+          type="submit"
+          className="w-full bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition"
+        >
+          ✅ Confirm Payment
+        </button>
+      </form>
     </div>
   );
 };

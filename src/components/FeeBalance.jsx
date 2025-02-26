@@ -2,17 +2,33 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const FeeBalance = () => {
+  const totalFees = 50000;
   const [outstandingAmount, setOutstandingAmount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
-  const totalFees = 50000;
 
   useEffect(() => {
+    // Fetch fee balance from localStorage
     const savedBalance = localStorage.getItem("feeBalance");
     if (savedBalance) {
       const balance = parseFloat(savedBalance);
       setOutstandingAmount(balance);
       setPaidAmount(totalFees - balance);
+    } else {
+      // If no data in localStorage, set default fee balance
+      localStorage.setItem("feeBalance", totalFees);
+      setOutstandingAmount(totalFees);
+      setPaidAmount(0);
     }
+
+    // Listen for storage changes (for real-time update)
+    const handleStorageChange = () => {
+      const updatedBalance = parseFloat(localStorage.getItem("feeBalance")) || totalFees;
+      setOutstandingAmount(updatedBalance);
+      setPaidAmount(totalFees - updatedBalance);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   return (
