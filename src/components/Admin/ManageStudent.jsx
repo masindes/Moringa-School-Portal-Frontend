@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ManageStudent = () => {
   const [students, setStudents] = useState(() => {
@@ -16,16 +18,18 @@ const ManageStudent = () => {
 
   const handleAddStudent = () => {
     if (!newStudent.name || !newStudent.email || !newStudent.grade || !newStudent.currentPhase) {
-      alert("All fields are required!");
+      toast.error("All fields are required!");
       return;
     }
     const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
     setStudents([...students, { ...newStudent, id: newId }]);
     setNewStudent({ name: '', email: '', grade: '', currentPhase: '' });
+    toast.success("Student added successfully!");
   };
 
   const handleDeleteStudent = (id) => {
     setStudents(students.filter(student => student.id !== id));
+    toast.info("Student deleted.");
   };
 
   const handleEditStudent = (student) => {
@@ -34,17 +38,21 @@ const ManageStudent = () => {
 
   const handleUpdateStudent = () => {
     if (!editingStudent.name || !editingStudent.email || !editingStudent.grade || !editingStudent.currentPhase) {
-      alert("All fields are required!");
+      toast.error("All fields are required!");
       return;
     }
     setStudents(students.map(student => 
       student.id === editingStudent.id ? editingStudent : student
     ));
     setEditingStudent(null);
+    toast.success("Student updated successfully!");
   };
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen text-white">
+      {/* Toast Container */}
+      <ToastContainer position="top-right" autoClose={3000} />
+
       {/* Back to Admin Dashboard NavLink */}
       <NavLink
         to="/Admin"
@@ -158,22 +166,13 @@ const ManageStudent = () => {
             <p className="text-gray-300 mb-2"><strong>Grade:</strong> {student.grade}</p>
             <p className="text-gray-300 mb-4"><strong>Current Phase:</strong> {student.currentPhase}</p>
             <div className="flex space-x-4">
-              <Link
-                to={`/student-details/${student.id}`}
-                className="text-blue-400 hover:text-blue-300"
-              >
+              <Link to={`/student-details/${student.id}`} className="text-blue-400 hover:text-blue-300">
                 View
               </Link>
-              <button
-                onClick={() => handleEditStudent(student)}
-                className="text-yellow-400 hover:text-yellow-300"
-              >
+              <button onClick={() => handleEditStudent(student)} className="text-yellow-400 hover:text-yellow-300">
                 Edit
               </button>
-              <button
-                onClick={() => handleDeleteStudent(student.id)}
-                className="text-red-400 hover:text-red-300"
-              >
+              <button onClick={() => handleDeleteStudent(student.id)} className="text-red-400 hover:text-red-300">
                 Delete
               </button>
             </div>
