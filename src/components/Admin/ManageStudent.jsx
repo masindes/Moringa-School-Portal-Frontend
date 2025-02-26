@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -50,10 +50,8 @@ const ManageStudent = () => {
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen text-white">
-      {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={3000} />
 
-      {/* Back to Admin Dashboard NavLink */}
       <NavLink
         to="/Admin"
         className="flex items-center text-blue-400 hover:text-blue-300 mb-6"
@@ -166,9 +164,6 @@ const ManageStudent = () => {
             <p className="text-gray-300 mb-2"><strong>Grade:</strong> {student.grade}</p>
             <p className="text-gray-300 mb-4"><strong>Current Phase:</strong> {student.currentPhase}</p>
             <div className="flex space-x-4">
-              <Link to={`/student-details/${student.id}`} className="text-blue-400 hover:text-blue-300">
-                View
-              </Link>
               <button onClick={() => handleEditStudent(student)} className="text-yellow-400 hover:text-yellow-300">
                 Edit
               </button>
