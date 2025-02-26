@@ -7,7 +7,7 @@ const ManageStudent = () => {
     return savedStudents ? JSON.parse(savedStudents) : [];
   });
 
-  const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '' });
+  const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', currentPhase: '' });
   const [editingStudent, setEditingStudent] = useState(null);
 
   useEffect(() => {
@@ -15,10 +15,13 @@ const ManageStudent = () => {
   }, [students]);
 
   const handleAddStudent = () => {
-    if (!newStudent.name || !newStudent.email || !newStudent.grade) return;
+    if (!newStudent.name || !newStudent.email || !newStudent.grade || !newStudent.currentPhase) {
+      alert("All fields are required!");
+      return;
+    }
     const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
     setStudents([...students, { ...newStudent, id: newId }]);
-    setNewStudent({ name: '', email: '', grade: '' });
+    setNewStudent({ name: '', email: '', grade: '', currentPhase: '' });
   };
 
   const handleDeleteStudent = (id) => {
@@ -30,6 +33,10 @@ const ManageStudent = () => {
   };
 
   const handleUpdateStudent = () => {
+    if (!editingStudent.name || !editingStudent.email || !editingStudent.grade || !editingStudent.currentPhase) {
+      alert("All fields are required!");
+      return;
+    }
     setStudents(students.map(student => 
       student.id === editingStudent.id ? editingStudent : student
     ));
@@ -74,7 +81,7 @@ const ManageStudent = () => {
             className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
           />
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             value={newStudent.email}
             onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
@@ -85,6 +92,13 @@ const ManageStudent = () => {
             placeholder="Grade"
             value={newStudent.grade}
             onChange={(e) => setNewStudent({ ...newStudent, grade: e.target.value })}
+            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
+          />
+          <input
+            type="text"
+            placeholder="Current Phase"
+            value={newStudent.currentPhase}
+            onChange={(e) => setNewStudent({ ...newStudent, currentPhase: e.target.value })}
             className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
           />
           <button
@@ -108,7 +122,7 @@ const ManageStudent = () => {
               className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
             />
             <input
-              type="text"
+              type="email"
               value={editingStudent.email}
               onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })}
               className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
@@ -117,6 +131,12 @@ const ManageStudent = () => {
               type="text"
               value={editingStudent.grade}
               onChange={(e) => setEditingStudent({ ...editingStudent, grade: e.target.value })}
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
+            />
+            <input
+              type="text"
+              value={editingStudent.currentPhase}
+              onChange={(e) => setEditingStudent({ ...editingStudent, currentPhase: e.target.value })}
               className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
             />
             <button
@@ -135,7 +155,8 @@ const ManageStudent = () => {
           <div key={student.id} className="bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">{student.name}</h3>
             <p className="text-gray-300 mb-2"><strong>Email:</strong> {student.email}</p>
-            <p className="text-gray-300 mb-4"><strong>Grade:</strong> {student.grade}</p>
+            <p className="text-gray-300 mb-2"><strong>Grade:</strong> {student.grade}</p>
+            <p className="text-gray-300 mb-4"><strong>Current Phase:</strong> {student.currentPhase}</p>
             <div className="flex space-x-4">
               <Link
                 to={`/student-details/${student.id}`}
