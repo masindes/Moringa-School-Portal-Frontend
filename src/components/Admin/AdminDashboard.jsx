@@ -20,6 +20,15 @@ const AdminDashboard = () => {
     navigate("/admin-payments"); 
   };
 
+  // Function to toggle student activation
+  const toggleActivation = (id) => {
+    const updatedStudents = students.map((student) =>
+      student.id === id ? { ...student, isActive: !student.isActive } : student
+    );
+    setStudents(updatedStudents);
+    localStorage.setItem("students", JSON.stringify(updatedStudents)); // Update storage
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <h1 className="text-4xl font-bold mb-8 flex items-center">
@@ -75,23 +84,43 @@ const AdminDashboard = () => {
             students.map((student) => (
               <div
                 key={student.id}
-                className="border-b border-gray-700 py-4 last:border-b-0"
+                className="border-b border-gray-700 py-4 last:border-b-0 flex justify-between items-center"
               >
-                <p className="text-gray-200">
-                  <strong>Name:</strong> {student.name}
-                </p>
-                <p className="text-gray-200">
-                  <strong>Email:</strong> {student.email}
-                </p>
-                <p className="text-gray-200">
-                  <strong>Grade:</strong> {student.grade}
-                </p>
-                <h3 className="font-semibold mt-2 text-gray-200">Current Phase:</h3>
-                <ul className="list-disc pl-5 text-gray-300">
-                  {student.currentPhase.map((course, index) => (
-                    <li key={index}>{course}</li>
-                  ))}
-                </ul>
+                <div>
+                  <p className="text-gray-200">
+                    <strong>Name:</strong> {student.name}
+                  </p>
+                  <p className="text-gray-200">
+                    <strong>Email:</strong> {student.email}
+                  </p>
+                  <p className="text-gray-200">
+                    <strong>Grade:</strong> {student.grade}
+                  </p>
+                  <h3 className="font-semibold mt-2 text-gray-200">Current Phase:</h3>
+                  <ul className="list-disc pl-5 text-gray-300">
+                    {student.currentPhase.map((course, index) => (
+                      <li key={index}>{course}</li>
+                    ))}
+                  </ul>
+                  <p className="text-gray-400 mt-2">
+                    <strong>Status:</strong>{" "}
+                    {student.isActive ? (
+                      <span className="text-green-400">Active</span>
+                    ) : (
+                      <span className="text-red-400">Inactive</span>
+                    )}
+                  </p>
+                </div>
+                <button
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-300 ${
+                    student.isActive
+                      ? "bg-red-600 hover:bg-red-700"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
+                  onClick={() => toggleActivation(student.id)}
+                >
+                  {student.isActive ? "Deactivate" : "Activate"}
+                </button>
               </div>
             ))
           ) : (
