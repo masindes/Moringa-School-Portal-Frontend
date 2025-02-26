@@ -37,11 +37,11 @@ const ManageStudent = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gray-900 min-h-screen text-white">
       {/* Back to Admin Dashboard NavLink */}
       <NavLink
         to="/Admin"
-        className="flex items-center text-blue-500 hover:text-blue-600 mb-6"
+        className="flex items-center text-blue-400 hover:text-blue-300 mb-6"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +63,7 @@ const ManageStudent = () => {
       <h2 className="text-2xl font-semibold mb-6">Manage Students</h2>
 
       {/* Add Student Form */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+      <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-xl font-semibold mb-4">Add New Student</h3>
         <div className="space-y-4">
           <input
@@ -71,25 +71,25 @@ const ManageStudent = () => {
             placeholder="Name"
             value={newStudent.name}
             onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
           />
           <input
             type="text"
             placeholder="Email"
             value={newStudent.email}
             onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
           />
           <input
             type="text"
             placeholder="Grade"
             value={newStudent.grade}
             onChange={(e) => setNewStudent({ ...newStudent, grade: e.target.value })}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
           />
           <button
             onClick={handleAddStudent}
-            className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
             Add Student
           </button>
@@ -98,30 +98,30 @@ const ManageStudent = () => {
 
       {/* Edit Student Form */}
       {editingStudent && (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
           <h3 className="text-xl font-semibold mb-4">Edit Student</h3>
           <div className="space-y-4">
             <input
               type="text"
               value={editingStudent.name}
               onChange={(e) => setEditingStudent({ ...editingStudent, name: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
             />
             <input
               type="text"
               value={editingStudent.email}
               onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
             />
             <input
               type="text"
               value={editingStudent.grade}
               onChange={(e) => setEditingStudent({ ...editingStudent, grade: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
             />
             <button
               onClick={handleUpdateStudent}
-              className="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
             >
               Update Student
             </button>
@@ -132,26 +132,26 @@ const ManageStudent = () => {
       {/* Student List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {students.map(student => (
-          <div key={student.id} className="bg-white p-6 rounded-lg shadow-md">
+          <div key={student.id} className="bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">{student.name}</h3>
-            <p className="text-gray-600 mb-2"><strong>Email:</strong> {student.email}</p>
-            <p className="text-gray-600 mb-4"><strong>Grade:</strong> {student.grade}</p>
+            <p className="text-gray-300 mb-2"><strong>Email:</strong> {student.email}</p>
+            <p className="text-gray-300 mb-4"><strong>Grade:</strong> {student.grade}</p>
             <div className="flex space-x-4">
               <Link
                 to={`/student-details/${student.id}`}
-                className="text-blue-500 hover:underline"
+                className="text-blue-400 hover:text-blue-300"
               >
                 View
               </Link>
               <button
                 onClick={() => handleEditStudent(student)}
-                className="text-yellow-500 hover:underline"
+                className="text-yellow-400 hover:text-yellow-300"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDeleteStudent(student.id)}
-                className="text-red-500 hover:underline"
+                className="text-red-400 hover:text-red-300"
               >
                 Delete
               </button>
