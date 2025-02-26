@@ -11,7 +11,7 @@ const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
       <p className="text-red-600 dark:text-red-400">Outstanding Balance: Ksh {(student.totalFees - student.paidAmount).toLocaleString()}</p>
       <div className="mt-3 flex space-x-2">
         <button
-          className="bg-yellow-400 text-gray-900 px-3 py-1 rounded flex items-center hover:bg-yellow-500"
+          className="bg-green-600 text-gray-900 px-3 py-1 rounded flex items-center hover:bg-blue-500"
           onClick={() => onEdit(student)}
         >
           <FaEdit className="mr-1" /> Edit
@@ -161,7 +161,7 @@ const AdminPayments = () => {
               min="0"
               step="0.01"
             />
-            <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-600">
               {editingPayment ? "Update Payment" : "Add Payment"}
             </button>
           </form>
