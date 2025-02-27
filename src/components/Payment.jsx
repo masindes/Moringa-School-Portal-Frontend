@@ -41,15 +41,8 @@ const Payment = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-6 transition-all">
-      {/* Theme Toggle Button */}
-      <button
-        onClick={() => setDarkMode(!darkMode)}
-        className="absolute top-5 right-5 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white p-2 rounded-lg text-sm"
-      >
-        {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-      </button>
-
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-6 transition-all relative">
+      
       {/* Title */}
       <h1 className="text-4xl font-bold mb-2 text-center text-gray-900 dark:text-white">
         💳 Make a Payment
@@ -109,6 +102,15 @@ const Payment = () => {
           </p>
         )}
       </form>
+
+      {/* Dark Mode Toggle Button */}
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="fixed bottom-100 right-6 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white p-3 rounded-full shadow-md text-sm transition-all"
+      >
+        {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+      </button>
+
     </div>
   );
 };
