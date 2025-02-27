@@ -57,18 +57,21 @@ const ManageStudent = () => {
     <div className="p-6 bg-gray-900 min-h-screen text-white">
       <ToastContainer position="top-right" autoClose={3000} />
 
-      {/* Back Button */}
-      <NavLink to="/Admin" className="flex items-center text-blue-400 hover:text-blue-300 mb-6">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-        </svg>
-        Back to Admin Dashboard
-      </NavLink>
+      {/* Centered Back Button */}
+      <div className="flex justify-center mb-6">
+        <NavLink to="/Admin" className="flex items-center text-blue-400 hover:text-blue-300">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Back to Admin Dashboard
+        </NavLink>
+      </div>
 
-      <h2 className="text-2xl font-semibold mb-6">Manage Students</h2>
+      {/* Centered Manage Students Heading */}
+      <h2 className="text-2xl font-semibold text-center mb-6">Manage Students</h2>
 
-      {/* Tabs */}
-      <div className="flex space-x-4 mb-6">
+      {/* Centered Tabs */}
+      <div className="flex justify-center space-x-4 mb-6">
         <button
           onClick={() => setActiveTab('add')}
           className={`px-4 py-2 rounded ${activeTab === 'add' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
@@ -85,8 +88,8 @@ const ManageStudent = () => {
 
       {/* Add Student Form */}
       {activeTab === 'add' && (
-        <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-          <h3 className="text-xl font-semibold mb-4">Add New Student</h3>
+        <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6 max-w-md mx-auto">
+          <h3 className="text-xl font-semibold mb-4 text-center">Add New Student</h3>
           <div className="space-y-4">
             <input type="text" placeholder="Name" value={newStudent.name} onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
             <input type="email" placeholder="Email" value={newStudent.email} onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
