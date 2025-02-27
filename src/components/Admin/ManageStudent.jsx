@@ -11,6 +11,7 @@ const ManageStudent = () => {
 
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', currentPhase: '', course: '' });
   const [editingStudent, setEditingStudent] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('students', JSON.stringify(students));
@@ -37,7 +38,7 @@ const ManageStudent = () => {
   };
 
   const handleEditStudent = (student) => {
-    setEditingStudent(student);
+    setEditingStudent({ ...student }); // Ensure a new object is created
   };
 
   const handleUpdateStudent = () => {
@@ -87,33 +88,38 @@ const ManageStudent = () => {
         <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
           <h3 className="text-xl font-semibold mb-4">Edit Student</h3>
           <div className="space-y-4">
-            <input type="text" placeholder="Name" value={editingStudent.name} onChange={(e) => setEditingStudent({ ...editingStudent, name: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
-            <input type="email" placeholder="Email" value={editingStudent.email} onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
-            <input type="text" placeholder="Grade" value={editingStudent.grade} onChange={(e) => setEditingStudent({ ...editingStudent, grade: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
-            <input type="text" placeholder="Current Phase" value={editingStudent.currentPhase} onChange={(e) => setEditingStudent({ ...editingStudent, currentPhase: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
+            <input type="text" placeholder="Name" value={editingStudent.name} onChange={(e) => setEditingStudent({ ...editingStudent, name: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
+            <input type="email" placeholder="Email" value={editingStudent.email} onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
+            <input type="text" placeholder="Grade" value={editingStudent.grade} onChange={(e) => setEditingStudent({ ...editingStudent, grade: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
+            <input type="text" placeholder="Current Phase" value={editingStudent.currentPhase} onChange={(e) => setEditingStudent({ ...editingStudent, currentPhase: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
             <select value={editingStudent.course} onChange={(e) => setEditingStudent({ ...editingStudent, course: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white">
               <option value="">Select Course</option>
               {courses.map(course => <option key={course} value={course}>{course}</option>)}
             </select>
             <button onClick={handleUpdateStudent} className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Update Student</button>
+            <button onClick={() => setEditingStudent(null)} className="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mt-2">Cancel</button>
           </div>
         </div>
       )}
 
       {/* Student List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {students.map(student => (
+        {(showAll ? students : students.slice(0, 6)).map(student => (
           <div key={student.id} className="bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">{student.name}</h3>
             <p className="text-gray-300 mb-2"><strong>Email:</strong> {student.email}</p>
             <p className="text-gray-300 mb-2"><strong>Grade:</strong> {student.grade}</p>
-            <p className="text-gray-300 mb-2"><strong>Course:</strong> {student.course}</p>
-            <p className="text-gray-300 mb-4"><strong>Current Phase:</strong> {student.currentPhase}</p>
-            <button onClick={() => handleEditStudent(student)} className="text-yellow-400 hover:text-yellow-300">Edit</button>
+            <button onClick={() => handleEditStudent(student)} className="text-yellow-400 hover:text-yellow-300 mt-4">Edit</button>
             <button onClick={() => handleDeleteStudent(student.id)} className="text-red-400 hover:text-red-300 ml-4">Delete</button>
           </div>
         ))}
       </div>
+
+      {students.length > 6 && (
+        <button onClick={() => setShowAll(!showAll)} className="w-full bg-gray-700 text-white px-4 py-2 rounded mt-6">
+          {showAll ? "View Less" : "View More"}
+        </button>
+      )}
     </div>
   );
 };
