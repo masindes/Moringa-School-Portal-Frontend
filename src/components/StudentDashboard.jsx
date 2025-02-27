@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Grades from "./Grades";
 import FeeBalance from "./FeeBalance";
 import CurrentPhase from "./CurrentPhase";
-import { Moon, Sun, CreditCard, BarChart2, Layers, LogOut } from "lucide-react";
+import { Moon, Sun, CreditCard, BarChart2, Layers, LogOut, ArrowLeft } from "lucide-react";
 
 const StudentDashboard = () => {
   // Theme state
@@ -68,6 +68,15 @@ const StudentDashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-8">
+        <div className="flex items-center gap-3 mb-4">
+          <Link
+            to="/home-page"
+            className="flex items-center text-lg text-gray-700 dark:text-gray-300 hover:text-blue-500 transition"
+          >
+            <ArrowLeft size={24} /> Back to Home
+          </Link>
+        </div>
+
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           📊 Student Dashboard
         </h1>
