@@ -25,20 +25,18 @@ const ManageStudent = () => {
       return;
     }
     const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
-    const updatedStudents = [...students, { ...newStudent, id: newId }];
-    setStudents(updatedStudents);
+    setStudents([...students, { ...newStudent, id: newId }]);
     setNewStudent({ name: '', email: '', grade: '', currentPhase: '', course: '' });
     toast.success("Student added successfully!");
   };
 
   const handleDeleteStudent = (id) => {
-    const updatedStudents = students.filter(student => student.id !== id);
-    setStudents(updatedStudents);
+    setStudents(students.filter(student => student.id !== id));
     toast.info("Student deleted.");
   };
 
   const handleEditStudent = (student) => {
-    setEditingStudent({ ...student }); // Ensure a new object is created
+    setEditingStudent({ ...student });
   };
 
   const handleUpdateStudent = () => {
@@ -46,10 +44,9 @@ const ManageStudent = () => {
       toast.error("All fields are required!");
       return;
     }
-    const updatedStudents = students.map(student => 
+    setStudents(students.map(student => 
       student.id === editingStudent.id ? { ...editingStudent } : student
-    );
-    setStudents(updatedStudents);
+    ));
     setEditingStudent(null);
     toast.success("Student updated successfully!");
   };
@@ -107,17 +104,18 @@ const ManageStudent = () => {
         {(showAll ? students : students.slice(0, 6)).map(student => (
           <div key={student.id} className="bg-gray-800 p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">{student.name}</h3>
-            <p className="text-gray-300 mb-2"><strong>Email:</strong> {student.email}</p>
-            <p className="text-gray-300 mb-2"><strong>Grade:</strong> {student.grade}</p>
-            <button onClick={() => handleEditStudent(student)} className="text-yellow-400 hover:text-yellow-300 mt-4">Edit</button>
-            <button onClick={() => handleDeleteStudent(student.id)} className="text-red-400 hover:text-red-300 ml-4">Delete</button>
+            <p className="text-gray-300"><strong>Email:</strong> {student.email}</p>
+            <p className="text-gray-300"><strong>Grade:</strong> {student.grade}</p>
+            <p className="text-gray-300"><strong>Phase:</strong> {student.currentPhase}</p>
+            <p className="text-gray-300 mb-2"><strong>Course:</strong> {student.course}</p>
           </div>
         ))}
       </div>
 
+      {/* Show More/Less Button */}
       {students.length > 6 && (
-        <button onClick={() => setShowAll(!showAll)} className="w-full bg-gray-700 text-white px-4 py-2 rounded mt-6">
-          {showAll ? "View Less" : "View More"}
+        <button onClick={() => setShowAll(!showAll)} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
+          {showAll ? "Show Less" : "Show More"}
         </button>
       )}
     </div>
