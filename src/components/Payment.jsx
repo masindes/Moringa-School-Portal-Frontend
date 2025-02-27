@@ -1,78 +1,56 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
   const [amount, setAmount] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const studentName = "Masinde Sylvester"; 
+  const totalFees = 50000;
+  const navigate = useNavigate();
 
-  const handlePayment = async (e) => {
+  const handlePayment = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage("");
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/mpesa/pay", {
-        phone: phoneNumber,
-        amount: amount,
-      });
-
-      setMessage(response.data.message);
-    } catch (error) {
-      setMessage("Payment request failed. Try again.");
+    
+    const paymentAmount = parseFloat(amount);
+    if (isNaN(paymentAmount) || paymentAmount <= 0) {
+      alert("Enter a valid amount");
+      return;
     }
 
-    setLoading(false);
+    const storedPayments = JSON.parse(localStorage.getItem("studentPayments")) || [];
+
+    const newPayment = {
+      id: Date.now(),
+      studentName,
+      amount: paymentAmount,
+      timestamp: new Date().toLocaleString(),
+    };
+
+    const updatedPayments = [...storedPayments, newPayment];
+    localStorage.setItem("studentPayments", JSON.stringify(updatedPayments));
+
+    alert("Payment successful!");
+    navigate("/fee-balance"); 
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      {/* Title */}
-      <h1 className="text-4xl font-bold mb-2 text-center">💳 Make a Payment</h1>
-      <p className="text-lg text-gray-700 mb-6 text-center">
-        Enter details to pay your fee balance.
-      </p>
+    <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mx-auto">
+      <h2 className="text-xl font-bold text-gray-800 text-center">💳 Make a Payment</h2>
+      <p className="text-gray-600 text-sm text-center mb-4">Student: {studentName}</p>
 
-      {/* Card */}
-      <form onSubmit={handlePayment} className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-lg">
-        {/* Phone Number Input */}
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold text-xl">Phone Number</label>
-          <input
-            type="tel"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="07XXXXXXXX"
-            className="p-3 border border-gray-300 rounded-lg w-full text-lg"
-            required
-          />
-        </div>
-
-        {/* Amount Input */}
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold text-xl">Amount (Ksh)</label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-            className="p-3 border border-gray-300 rounded-lg w-full text-lg"
-            required
-          />
-        </div>
-
-        {/* Submit Button */}
+      <form onSubmit={handlePayment}>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm mb-4 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Enter payment amount"
+        />
         <button
           type="submit"
-          className="w-full bg-[#ff7d00] text-white py-3 rounded-lg text-xl"
-          disabled={loading}
+          className="w-full bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition"
         >
-          {loading ? "Processing..." : "Pay Now"}
+          ✅ Confirm Payment
         </button>
-
-        {/* Payment Message */}
-        {message && <p className="mt-4 text-center text-gray-800 text-lg">{message}</p>}
       </form>
     </div>
   );
