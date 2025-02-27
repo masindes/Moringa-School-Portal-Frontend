@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Grades from "./Grades";
 import FeeBalance from "./FeeBalance";
 import CurrentPhase from "./CurrentPhase";
-import { Moon, Sun, Home, CreditCard, BarChart2, LogOut } from "lucide-react";
+import { Moon, Sun, CreditCard, BarChart2, Layers, LogOut } from "lucide-react";
 
 const StudentDashboard = () => {
   // Theme state
@@ -32,13 +32,6 @@ const StudentDashboard = () => {
 
           <nav className="mt-6 space-y-4">
             <Link
-              to="/dashboard"
-              className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition"
-            >
-              <Home size={20} /> Dashboard
-            </Link>
-
-            <Link
               to="/grades"
               className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition"
             >
@@ -46,10 +39,17 @@ const StudentDashboard = () => {
             </Link>
 
             <Link
-              to="/payment"
+              to="/fee-balance"
               className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition"
             >
-              <CreditCard size={20} /> Payments
+              <CreditCard size={20} /> Fee Balance
+            </Link>
+
+            <Link
+              to="/current-phase"
+              className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition"
+            >
+              <Layers size={20} /> Current Phase
             </Link>
           </nav>
         </div>
