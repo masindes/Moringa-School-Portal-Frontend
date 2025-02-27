@@ -61,7 +61,7 @@ const StudentDashboard = () => {
           {darkMode ? <Sun size={20} /> : <Moon size={20} />} Toggle Theme
         </button>
 
-        <button className="flex items-center gap-3 text-lg text-red-600 hover:bg-red-100 dark:hover:bg-red-900 p-2 rounded-md transition">
+        <button className="flex items-center gap-3 text-lg text-red-600 hover:bg-red-100 dark:hover:bg-red-90 p-2 rounded-md transition">
           <LogOut size={20} /> Logout
         </button>
       </aside>
