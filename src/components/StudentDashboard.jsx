@@ -24,7 +24,7 @@ const StudentDashboard = () => {
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 transition-all">
       {/* Sidebar */}
-      <aside className="w-64 bg-white dark:bg-gray-800 shadow-lg p-6 flex flex-col justify-between">
+      <aside className="w-64 bg-blue-100 dark:bg-gray-800 shadow-lg p-6 flex flex-col justify-between transition-all">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             🎓 Student Portal
