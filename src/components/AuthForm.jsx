@@ -16,7 +16,6 @@ const AuthForm = ({ type }) => {
     e.preventDefault();
     setError(null);
 
-    // Basic validation
     if (!email || !password || (isSignUp && (!firstName || !lastName))) {
       setError("Please fill in all fields.");
       return;
@@ -35,15 +34,13 @@ const AuthForm = ({ type }) => {
 
       const response = await axios.post(endpoint, payload);
 
-      // Store token in localStorage
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-        navigate("/dashboard"); // Redirect to dashboard
+        navigate("/dashboard"); 
       } else {
         setError("No token received. Please try again.");
       }
     } catch (err) {
-      // Handle specific errors from the server
       if (err.response && err.response.data.message) {
         setError(err.response.data.message);
       } else {
