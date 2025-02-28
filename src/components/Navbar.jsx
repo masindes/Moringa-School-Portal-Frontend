@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Bell } from "lucide-react";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
+  const [isOpen, setIsOpen] = useState(false); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -14,11 +14,10 @@ const Navbar = () => {
     setIsAuthenticated(!!token);
 
     if (token) {
-      loadMockNotifications(); // Load mock data instead of API call
+      loadMockNotifications(); 
     }
   }, []);
 
-  // Load Mock Notifications
   const loadMockNotifications = () => {
     const mockNotifications = [
       { id: 1, message: "Your grades have been updated!" },
@@ -28,7 +27,6 @@ const Navbar = () => {
     setNotifications(mockNotifications);
   };
 
-  // Handle Logout
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
       localStorage.removeItem("token");
