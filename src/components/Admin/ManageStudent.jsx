@@ -2,38 +2,57 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
+const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
 
 const ManageStudent = () => {
-  const [students, setStudents] = useState(() => {
-    const savedStudents = localStorage.getItem('students');
-    return savedStudents ? JSON.parse(savedStudents) : [];
-  });
-
+  const [students, setStudents] = useState([]);
   const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', currentPhase: '', course: '' });
   const [editingStudent, setEditingStudent] = useState(null);
   const [activeTab, setActiveTab] = useState('add');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('students', JSON.stringify(students));
-  }, [students]);
+    const fetchStudents = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        setStudents(response.data);
+      } catch (error) {
+        toast.error("Failed to fetch students.");
+      }
+    };
+    fetchStudents();
+  }, []);
 
   const courses = ["Software Engineering", "Cyber Security", "Data Science", "Product Design", "DevOps"];
 
-  const handleAddStudent = () => {
+  const handleAddStudent = async () => {
     if (!newStudent.name || !newStudent.email || !newStudent.grade || !newStudent.currentPhase || !newStudent.course) {
       toast.error("All fields are required!");
       return;
     }
-    const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
-    setStudents([...students, { ...newStudent, id: newId }]);
-    setNewStudent({ name: '', email: '', grade: '', currentPhase: '', course: '' });
-    toast.success("Student added successfully!");
+
+    try {
+      const response = await axios.post(API_URL, newStudent);
+      setStudents([...students, response.data]);
+      setNewStudent({ name: '', email: '', grade: '', currentPhase: '', course: '' });
+      toast.success("Student added successfully!");
+    } catch (error) {
+      toast.error("Failed to add student.");
+    }
   };
 
-  const handleDeleteStudent = (id) => {
-    setStudents(students.filter(student => student.id !== id));
-    toast.info("Student deleted.");
+  const handleDeleteStudent = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this student?")) return;
+
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      setStudents(students.filter(student => student.id !== id));
+      toast.info("Student deleted.");
+    } catch (error) {
+      toast.error("Failed to delete student.");
+    }
   };
 
   const handleEditStudent = (student) => {
@@ -41,23 +60,27 @@ const ManageStudent = () => {
     setIsModalOpen(true);
   };
 
-  const handleUpdateStudent = () => {
+  const handleUpdateStudent = async () => {
     if (!editingStudent.name || !editingStudent.email || !editingStudent.grade || !editingStudent.currentPhase || !editingStudent.course) {
       toast.error("All fields are required!");
       return;
     }
-    setStudents(students.map(student => 
-      student.id === editingStudent.id ? { ...editingStudent } : student
-    ));
-    setIsModalOpen(false);
-    toast.success("Student updated successfully!");
+
+    try {
+      await axios.put(`${API_URL}/${editingStudent.id}`, editingStudent);
+      setStudents(students.map(student => (student.id === editingStudent.id ? editingStudent : student)));
+      setIsModalOpen(false);
+      toast.success("Student updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update student.");
+    }
   };
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen text-white">
       <ToastContainer position="top-right" autoClose={3000} />
 
-      {/* Centered Back Button */}
+      {/* Back Button */}
       <div className="flex justify-center mb-6">
         <NavLink to="/Admin" className="flex items-center text-blue-400 hover:text-blue-300">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,23 +90,10 @@ const ManageStudent = () => {
         </NavLink>
       </div>
 
-      {/* Centered Manage Students Heading */}
-      <h2 className="text-2xl font-semibold text-center mb-6">Manage Students</h2>
-
-      {/* Centered Tabs */}
+      {/* Tabs */}
       <div className="flex justify-center space-x-4 mb-6">
-        <button
-          onClick={() => setActiveTab('add')}
-          className={`px-4 py-2 rounded ${activeTab === 'add' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
-        >
-          Add Student
-        </button>
-        <button
-          onClick={() => setActiveTab('view')}
-          className={`px-4 py-2 rounded ${activeTab === 'view' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
-        >
-          View Students
-        </button>
+        <button onClick={() => setActiveTab('add')} className={`px-4 py-2 rounded ${activeTab === 'add' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}>Add Student</button>
+        <button onClick={() => setActiveTab('view')} className={`px-4 py-2 rounded ${activeTab === 'view' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}>View Students</button>
       </div>
 
       {/* Add Student Form */}
@@ -91,10 +101,9 @@ const ManageStudent = () => {
         <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6 max-w-md mx-auto">
           <h3 className="text-xl font-semibold mb-4 text-center">Add New Student</h3>
           <div className="space-y-4">
-            <input type="text" placeholder="Name" value={newStudent.name} onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
-            <input type="email" placeholder="Email" value={newStudent.email} onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
-            <input type="text" placeholder="Grade" value={newStudent.grade} onChange={(e) => setNewStudent({ ...newStudent, grade: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
-            <input type="text" placeholder="Current Phase" value={newStudent.currentPhase} onChange={(e) => setNewStudent({ ...newStudent, currentPhase: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
+            {["name", "email", "grade", "currentPhase"].map(field => (
+              <input key={field} type="text" placeholder={field} value={newStudent[field]} onChange={(e) => setNewStudent({ ...newStudent, [field]: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"/>
+            ))}
             <select value={newStudent.course} onChange={(e) => setNewStudent({ ...newStudent, course: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white">
               <option value="">Select Course</option>
               {courses.map(course => <option key={course} value={course}>{course}</option>)}
@@ -110,11 +119,10 @@ const ManageStudent = () => {
           {students.map(student => (
             <div key={student.id} className="bg-gray-800 p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold mb-2">{student.name}</h3>
-              <p className="text-gray-300"><strong>Email:</strong> {student.email}</p>
-              <p className="text-gray-300"><strong>Grade:</strong> {student.grade}</p>
-              <p className="text-gray-300"><strong>Phase:</strong> {student.currentPhase}</p>
-              <p className="text-gray-300 mb-4"><strong>Course:</strong> {student.course}</p>
-              <div className="flex space-x-2">
+              {["email", "grade", "currentPhase", "course"].map(field => (
+                <p key={field} className="text-gray-300"><strong>{field.charAt(0).toUpperCase() + field.slice(1)}:</strong> {student[field]}</p>
+              ))}
+              <div className="flex space-x-2 mt-4">
                 <button onClick={() => handleEditStudent(student)} className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Edit</button>
                 <button onClick={() => handleDeleteStudent(student.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
               </div>
@@ -128,18 +136,10 @@ const ManageStudent = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">Edit Student</h3>
-            <div className="space-y-4">
-              <input type="text" placeholder="Name" value={editingStudent.name} onChange={(e) => setEditingStudent({ ...editingStudent, name: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
-              <input type="email" placeholder="Email" value={editingStudent.email} onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
-              <input type="text" placeholder="Grade" value={editingStudent.grade} onChange={(e) => setEditingStudent({ ...editingStudent, grade: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
-              <input type="text" placeholder="Current Phase" value={editingStudent.currentPhase} onChange={(e) => setEditingStudent({ ...editingStudent, currentPhase: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
-              <select value={editingStudent.course} onChange={(e) => setEditingStudent({ ...editingStudent, course: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white">
-                <option value="">Select Course</option>
-                {courses.map(course => <option key={course} value={course}>{course}</option>)}
-              </select>
-              <button onClick={handleUpdateStudent} className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Update Student</button>
-              <button onClick={() => setIsModalOpen(false)} className="w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Cancel</button>
-            </div>
+            {["name", "email", "grade", "currentPhase"].map(field => (
+              <input key={field} type="text" placeholder={field} value={editingStudent[field]} onChange={(e) => setEditingStudent({ ...editingStudent, [field]: e.target.value })} className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"/>
+            ))}
+            <button onClick={handleUpdateStudent} className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Update</button>
           </div>
         </div>
       )}

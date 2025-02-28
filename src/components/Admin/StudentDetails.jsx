@@ -2,6 +2,9 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
+const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
 
 const StudentDetails = () => {
     const { id } = useParams();
@@ -9,42 +12,55 @@ const StudentDetails = () => {
     const [student, setStudent] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editedStudent, setEditedStudent] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
-        const foundStudent = storedStudents.find(s => s.id === parseInt(id));
-
-        if (foundStudent) {
-            setStudent(foundStudent);
-            setEditedStudent(foundStudent);
-        } else {
-            toast.error("Student not found!");
-            navigate('/manage-student');
-        }
+        const fetchStudent = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/${id}`);
+                setStudent(response.data);
+                setEditedStudent(response.data);
+            } catch (error) {
+                toast.error("Student not found!");
+                navigate('/manage-student');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStudent();
     }, [id, navigate]);
 
-    const handleUpdateStudent = () => {
+    const handleUpdateStudent = async () => {
         if (!editedStudent.name || !editedStudent.email || !editedStudent.grade || !editedStudent.currentPhase || !editedStudent.course) {
             toast.error("All fields are required!");
             return;
         }
-        const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
-        const updatedStudents = storedStudents.map(s => (s.id === editedStudent.id ? editedStudent : s));
 
-        localStorage.setItem('students', JSON.stringify(updatedStudents));
-        setStudent(editedStudent);
-        setIsEditing(false);
-        toast.success("Student updated successfully!");
+        try {
+            await axios.put(`${API_URL}/${id}`, editedStudent);
+            setStudent(editedStudent);
+            setIsEditing(false);
+            toast.success("Student updated successfully!");
+        } catch (error) {
+            toast.error("Failed to update student.");
+        }
     };
 
-    const handleDeleteStudent = () => {
-        const storedStudents = JSON.parse(localStorage.getItem('students')) || [];
-        const updatedStudents = storedStudents.filter(s => s.id !== student.id);
+    const handleDeleteStudent = async () => {
+        if (!window.confirm("Are you sure you want to delete this student?")) return;
 
-        localStorage.setItem('students', JSON.stringify(updatedStudents));
-        toast.info("Student deleted.");
-        navigate('/manage-student');
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            toast.info("Student deleted.");
+            navigate('/manage-student');
+        } catch (error) {
+            toast.error("Failed to delete student.");
+        }
     };
+
+    if (loading) {
+        return <div className="text-center text-white p-6">Loading...</div>;
+    }
 
     return (
         <div className="p-6 bg-gray-900 text-white min-h-screen">

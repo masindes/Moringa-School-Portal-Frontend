@@ -24,23 +24,30 @@ const AuthForm = ({ type }) => {
 
     try {
       const endpoint = isSignUp
-        ? "http://localhost:5000/api/signup"
-        : "http://localhost:5000/api/login";
+        ? "https://moringa-school-portal-backend.onrender.com/register"
+        : "https://moringa-school-portal-backend.onrender.com/login";
 
-      const payload = { email, password };
-      if (isSignUp) {
-        payload.firstName = firstName;
-        payload.lastName = lastName;
-      }
+      const payload = { 
+        email, 
+        password,
+        first_name: firstName, // Match backend's expected field name
+        last_name: lastName,  // Match backend's expected field name
+      };
 
       const response = await axios.post(endpoint, payload);
+      console.log(response.data);
+      console.log(response.data.access_token);
+      
+      // Handle response
+      if (response.data.access_token) {
+        console.log(payload);
+        // Store token in localStorage
+        localStorage.setItem("token", response.data.access_token);
 
-      // Store token in localStorage
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        navigate("/dashboard"); // Redirect to dashboard
+        // Redirect to the Home Page
+        navigate("/home-page");
       } else {
-        setError("No token received. Please try again.");
+        setError(response.data.message || "Login failed. Please try again.");
       }
     } catch (err) {
       // Handle specific errors from the server
@@ -60,8 +67,7 @@ const AuthForm = ({ type }) => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         animation: "moveBackground 20s linear infinite",
-      }
-      }
+      }}
     >
       {/* Main Content */}
       <div className="flex flex-grow items-center justify-center px-7 py-7 bg-black bg-opacity-40">
@@ -80,7 +86,7 @@ const AuthForm = ({ type }) => {
                 {isSignUp ? "Create Account" : "Sign In"}
               </h3>
 
-              {error && <p className="text-red-500 text-center">{error}</p>}
+              {error && <p className="text-green-500 text-center">{error}</p>}
 
               <form onSubmit={handleSubmit}>
                 {isSignUp && (
