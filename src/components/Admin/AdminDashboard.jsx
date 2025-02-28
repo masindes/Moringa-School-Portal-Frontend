@@ -7,7 +7,6 @@ const AdminDashboard = () => {
   const [students, setStudents] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
 
-  // Load students from localStorage when showDetails is toggled
   useEffect(() => {
     if (showDetails) {
       const storedStudents = JSON.parse(localStorage.getItem("students")) || [];
@@ -15,7 +14,6 @@ const AdminDashboard = () => {
     }
   }, [showDetails]);
 
-  // Function to navigate to payments
   const handlePaymentsNavigation = (e) => {
     e.stopPropagation();
     navigate("/admin-payments");
@@ -23,7 +21,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center items-center p-8">
-      {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text inline-block">
           Admin Dashboard
@@ -31,9 +28,7 @@ const AdminDashboard = () => {
         <p className="text-gray-400 mt-2">Manage students, payments, and more.</p>
       </div>
 
-      {/* Dashboard Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center mb-12">
-        {/* Manage Students Card */}
         <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-purple-500/50">
           <UserCheck className="w-12 h-12 text-blue-400 mb-4" />
           <h2 className="text-xl font-semibold text-gray-100 mb-2">Manage Students</h2>
@@ -42,14 +37,13 @@ const AdminDashboard = () => {
             className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
             onClick={() => {
               navigate("/manage-student");
-              setShowDetails(true); // Show student details when navigating
+              setShowDetails(true); 
             }}
           >
             View Students
           </button>
         </div>
 
-        {/* Payments Card */}
         <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-yellow-500/50">
           <CreditCard className="w-12 h-12 text-yellow-400 mb-4" />
           <h2 className="text-xl font-semibold text-gray-100 mb-2">Payments</h2>
@@ -62,7 +56,6 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {/* View Student Details Card */}
         <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-green-500/50">
           <BookOpen className="w-12 h-12 text-green-400 mb-4" />
           <h2 className="text-xl font-semibold text-gray-100 mb-2">View Student Details</h2>
@@ -78,7 +71,6 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Student Details Section */}
       {showDetails && (
         <div className="mt-8 p-6 bg-gray-800 shadow-2xl rounded-lg max-w-4xl w-full">
           <h2 className="text-2xl font-bold mb-6 text-gray-100 text-center">All Student Details</h2>
