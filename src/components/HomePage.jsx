@@ -12,7 +12,6 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {/* Notification Bell */}
       <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50">
         <button
           className="bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition relative"
@@ -26,7 +25,6 @@ const HomePage = () => {
           )}
         </button>
 
-        {/* Notification Dropdown */}
         {showNotifications && (
           <div className="absolute right-0 mt-4 w-64 bg-white shadow-lg rounded-lg p-4">
             <h3 className="text-lg font-semibold mb-2">Notifications</h3>
@@ -41,7 +39,6 @@ const HomePage = () => {
         )}
       </div>
 
-      {/* Hero Section */}
       <div
         className="bg-gradient-to-r from-blue-600 to-purple-600 py-20 text-center text-white"
         style={{
@@ -53,9 +50,7 @@ const HomePage = () => {
         <p className="text-xl mb-6">Stay updated with the latest announcements and access key features.</p>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto p-6">
-        {/* Announcements Section */}
         <div className="mt-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">Announcements</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -83,7 +78,6 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Quick Links Section */}
         <div className="mt-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">Quick Links</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
