@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import pexelsImage from "../assets/images/pexels.jpg"; // Import the image
+import pexelsImage from "../assets/images/pexels.jpg"; 
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +15,6 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted:", formData);
-    // You can integrate with backend API here
   };
 
   return (
