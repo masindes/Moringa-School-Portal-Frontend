@@ -35,20 +35,34 @@ const AuthForm = ({ type }) => {
       };
 
       const response = await axios.post(endpoint, payload);
-      console.log(response.data);
-      console.log(response.data.access_token);
+      const access_token = response.data.access_token
+      const role = response.data.role
+      
       
       // Handle response
       if (response.data.access_token) {
-        console.log(payload);
+        
+        
         // Store token in localStorage
         localStorage.setItem("token", response.data.access_token);
-
+        localStorage.setItem("role", response.data.role);
+        switch (role){
+          case 'admin':
+            navigate('/admin')
+            break;
+            case'student':
+            navigate('/home-page')
+            break;
+            default:
+              navigate('/login')
+    
+        }
         // Redirect to the Home Page
-        navigate("/home-page");
+        
       } else {
         setError(response.data.message || "Login failed. Please try again.");
       }
+    
     } catch (err) {
       // Handle specific errors from the server
       if (err.response && err.response.data.message) {

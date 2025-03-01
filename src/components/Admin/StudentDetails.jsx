@@ -17,7 +17,7 @@ const StudentDetails = () => {
     useEffect(() => {
         const fetchStudent = async () => {
             try {
-                const response = await axios.get(`${API_URL}/${id}`);
+                const response = await axios.get(`${API_URL}`);
                 setStudent(response.data);
                 setEditedStudent(response.data);
             } catch (error) {
