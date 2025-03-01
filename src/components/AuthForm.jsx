@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,17 +8,20 @@ const AuthForm = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const isSignUp = type === "signup";
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     // Basic validation
     if (!email || !password || (isSignUp && (!firstName || !lastName))) {
       setError("Please fill in all fields.");
+      setLoading(false);
       return;
     }
 
@@ -35,43 +38,35 @@ const AuthForm = ({ type }) => {
       };
 
       const response = await axios.post(endpoint, payload);
-      const access_token = response.data.access_token
-      const role = response.data.role
-      
-      
-      // Handle response
-      if (response.data.access_token) {
+      const { access_token, role } = response.data;
+
+      if (access_token) {
+        localStorage.setItem("token", access_token);
+        localStorage.setItem("role", role);
         
-        
-        // Store token in localStorage
-        localStorage.setItem("token", response.data.access_token);
-        localStorage.setItem("role", response.data.role);
-        switch (role){
+        switch (role) {
           case 'admin':
-            navigate('/admin')
+            navigate('/admin');
             break;
-            case'student':
-            navigate('/home-page')
+          case 'student':
+            navigate('/home-page');
             break;
-            default:
-              navigate('/login')
-    
+          default:
+            navigate('/login');
         }
-        // Redirect to the Home Page
-        
       } else {
         setError(response.data.message || "Login failed. Please try again.");
       }
-    
     } catch (err) {
-      // Handle specific errors from the server
       if (err.response && err.response.data.message) {
         setError(err.response.data.message);
       } else {
         setError("An error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [email, password, firstName, lastName, isSignUp, navigate]);
 
   return (
     <div
@@ -161,8 +156,9 @@ const AuthForm = ({ type }) => {
                 <button
                   type="submit"
                   className="w-full bg-black text-white py-2 rounded-lg hover:bg-[#df872e] transition"
+                  disabled={loading}
                 >
-                  {isSignUp ? "Create Account" : "Sign In"}
+                  {loading ? "Loading..." : isSignUp ? "Create Account" : "Sign In"}
                 </button>
 
                 <div className="flex justify-between items-center mt-3 text-sm text-black">
@@ -192,4 +188,4 @@ const AuthForm = ({ type }) => {
   );
 };
 
-export default AuthForm;
+export default React.memo(AuthForm);
