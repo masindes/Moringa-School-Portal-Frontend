@@ -38,11 +38,11 @@ const ChatSupport = () => {
   };
 
   return (
-    <div className="fixed top-8 right-8">
+    <div className="fixed top-32 right-8 z-50"> {/* Adjusted top position and added z-index */}
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-4 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+        className="p-4 bg-green-500 text-white rounded-full shadow-lg hover:bg-sky-600 transition-colors"
       >
         {isOpen ? (
           <svg
@@ -79,9 +79,9 @@ const ChatSupport = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="mt-4 w-80 bg-white rounded-lg shadow-lg flex flex-col overflow-hidden">
+        <div className="mt-4 w-80 h-96 bg-white rounded-lg shadow-lg flex flex-col overflow-hidden">
           {/* Chat Header */}
-          <div className="p-4 bg-blue-500 text-white">
+          <div className="p-4 bg-green-500 text-white">
             <h2 className="text-lg font-semibold">Chat Support</h2>
           </div>
 
@@ -92,7 +92,7 @@ const ChatSupport = () => {
                 key={index}
                 className={`mb-3 p-3 rounded-lg max-w-[80%] ${
                   msg.sender === "user"
-                    ? "bg-blue-500 text-white ml-auto"
+                    ? "bg-green-500 text-white ml-auto"
                     : "bg-gray-200 text-gray-800"
                 }`}
               >
@@ -100,7 +100,7 @@ const ChatSupport = () => {
               </div>
             ))}
             {loading && (
-              <div className="mb-3 p-3 rounded-lg bg-gray-200 text-gray-800 max-w-[80%]">
+              <div className="mb-3 p-3 rounded-lg bg-gray-200 text-green-800 max-w-[80%]">
                 Typing...
               </div>
             )}
