@@ -3,177 +3,178 @@ import { NavLink } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ManageStudent = () => {
-  const [students, setStudents] = useState(() => {
-    const savedStudents = localStorage.getItem('students');
-    return savedStudents ? JSON.parse(savedStudents) : [];
-  });
+const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
 
-  const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', currentPhase: '' });
+const ManageStudent = () => {
+  const [students, setStudents] = useState([]);
+  const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', currentPhase: '', course: '' });
   const [editingStudent, setEditingStudent] = useState(null);
+  const [activeTab, setActiveTab] = useState('add');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Get the JWT token from LocalStorage
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    localStorage.setItem('students', JSON.stringify(students));
-  }, [students]);
+    fetchStudents();
+  }, [token]);
 
-  const handleAddStudent = () => {
-    if (!newStudent.name || !newStudent.email || !newStudent.grade || !newStudent.currentPhase) {
+  // 🟢 Read: Fetch Students
+  const fetchStudents = async () => {
+    try {
+      const response = await fetch(API_URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 401) {
+        toast.error('Unauthorized: Please log in.');
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch students.');
+      }
+
+      const data = await response.json();
+      setStudents(Array.isArray(data) ? data : []);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const courses = ["Software Engineering", "Cyber Security", "Data Science", "Product Design", "DevOps"];
+
+  // 🟢 Create: Add a New Student
+  const handleAddStudent = async () => {
+    if (!Object.values(newStudent).every(value => value)) {
       toast.error("All fields are required!");
       return;
     }
-    const newId = students.length ? Math.max(...students.map(s => s.id)) + 1 : 1;
-    setStudents([...students, { ...newStudent, id: newId }]);
-    setNewStudent({ name: '', email: '', grade: '', currentPhase: '' });
-    toast.success("Student added successfully!");
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(newStudent),
+      });
+
+      if (!response.ok) throw new Error('Failed to add student.');
+
+      const addedStudent = await response.json();
+      setStudents([...students, addedStudent]);
+      setNewStudent({ name: '', email: '', grade: '', currentPhase: '', course: '' });
+      toast.success("Student added successfully!");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  const handleDeleteStudent = (id) => {
-    setStudents(students.filter(student => student.id !== id));
-    toast.info("Student deleted.");
+  // 🟢 Delete: Remove a Student
+  const handleDeleteStudent = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this student?")) return;
+
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to delete student.');
+
+      setStudents(students.filter(student => student.id !== id));
+      toast.info("Student deleted.");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
+  // 🟢 Prepare Student for Editing
   const handleEditStudent = (student) => {
     setEditingStudent(student);
+    setIsModalOpen(true);
   };
 
-  const handleUpdateStudent = () => {
-    if (!editingStudent.name || !editingStudent.email || !editingStudent.grade || !editingStudent.currentPhase) {
+  // 🟢 Update: Edit Student Details
+  const handleUpdateStudent = async () => {
+    if (!Object.values(editingStudent).every(value => value)) {
       toast.error("All fields are required!");
       return;
     }
-    setStudents(students.map(student => 
-      student.id === editingStudent.id ? editingStudent : student
-    ));
-    setEditingStudent(null);
-    toast.success("Student updated successfully!");
+
+    try {
+      const response = await fetch(`${API_URL}/${editingStudent.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(editingStudent),
+      });
+
+      if (!response.ok) throw new Error('Failed to update student.');
+
+      setStudents(students.map(student => (student.id === editingStudent.id ? editingStudent : student)));
+      setIsModalOpen(false);
+      toast.success("Student updated successfully!");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen text-white">
       <ToastContainer position="top-right" autoClose={3000} />
 
-      <NavLink
-        to="/Admin"
-        className="flex items-center text-blue-400 hover:text-blue-300 mb-6"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 mr-2"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-          />
-        </svg>
-        Back to Admin Dashboard
-      </NavLink>
-
-      <h2 className="text-2xl font-semibold mb-6">Manage Students</h2>
-
-      {/* Add Student Form */}
-      <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-        <h3 className="text-xl font-semibold mb-4">Add New Student</h3>
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Name"
-            value={newStudent.name}
-            onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
-            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={newStudent.email}
-            onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
-            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-          />
-          <input
-            type="text"
-            placeholder="Grade"
-            value={newStudent.grade}
-            onChange={(e) => setNewStudent({ ...newStudent, grade: e.target.value })}
-            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-          />
-          <input
-            type="text"
-            placeholder="Current Phase"
-            value={newStudent.currentPhase}
-            onChange={(e) => setNewStudent({ ...newStudent, currentPhase: e.target.value })}
-            className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-          />
-          <button
-            onClick={handleAddStudent}
-            className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Add Student
-          </button>
-        </div>
+      <div className="flex justify-center mb-6">
+        <NavLink to="/Admin" className="flex items-center text-blue-400 hover:text-blue-300">
+          <span>&larr;</span> Back to Admin Dashboard
+        </NavLink>
       </div>
 
-      {/* Edit Student Form */}
-      {editingStudent && (
-        <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
-          <h3 className="text-xl font-semibold mb-4">Edit Student</h3>
-          <div className="space-y-4">
-            <input
-              type="text"
-              value={editingStudent.name}
-              onChange={(e) => setEditingStudent({ ...editingStudent, name: e.target.value })}
-              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-            />
-            <input
-              type="email"
-              value={editingStudent.email}
-              onChange={(e) => setEditingStudent({ ...editingStudent, email: e.target.value })}
-              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-            />
-            <input
-              type="text"
-              value={editingStudent.grade}
-              onChange={(e) => setEditingStudent({ ...editingStudent, grade: e.target.value })}
-              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-            />
-            <input
-              type="text"
-              value={editingStudent.currentPhase}
-              onChange={(e) => setEditingStudent({ ...editingStudent, currentPhase: e.target.value })}
-              className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white placeholder-gray-400"
-            />
-            <button
-              onClick={handleUpdateStudent}
-              className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            >
-              Update Student
-            </button>
-          </div>
+      <div className="flex justify-center space-x-4 mb-6">
+        <button onClick={() => setActiveTab('add')} className={`px-4 py-2 rounded ${activeTab === 'add' ? 'bg-blue-600' : 'bg-gray-700'}`}>Add Student</button>
+        <button onClick={() => setActiveTab('view')} className={`px-4 py-2 rounded ${activeTab === 'view' ? 'bg-blue-600' : 'bg-gray-700'}`}>View Students</button>
+      </div>
+
+      {activeTab === 'add' && (
+        <div className="max-w-md mx-auto bg-gray-800 p-6 rounded-lg">
+          <h3 className="text-xl mb-4">Add New Student</h3>
+          {["name", "email", "grade", "currentPhase"].map(field => (
+            <input key={field} type="text" placeholder={field} value={newStudent[field]} onChange={(e) => setNewStudent({ ...newStudent, [field]: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded" />
+          ))}
+          <select value={newStudent.course} onChange={(e) => setNewStudent({ ...newStudent, course: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded">
+            <option value="">Select Course</option>
+            {courses.map(course => <option key={course} value={course}>{course}</option>)}
+          </select>
+          <button onClick={handleAddStudent} className="w-full bg-blue-600 p-2 rounded">Add Student</button>
         </div>
       )}
 
-      {/* Student List */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {students.map(student => (
-          <div key={student.id} className="bg-gray-800 p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">{student.name}</h3>
-            <p className="text-gray-300 mb-2"><strong>Email:</strong> {student.email}</p>
-            <p className="text-gray-300 mb-2"><strong>Grade:</strong> {student.grade}</p>
-            <p className="text-gray-300 mb-4"><strong>Current Phase:</strong> {student.currentPhase}</p>
-            <div className="flex space-x-4">
-              <button onClick={() => handleEditStudent(student)} className="text-yellow-400 hover:text-yellow-300">
-                Edit
-              </button>
-              <button onClick={() => handleDeleteStudent(student.id)} className="text-red-400 hover:text-red-300">
-                Delete
-              </button>
+      {activeTab === 'view' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(students ?? []).map(student => (
+            <div key={student.id} className="bg-gray-800 p-6 rounded-lg">
+              <h3 className="text-xl mb-2">{student.name}</h3>
+              {["email", "grade", "currentPhase", "course"].map(field => (
+                <p key={field}><strong>{field}:</strong> {student[field]}</p>
+              ))}
+              <div className="flex space-x-2 mt-4">
+                <button onClick={() => handleEditStudent(student)} className="bg-yellow-500 p-2 rounded">Edit</button>
+                <button onClick={() => handleDeleteStudent(student.id)} className="bg-red-500 p-2 rounded">Delete</button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

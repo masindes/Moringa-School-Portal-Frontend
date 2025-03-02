@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 
 const AuthForm = ({ type }) => {
   const [firstName, setFirstName] = useState("");
@@ -8,49 +9,72 @@ const AuthForm = ({ type }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
   const isSignUp = type === "signup";
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     // Basic validation
     if (!email || !password || (isSignUp && (!firstName || !lastName))) {
       setError("Please fill in all fields.");
+      setLoading(false);
       return;
     }
 
     try {
       const endpoint = isSignUp
-        ? "http://localhost:5000/api/signup"
-        : "http://localhost:5000/api/login";
+        ? "https://moringa-school-portal-backend.onrender.com/register"
+        : "https://moringa-school-portal-backend.onrender.com/login";
 
-      const payload = { email, password };
-      if (isSignUp) {
-        payload.firstName = firstName;
-        payload.lastName = lastName;
-      }
+      const payload = { 
+        email, 
+        password,
+        first_name: firstName, // Match backend's expected field name
+        last_name: lastName,  // Match backend's expected field name
+      };
 
       const response = await axios.post(endpoint, payload);
+      const { access_token, role } = response.data;
 
-      // Store token in localStorage
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        navigate("/dashboard"); // Redirect to dashboard
+      if (access_token) {
+        // Store the token and role in localStorage
+        localStorage.setItem("token", access_token);
+        localStorage.setItem("role", role);
+
+        // Set successful login state
+        setError(null); // Clear any previous errors
+        setLoading(false);
+
+        // Redirect based on role
+        switch (role) {
+          case 'admin':
+            navigate('/admin');
+            break;
+          case 'student':
+            navigate('/home-page');
+            break;
+          default:
+            navigate('/login');
+        }
       } else {
-        setError("No token received. Please try again.");
+        setError(response.data.message || "Login failed. Please try again.");
       }
     } catch (err) {
-      // Handle specific errors from the server
       if (err.response && err.response.data.message) {
         setError(err.response.data.message);
       } else {
         setError("An error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [email, password, firstName, lastName, isSignUp, navigate]);
 
   return (
     <div
@@ -60,8 +84,7 @@ const AuthForm = ({ type }) => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         animation: "moveBackground 20s linear infinite",
-      }
-      }
+      }}
     >
       {/* Main Content */}
       <div className="flex flex-grow items-center justify-center px-7 py-7 bg-black bg-opacity-40">
@@ -125,24 +148,34 @@ const AuthForm = ({ type }) => {
                   />
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 relative">
                   <label className="block text-black text-sm font-medium">
                     Password
                   </label>
-                  <input
-                    type="password"
-                    className="w-full p-2 border border-gray-300 rounded-lg"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"} // Toggle between text and password
+                      className="w-full p-2 border border-gray-300 rounded-lg pr-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center h-full" // Center the icon vertically
+                      onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle eye icons */}
+                    </button>
+                  </div>
                 </div>
 
                 <button
                   type="submit"
                   className="w-full bg-black text-white py-2 rounded-lg hover:bg-[#df872e] transition"
+                  disabled={loading}
                 >
-                  {isSignUp ? "Create Account" : "Sign In"}
+                  {loading ? "Loading..." : isSignUp ? "Create Account" : "Sign In"}
                 </button>
 
                 <div className="flex justify-between items-center mt-3 text-sm text-black">
@@ -172,4 +205,4 @@ const AuthForm = ({ type }) => {
   );
 };
 
-export default AuthForm;
+export default React.memo(AuthForm);
