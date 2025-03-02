@@ -43,9 +43,15 @@ const AuthForm = ({ type }) => {
       const { access_token, role } = response.data;
 
       if (access_token) {
+        // Store the token and role in localStorage
         localStorage.setItem("token", access_token);
         localStorage.setItem("role", role);
-        
+
+        // Set successful login state
+        setError(null); // Clear any previous errors
+        setLoading(false);
+
+        // Redirect based on role
         switch (role) {
           case 'admin':
             navigate('/admin');
@@ -97,7 +103,7 @@ const AuthForm = ({ type }) => {
                 {isSignUp ? "Create Account" : "Sign In"}
               </h3>
 
-              {error && <p className="text-green-500 text-center">{error}</p>}
+              {error && <p className="text-red-500 text-center">{error}</p>}
 
               <form onSubmit={handleSubmit}>
                 {isSignUp && (
