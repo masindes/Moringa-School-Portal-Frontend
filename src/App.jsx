@@ -16,6 +16,7 @@ import Logout from "./components/Logout";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ManageStudent from "./components/Admin/ManageStudent";
 import AdminPayments from "./components/Admin/AdminPayments";
+import ChatSupport from "./components/ChatSupport";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,6 +29,12 @@ const App = () => {
 
   return (
     <Router>
+       <div className="App">
+      <h1 className="text-3xl font-bold text-center mt-8">
+        Welcome to My App
+      </h1>
+      <ChatSupport />
+    </div>
       <div className="min-h-screen flex flex-col bg-gray-100">
         {/* Pass authentication state to Navbar */}
         <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
