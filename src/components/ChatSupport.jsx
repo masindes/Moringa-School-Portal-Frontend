@@ -38,7 +38,7 @@ const ChatSupport = () => {
   };
 
   return (
-    <div className="fixed bottom-8 right-8">
+    <div className="fixed top-8 right-8">
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
