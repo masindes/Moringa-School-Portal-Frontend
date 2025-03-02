@@ -1,12 +1,18 @@
-// src/components/ChatSupport.js
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
 
 const ChatSupport = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // State to toggle chat window
+  const [isOpen, setIsOpen] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  // Scroll to the bottom of the chat when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
@@ -16,15 +22,14 @@ const ChatSupport = () => {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      // Send the user message to the Rasa server
       const response = await axios.post("http://localhost:5005/webhooks/rest/webhook", {
         sender: "user",
         message: input,
       });
 
-      // Add the bot's response to the messages
-      const aiMessage = response.data[0].text;
-      setMessages((prev) => [...prev, { text: aiMessage, sender: "ai" }]);
+      response.data.forEach((msg) => {
+        setMessages((prev) => [...prev, { text: msg.text, sender: "ai" }]);
+      });
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages((prev) => [
@@ -38,7 +43,7 @@ const ChatSupport = () => {
   };
 
   return (
-    <div className="fixed top-32 right-8 z-50"> {/* Adjusted top position and added z-index */}
+    <div className="fixed top-32 right-8 z-50">
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -79,35 +84,36 @@ const ChatSupport = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="mt-4 w-80 h-96 bg-white rounded-lg shadow-lg flex flex-col overflow-hidden">
+        <div className="mt-4 w-80 h-96 bg-white/80 backdrop-blur-lg rounded-lg shadow-lg flex flex-col overflow-hidden">
           {/* Chat Header */}
-          <div className="p-4 bg-green-500 text-white">
+          <div className="p-4 bg-green-500/80 text-white">
             <h2 className="text-lg font-semibold">Chat Support</h2>
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+          <div className="flex-1 p-4 overflow-y-auto bg-gray-50/50">
             {messages.map((msg, index) => (
               <div
                 key={index}
                 className={`mb-3 p-3 rounded-lg max-w-[80%] ${
                   msg.sender === "user"
-                    ? "bg-green-500 text-white ml-auto"
-                    : "bg-gray-200 text-gray-800"
+                    ? "bg-green-500/90 text-white ml-auto"
+                    : "bg-gray-200/90 text-gray-800"
                 }`}
               >
                 {msg.text}
               </div>
             ))}
             {loading && (
-              <div className="mb-3 p-3 rounded-lg bg-gray-200 text-green-800 max-w-[80%]">
+              <div className="mb-3 p-3 rounded-lg bg-gray-200/90 text-green-800 max-w-[80%]">
                 Typing...
               </div>
             )}
+            <div ref={messagesEndRef} /> {/* Scroll to this element */}
           </div>
 
           {/* Chat Input */}
-          <div className="flex border-t border-gray-300">
+          <div className="flex border-t border-gray-300/50">
             <input
               type="text"
               value={input}
@@ -115,12 +121,12 @@ const ChatSupport = () => {
               onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               placeholder="Type your message..."
               disabled={loading}
-              className="flex-1 p-3 border-none outline-none"
+              className="flex-1 p-3 border-none outline-none bg-transparent"
             />
             <button
               onClick={handleSendMessage}
               disabled={loading}
-              className="p-3 bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              className="p-3 bg-blue-500/90 text-white hover:bg-blue-600/90 disabled:bg-gray-400/90 disabled:cursor-not-allowed transition-colors"
             >
               Send
             </button>
