@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 
 const AuthForm = ({ type }) => {
   const [firstName, setFirstName] = useState("");
@@ -9,6 +10,7 @@ const AuthForm = ({ type }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const isSignUp = type === "signup";
@@ -140,17 +142,24 @@ const AuthForm = ({ type }) => {
                   />
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 relative">
                   <label className="block text-black text-sm font-medium">
                     Password
                   </label>
                   <input
-                    type="password"
-                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    type={showPassword ? "text" : "password"} // Toggle between text and password
+                    className="w-full p-2 border border-gray-300 rounded-lg pr-10"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle eye icons */}
+                  </button>
                 </div>
 
                 <button
