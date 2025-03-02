@@ -10,7 +10,7 @@ const AuthForm = ({ type }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
   const isSignUp = type === "signup";
@@ -146,20 +146,22 @@ const AuthForm = ({ type }) => {
                   <label className="block text-black text-sm font-medium">
                     Password
                   </label>
-                  <input
-                    type={showPassword ? "text" : "password"} // Toggle between text and password
-                    className="w-full p-2 border border-gray-300 rounded-lg pr-10"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                    onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle eye icons */}
-                  </button>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"} // Toggle between text and password
+                      className="w-full p-2 border border-gray-300 rounded-lg pr-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center h-full" // Center the icon vertically
+                      onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle eye icons */}
+                    </button>
+                  </div>
                 </div>
 
                 <button
