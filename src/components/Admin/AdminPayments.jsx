@@ -27,7 +27,6 @@ const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   );
 };
 
-// ✅ Define PropTypes for validation
 StudentPaymentCard.propTypes = {
   student: PropTypes.shape({
     id: PropTypes.number.isRequired,
@@ -42,7 +41,6 @@ StudentPaymentCard.propTypes = {
 const AdminPayments = () => {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
 
-  // ✅ Load payments from localStorage
   const [payments, setPayments] = useState(() => {
     const savedPayments = localStorage.getItem("payments");
     return savedPayments ? JSON.parse(savedPayments) : [];
