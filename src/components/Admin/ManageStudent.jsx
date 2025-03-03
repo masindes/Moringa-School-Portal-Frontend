@@ -20,7 +20,6 @@ const ManageStudent = () => {
     fetchStudents();
   }, [token]);
 
-  // Fetch Students
   const fetchStudents = async () => {
     try {
       const response = await fetch(API_URL, {
@@ -50,13 +49,11 @@ const ManageStudent = () => {
     { id: 5, name: "DevOps" }
   ];
 
-  // Handle Input Change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setStudentForm({ ...studentForm, [name]: value });
   };
 
-  // Add or Update Student
   const handleSubmit = async () => {
     if (!Object.values(studentForm).every(value => value)) {
       toast.error("All fields are required!");
@@ -107,7 +104,6 @@ const ManageStudent = () => {
     }
   };
 
-  // Delete Student
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this student?")) return;
 
@@ -126,7 +122,6 @@ const ManageStudent = () => {
     }
   };
 
-  // Edit Student
   const handleEdit = (student) => {
     setEditingStudent(student);
     setStudentForm(student);
