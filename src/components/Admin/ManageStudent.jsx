@@ -7,12 +7,11 @@ const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
 
 const ManageStudent = () => {
   const [students, setStudents] = useState([]);
-  const [newStudent, setNewStudent] = useState({ name: '', email: '', grade: '', currentPhase: '', course: '' });
+  const [newStudent, setNewStudent] = useState({ firstName: '', lastName: '', email: '', currentPhase: '', course: '' });
   const [editingStudent, setEditingStudent] = useState(null);
   const [activeTab, setActiveTab] = useState('add');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Get the JWT token from LocalStorage
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -69,7 +68,7 @@ const ManageStudent = () => {
 
       const addedStudent = await response.json();
       setStudents([...students, addedStudent]);
-      setNewStudent({ name: '', email: '', grade: '', currentPhase: '', course: '' });
+      setNewStudent({ firstName: '', lastName: '', email: '', currentPhase: '', course: '' });
       toast.success("Student added successfully!");
     } catch (error) {
       toast.error(error.message);
@@ -148,7 +147,7 @@ const ManageStudent = () => {
       {activeTab === 'add' && (
         <div className="max-w-md mx-auto bg-gray-800 p-6 rounded-lg">
           <h3 className="text-xl mb-4">Add New Student</h3>
-          {["name", "email", "grade", "currentPhase"].map(field => (
+          {["firstName", "lastName", "email", "currentPhase"].map(field => (
             <input key={field} type="text" placeholder={field} value={newStudent[field]} onChange={(e) => setNewStudent({ ...newStudent, [field]: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded" />
           ))}
           <select value={newStudent.course} onChange={(e) => setNewStudent({ ...newStudent, course: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded">
@@ -163,8 +162,8 @@ const ManageStudent = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {(students ?? []).map(student => (
             <div key={student.id} className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-xl mb-2">{student.name}</h3>
-              {["email", "grade", "currentPhase", "course"].map(field => (
+              <h3 className="text-xl mb-2">{student.firstName} {student.lastName}</h3>
+              {["email", "currentPhase", "grade", "course"].map(field => (
                 <p key={field}><strong>{field}:</strong> {student[field]}</p>
               ))}
               <div className="flex space-x-2 mt-4">
@@ -173,6 +172,24 @@ const ManageStudent = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {isModalOpen && editingStudent && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-800 p-6 rounded-lg">
+            <h3 className="text-xl mb-4">Edit Student</h3>
+            {["firstName", "lastName", "email", "currentPhase", "grade"].map(field => (
+              <input key={field} type="text" placeholder={field} value={editingStudent[field]} onChange={(e) => setEditingStudent({ ...editingStudent, [field]: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded" />
+            ))}
+            <select value={editingStudent.course} onChange={(e) => setEditingStudent({ ...editingStudent, course: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded">
+              {courses.map(course => <option key={course} value={course}>{course}</option>)}
+            </select>
+            <div className="flex space-x-2 mt-4">
+              <button onClick={handleUpdateStudent} className="bg-blue-600 p-2 rounded">Save</button>
+              <button onClick={() => setIsModalOpen(false)} className="bg-gray-500 p-2 rounded">Cancel</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
