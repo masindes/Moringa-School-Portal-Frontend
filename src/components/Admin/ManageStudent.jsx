@@ -7,10 +7,12 @@ const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
 
 const ManageStudent = () => {
   const [students, setStudents] = useState([]);
-  const [newStudent, setNewStudent] = useState({ firstName: '', lastName: '', email: '', currentPhase: '', course: '' });
+  const [studentForm, setStudentForm] = useState({
+    first_name: '', last_name: '', email: '', password: '',
+    phase: '', total_fee: '', amount_paid: '', status: 'active', course_id: ''
+  });
   const [editingStudent, setEditingStudent] = useState(null);
   const [activeTab, setActiveTab] = useState('add');
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const token = localStorage.getItem('token');
 
@@ -18,15 +20,12 @@ const ManageStudent = () => {
     fetchStudents();
   }, [token]);
 
-  // 🟢 Read: Fetch Students
+  // Fetch Students
   const fetchStudents = async () => {
     try {
       const response = await fetch(API_URL, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       });
 
       if (response.status === 401) {
@@ -34,9 +33,7 @@ const ManageStudent = () => {
         return;
       }
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch students.');
-      }
+      if (!response.ok) throw new Error('Failed to fetch students.');
 
       const data = await response.json();
       setStudents(Array.isArray(data) ? data : []);
@@ -45,88 +42,95 @@ const ManageStudent = () => {
     }
   };
 
-  const courses = ["Software Engineering", "Cyber Security", "Data Science", "Product Design", "DevOps"];
+  const courses = [
+    { id: 1, name: "Software Engineering" },
+    { id: 2, name: "Cyber Security" },
+    { id: 3, name: "Data Science" },
+    { id: 4, name: "Product Design" },
+    { id: 5, name: "DevOps" }
+  ];
 
-  // 🟢 Create: Add a New Student
-  const handleAddStudent = async () => {
-    if (!Object.values(newStudent).every(value => value)) {
+  // Handle Input Change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setStudentForm({ ...studentForm, [name]: value });
+  };
+
+  // Add or Update Student
+  const handleSubmit = async () => {
+    if (!Object.values(studentForm).every(value => value)) {
       toast.error("All fields are required!");
       return;
     }
 
+    const studentData = {
+      ...studentForm,
+      total_fee: parseFloat(studentForm.total_fee),
+      amount_paid: parseFloat(studentForm.amount_paid),
+      course_id: parseInt(studentForm.course_id)
+    };
+
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(newStudent),
+      const response = await fetch(
+        editingStudent ? `${API_URL}/${editingStudent.id}` : API_URL,
+        {
+          method: editingStudent ? 'PATCH' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(studentData),
+        }
+      );
+
+      if (!response.ok) throw new Error(`Failed to ${editingStudent ? 'update' : 'add'} student.`);
+
+      const updatedStudent = await response.json();
+
+      if (editingStudent) {
+        setStudents(students.map(s => (s.id === updatedStudent.id ? updatedStudent : s)));
+        toast.success("Student updated successfully!");
+      } else {
+        setStudents([...students, updatedStudent]);
+        toast.success("Student added successfully!");
+      }
+
+      setStudentForm({
+        first_name: '', last_name: '', email: '', password: '',
+        phase: '', total_fee: '', amount_paid: '', status: 'active', course_id: ''
       });
+      setEditingStudent(null);
+      setActiveTab('view');
 
-      if (!response.ok) throw new Error('Failed to add student.');
-
-      const addedStudent = await response.json();
-      setStudents([...students, addedStudent]);
-      setNewStudent({ firstName: '', lastName: '', email: '', currentPhase: '', course: '' });
-      toast.success("Student added successfully!");
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  // 🟢 Delete: Remove a Student
-  const handleDeleteStudent = async (id) => {
+  // Delete Student
+  const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this student?")) return;
 
     try {
       const response = await fetch(`${API_URL}/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
       });
 
-      if (!response.ok) throw new Error('Failed to delete student.');
+      if (!response.ok) throw new Error("Failed to delete student.");
 
       setStudents(students.filter(student => student.id !== id));
-      toast.info("Student deleted.");
+      toast.success("Student deleted successfully!");
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  // 🟢 Prepare Student for Editing
-  const handleEditStudent = (student) => {
+  // Edit Student
+  const handleEdit = (student) => {
     setEditingStudent(student);
-    setIsModalOpen(true);
-  };
-
-  // 🟢 Update: Edit Student Details
-  const handleUpdateStudent = async () => {
-    if (!Object.values(editingStudent).every(value => value)) {
-      toast.error("All fields are required!");
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_URL}/${editingStudent.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(editingStudent),
-      });
-
-      if (!response.ok) throw new Error('Failed to update student.');
-
-      setStudents(students.map(student => (student.id === editingStudent.id ? editingStudent : student)));
-      setIsModalOpen(false);
-      toast.success("Student updated successfully!");
-    } catch (error) {
-      toast.error(error.message);
-    }
+    setStudentForm(student);
+    setActiveTab('add');
   };
 
   return (
@@ -140,56 +144,47 @@ const ManageStudent = () => {
       </div>
 
       <div className="flex justify-center space-x-4 mb-6">
-        <button onClick={() => setActiveTab('add')} className={`px-4 py-2 rounded ${activeTab === 'add' ? 'bg-blue-600' : 'bg-gray-700'}`}>Add Student</button>
+        <button onClick={() => setActiveTab('add')} className={`px-4 py-2 rounded ${activeTab === 'add' ? 'bg-blue-600' : 'bg-gray-700'}`}>{editingStudent ? 'Edit Student' : 'Add Student'}</button>
         <button onClick={() => setActiveTab('view')} className={`px-4 py-2 rounded ${activeTab === 'view' ? 'bg-blue-600' : 'bg-gray-700'}`}>View Students</button>
       </div>
 
       {activeTab === 'add' && (
         <div className="max-w-md mx-auto bg-gray-800 p-6 rounded-lg">
-          <h3 className="text-xl mb-4">Add New Student</h3>
-          {["firstName", "lastName", "email", "currentPhase"].map(field => (
-            <input key={field} type="text" placeholder={field} value={newStudent[field]} onChange={(e) => setNewStudent({ ...newStudent, [field]: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded" />
+          <h3 className="text-xl mb-4">{editingStudent ? 'Edit Student' : 'Add New Student'}</h3>
+          {["first_name", "last_name", "email", "password", "phase"].map(field => (
+            <input key={field} type={field === "password" ? "password" : "text"} name={field} placeholder={field}
+              value={studentForm[field]} onChange={handleInputChange}
+              className="w-full p-2 mb-2 bg-gray-700 rounded"
+            />
           ))}
-          <select value={newStudent.course} onChange={(e) => setNewStudent({ ...newStudent, course: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded">
-            <option value="">Select Course</option>
-            {courses.map(course => <option key={course} value={course}>{course}</option>)}
+          {["total_fee", "amount_paid"].map(field => (
+            <input key={field} type="number" name={field} placeholder={field} value={studentForm[field]}
+              onChange={handleInputChange} className="w-full p-2 mb-2 bg-gray-700 rounded"
+            />
+          ))}
+          <select name="status" value={studentForm.status} onChange={handleInputChange} className="w-full p-2 mb-2 bg-gray-700 rounded">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
           </select>
-          <button onClick={handleAddStudent} className="w-full bg-blue-600 p-2 rounded">Add Student</button>
+          <select name="course_id" value={studentForm.course_id} onChange={handleInputChange} className="w-full p-2 mb-2 bg-gray-700 rounded">
+            <option value="">Select Course</option>
+            {courses.map(course => <option key={course.id} value={course.id}>{course.name}</option>)}
+          </select>
+          <button onClick={handleSubmit} className="w-full bg-blue-600 p-2 rounded">{editingStudent ? 'Update' : 'Add'} Student</button>
         </div>
       )}
 
       {activeTab === 'view' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(students ?? []).map(student => (
+          {students.map(student => (
             <div key={student.id} className="bg-gray-800 p-6 rounded-lg">
-              <h3 className="text-xl mb-2">{student.firstName} {student.lastName}</h3>
-              {["email", "currentPhase", "grade", "course"].map(field => (
-                <p key={field}><strong>{field}:</strong> {student[field]}</p>
-              ))}
-              <div className="flex space-x-2 mt-4">
-                <button onClick={() => handleEditStudent(student)} className="bg-yellow-500 p-2 rounded">Edit</button>
-                <button onClick={() => handleDeleteStudent(student.id)} className="bg-red-500 p-2 rounded">Delete</button>
-              </div>
+              <h3 className="text-xl mb-2">{student.first_name} {student.last_name}</h3>
+              <p><strong>Email:</strong> {student.email}</p>
+              <p><strong>Course:</strong> {courses.find(c => c.id === student.course_id)?.name || "Unknown"}</p>
+              <button onClick={() => handleEdit(student)} className="bg-yellow-500 px-4 py-1 rounded mr-2">Edit</button>
+              <button onClick={() => handleDelete(student.id)} className="bg-red-600 px-4 py-1 rounded">Delete</button>
             </div>
           ))}
-        </div>
-      )}
-
-      {isModalOpen && editingStudent && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-gray-800 p-6 rounded-lg">
-            <h3 className="text-xl mb-4">Edit Student</h3>
-            {["firstName", "lastName", "email", "currentPhase", "grade"].map(field => (
-              <input key={field} type="text" placeholder={field} value={editingStudent[field]} onChange={(e) => setEditingStudent({ ...editingStudent, [field]: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded" />
-            ))}
-            <select value={editingStudent.course} onChange={(e) => setEditingStudent({ ...editingStudent, course: e.target.value })} className="w-full p-2 mb-2 bg-gray-700 rounded">
-              {courses.map(course => <option key={course} value={course}>{course}</option>)}
-            </select>
-            <div className="flex space-x-2 mt-4">
-              <button onClick={handleUpdateStudent} className="bg-blue-600 p-2 rounded">Save</button>
-              <button onClick={() => setIsModalOpen(false)} className="bg-gray-500 p-2 rounded">Cancel</button>
-            </div>
-          </div>
         </div>
       )}
     </div>
