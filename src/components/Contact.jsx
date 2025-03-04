@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import pexelsImage from "../assets/images/pexels.jpg"; // Import the image
 
 const Contact = () => {
@@ -28,7 +28,7 @@ const Contact = () => {
       <div className="max-w-3xl w-full bg-white bg-opacity-90 rounded-2xl shadow-lg p-8 backdrop-blur-sm">
         <h2 className="text-3xl font-semibold text-center text-gray-800">Contact Us</h2>
         <p className="text-center text-gray-600 mt-2">
-          Have questions? We'd love to hear from you.
+          Have questions? We would love to hear from you.
         </p>
 
         {/* Contact Form */}

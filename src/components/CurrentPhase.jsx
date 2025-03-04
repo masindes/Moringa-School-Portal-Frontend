@@ -1,4 +1,4 @@
-import React from "react";
+
 
 const CurrentPhase = () => {
   const currentPhase = "Phase 1 - Software Engineering";

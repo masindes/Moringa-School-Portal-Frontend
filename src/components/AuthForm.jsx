@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import PropTypes from "prop-types"; // Import PropTypes
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
@@ -203,6 +204,11 @@ const AuthForm = ({ type }) => {
       </div>
     </div>
   );
+};
+
+// PropTypes validation
+AuthForm.propTypes = {
+  type: PropTypes.string.isRequired, // Validate "type" prop
 };
 
 export default React.memo(AuthForm);
