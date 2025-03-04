@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { FaMoneyCheckAlt, FaEdit, FaTrash, FaMoon, FaSun } from "react-icons/fa";
+import axios from "axios";
 
 const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   return (
@@ -27,7 +28,6 @@ const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
   );
 };
 
-// ✅ Define PropTypes for validation
 StudentPaymentCard.propTypes = {
   student: PropTypes.shape({
     id: PropTypes.number.isRequired,
@@ -41,36 +41,38 @@ StudentPaymentCard.propTypes = {
 
 const AdminPayments = () => {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
-
-  // ✅ Load payments from localStorage
-  const [payments, setPayments] = useState(() => {
-    const savedPayments = localStorage.getItem("payments");
-    return savedPayments ? JSON.parse(savedPayments) : [];
-  });
-
+  const [payments, setPayments] = useState([]);
   const [newPayment, setNewPayment] = useState({
     studentName: "",
     totalFees: "",
     paidAmount: "",
   });
-
   const [editingPayment, setEditingPayment] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("payments", JSON.stringify(payments));
-  }, [payments]);
+    fetchPayments();
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
+  const fetchPayments = async () => {
+    try {
+      const response = await axios.get("https://moringa-school-portal-backend.onrender.com/payments");
+      setPayments(response.data);
+    } catch (error) {
+      console.error("Error fetching payments:", error);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewPayment({ ...newPayment, [name]: value });
   };
 
-  const handleAddPayment = (e) => {
+  const handleAddPayment = async (e) => {
     e.preventDefault();
     const formattedPayment = {
       studentName: newPayment.studentName,
@@ -78,23 +80,32 @@ const AdminPayments = () => {
       paidAmount: parseFloat(newPayment.paidAmount) || 0,
     };
 
-    if (editingPayment) {
-      setPayments(
-        payments.map((payment) =>
-          payment.id === editingPayment.id ? { ...editingPayment, ...formattedPayment } : payment
-        )
-      );
-      setEditingPayment(null);
-    } else {
-      const newEntry = { id: Date.now(), ...formattedPayment };
-      setPayments([...payments, newEntry]);
+    try {
+      if (editingPayment) {
+        await axios.patch(`https://moringa-school-portal-backend.onrender.com/students/${editingPayment.id}/payments`, formattedPayment);
+        setPayments(
+          payments.map((payment) =>
+            payment.id === editingPayment.id ? { ...editingPayment, ...formattedPayment } : payment
+          )
+        );
+        setEditingPayment(null);
+      } else {
+        const response = await axios.post("https://moringa-school-portal-backend.onrender.com/students/${studentId}/payments", formattedPayment);
+        setPayments([...payments, response.data]);
+      }
+      setNewPayment({ studentName: "", totalFees: "", paidAmount: "" });
+    } catch (error) {
+      console.error("Error adding/updating payment:", error);
     }
-
-    setNewPayment({ studentName: "", totalFees: "", paidAmount: "" });
   };
 
-  const handleDelete = (id) => {
-    setPayments(payments.filter((payment) => payment.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`https://moringa-school-portal-backend.onrender.com/students/${id}/payments`);
+      setPayments(payments.filter((payment) => payment.id !== id));
+    } catch (error) {
+      console.error("Error deleting payment:", error);
+    }
   };
 
   const handleEdit = (payment) => {
@@ -108,7 +119,6 @@ const AdminPayments = () => {
 
   return (
     <div className="p-6 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition-all">
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold flex items-center">
           <FaMoneyCheckAlt className="text-green-500 mr-2" /> Payment Management
@@ -122,9 +132,7 @@ const AdminPayments = () => {
         </button>
       </div>
 
-      {/* Two-Column Layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left: Payment Form */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
             {editingPayment ? "Edit Payment" : "Add Payment"}
@@ -167,7 +175,6 @@ const AdminPayments = () => {
           </form>
         </div>
 
-        {/* Right: Payment List */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Student Payments</h3>
           <div className="space-y-4">
