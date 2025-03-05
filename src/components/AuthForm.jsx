@@ -47,7 +47,7 @@ const AuthForm = ({ type }) => {
         localStorage.setItem("role", role);
 
         
-        setError(null); // Clear any previous errors
+        setError(null); 
         setLoading(false);
 
         // Redirect based on role
