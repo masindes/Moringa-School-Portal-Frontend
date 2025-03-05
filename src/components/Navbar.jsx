@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Bell } from "lucide-react";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
+  const [isOpen, setIsOpen] = useState(false); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
