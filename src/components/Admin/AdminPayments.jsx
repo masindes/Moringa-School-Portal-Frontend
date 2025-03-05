@@ -198,7 +198,7 @@ const ManageStudentPayments = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Form Section */}
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
               {editingStudent ? "Edit Payment" : "Add Payment"}
             </h3>
             <form onSubmit={editingStudent ? handleUpdatePayment : handleAddPayment} className="space-y-4">
@@ -249,7 +249,7 @@ const ManageStudentPayments = () => {
 
           {/* Table Section */}
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md overflow-x-auto">
-            <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Student Payments</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Student Payments</h3>
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-200 dark:bg-gray-700">
