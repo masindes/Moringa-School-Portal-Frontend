@@ -46,7 +46,7 @@ const AuthForm = ({ type }) => {
         localStorage.setItem("token", access_token);
         localStorage.setItem("role", role);
 
-        // Set successful login state
+        
         setError(null); // Clear any previous errors
         setLoading(false);
 
