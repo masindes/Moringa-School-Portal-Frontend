@@ -43,7 +43,6 @@ const AuthForm = ({ type }) => {
       const { access_token, role } = response.data;
 
       if (access_token) {
-        // Store the token and role in localStorage
         localStorage.setItem("token", access_token);
         localStorage.setItem("role", role);
 
