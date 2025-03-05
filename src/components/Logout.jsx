@@ -14,7 +14,6 @@ const Logout = () => {
 
     localStorage.removeItem("token");
 
-    // Add a delay for better UX
     const logoutTimer = setTimeout(() => {
       navigate("/"); // Redirect to home page
     }, 1500); // 1.5 seconds delay
