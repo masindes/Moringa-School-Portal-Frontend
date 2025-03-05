@@ -5,7 +5,6 @@ const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the token exists
     const token = localStorage.getItem("token");
     if (!token) {
       // If no token, notify the user and redirect immediately
