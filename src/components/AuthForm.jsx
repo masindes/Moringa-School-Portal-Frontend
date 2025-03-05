@@ -160,7 +160,7 @@ const AuthForm = ({ type }) => {
                     />
                     <button
                       type="button"
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center h-full" // Center the icon vertically
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center h-full" 
                       onClick={() => setShowPassword(!showPassword)} 
                     >
                       {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle eye icons */}
