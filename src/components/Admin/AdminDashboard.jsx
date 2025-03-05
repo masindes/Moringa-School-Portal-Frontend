@@ -8,7 +8,6 @@ const AdminDashboard = () => {
   const [students, setStudents] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
 
-  // Load students from localStorage when showDetails is toggled
   useEffect(() => {
     if (showDetails) {
       const storedStudents = JSON.parse(localStorage.getItem("students")) || [];
