@@ -9,7 +9,6 @@ const StudentDetails = () => {
     const [student, setStudent] = useState(null);
 
     useEffect(() => {
-        // Retrieve student details from localStorage
         const storedStudents = JSON.parse(localStorage.getItem("students")) || [];
         const selectedStudent = storedStudents.find((s) => s.id === parseInt(id));
 
