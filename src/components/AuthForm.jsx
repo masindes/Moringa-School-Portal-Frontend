@@ -152,7 +152,7 @@ const AuthForm = ({ type }) => {
                   </label>
                   <div className="relative">
                     <input
-                      type={showPassword ? "text" : "password"} // Toggle between text and password
+                      type={showPassword ? "text" : "password"} 
                       className="w-full p-2 border border-gray-300 rounded-lg pr-10"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
