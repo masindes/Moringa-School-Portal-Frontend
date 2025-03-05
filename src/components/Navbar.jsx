@@ -14,7 +14,7 @@ const Navbar = () => {
     setIsAuthenticated(!!token);
 
     if (token) {
-      loadMockNotifications(); // Load mock data instead of API call
+      loadMockNotifications(); 
     }
   }, []);
 
