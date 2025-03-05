@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// Mock Data
 const studentFeeData = {
   studentName: "Masinde Sylvester",
   totalFees: 50000,
