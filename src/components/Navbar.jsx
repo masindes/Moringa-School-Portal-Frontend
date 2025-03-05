@@ -18,7 +18,6 @@ const Navbar = () => {
     }
   }, []);
 
-  // Load Mock Notifications
   const loadMockNotifications = () => {
     const mockNotifications = [
       { id: 1, message: "Your grades have been updated!" },
