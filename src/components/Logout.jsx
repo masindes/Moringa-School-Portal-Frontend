@@ -16,7 +16,7 @@ const Logout = () => {
 
     const logoutTimer = setTimeout(() => {
       navigate("/"); // Redirect to home page
-    }, 1500); // 1.5 seconds delay
+    }, 1500); 
 
     return () => clearTimeout(logoutTimer);
   }, [navigate]);
