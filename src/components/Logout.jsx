@@ -12,7 +12,6 @@ const Logout = () => {
       return;
     }
 
-    // Remove the token and any other user-related data
     localStorage.removeItem("token");
     // localStorage.removeItem("userData"); // Example: Remove additional user data
 
