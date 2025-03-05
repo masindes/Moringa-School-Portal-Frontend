@@ -136,7 +136,7 @@ const ManageStudent = () => {
 
     try {
       const response = await fetch(`${API_URL}/${editingStudent.id}`, {
-        method: 'PUT',
+        method: 'PATCH', // Changed from 'PUT' to 'PATCH'
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
