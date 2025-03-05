@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { FaMoneyCheckAlt, FaEdit, FaTrash, FaMoon, FaSun, FaArrowLeft } from "react-icons/fa";
+import { FaEdit, FaTrash, FaMoon, FaSun, FaArrowLeft, FaBars } from "react-icons/fa";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -65,6 +65,7 @@ const ManageStudentPayments = () => {
   const [editingStudent, setEditingStudent] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
   const [error, setError] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -118,6 +119,7 @@ const ManageStudentPayments = () => {
         total_fee: "",
         amount_paid: "",
       });
+      setIsSidebarOpen(false);
       toast.success("Payment added successfully!");
     } catch (error) {
       setError("Failed to add payment. Please try again.");
@@ -143,6 +145,7 @@ const ManageStudentPayments = () => {
   const handleEditStudent = (student) => {
     setEditingStudent(student);
     setNewPayment(student);
+    setIsSidebarOpen(true);
   };
 
   const handleUpdatePayment = async (e) => {
@@ -168,6 +171,7 @@ const ManageStudentPayments = () => {
         total_fee: "",
         amount_paid: "",
       });
+      setIsSidebarOpen(false);
       toast.success("Payment updated successfully!");
     } catch (error) {
       setError("Failed to update payment. Please try again.");
@@ -178,25 +182,15 @@ const ManageStudentPayments = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition-all">
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <NavLink to="/Admin" className="flex items-center text-blue-500 hover:text-blue-600">
-            <FaArrowLeft className="mr-2" /> Back to Admin Dashboard
-          </NavLink>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded flex items-center hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
-          >
-            {darkMode ? <FaSun className="mr-1" /> : <FaMoon className="mr-1" />}
-            {darkMode ? "Light Mode" : "Dark Mode"}
-          </button>
-        </div>
-
-        {error && <p className="text-red-500">{error}</p>}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+      <div className="flex">
+        {/* Sidebar Drawer */}
+        <div
+          className={`fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg transform ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform z-20`}
+        >
+          <div className="p-6">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
               {editingStudent ? "Edit Payment" : "Add Payment"}
             </h3>
             <form onSubmit={editingStudent ? handleUpdatePayment : handleAddPayment} className="space-y-4">
@@ -242,25 +236,53 @@ const ManageStudentPayments = () => {
               >
                 {editingStudent ? "Update Payment" : "Add Payment"}
               </button>
+              <button
+                type="button"
+                onClick={() => setIsSidebarOpen(false)}
+                className="w-full bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+              >
+                Cancel
+              </button>
             </form>
           </div>
+        </div>
 
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Student Payments</h3>
-            <div className="space-y-4">
-              {students.length === 0 ? (
-                <p className="text-gray-500 dark:text-gray-400">No payments found.</p>
-              ) : (
-                students.map((student) => (
-                  <StudentPaymentCard
-                    key={student.id}
-                    student={student}
-                    onDelete={handleDeleteStudent}
-                    onEdit={handleEditStudent}
-                  />
-                ))
-              )}
-            </div>
+        {/* Main Content */}
+        <div className="flex-1 p-6">
+          <div className="flex justify-between items-center mb-6">
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded flex items-center hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
+            >
+              <FaBars className="mr-2" /> Menu
+            </button>
+            <NavLink to="/Admin" className="flex items-center text-blue-500 hover:text-blue-600">
+              <FaArrowLeft className="mr-2" /> Back to Admin Dashboard
+            </NavLink>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded flex items-center hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
+            >
+              {darkMode ? <FaSun className="mr-1" /> : <FaMoon className="mr-1" />}
+              {darkMode ? "Light Mode" : "Dark Mode"}
+            </button>
+          </div>
+
+          {error && <p className="text-red-500">{error}</p>}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {students.length === 0 ? (
+              <p className="text-gray-500 dark:text-gray-400">No payments found.</p>
+            ) : (
+              students.map((student) => (
+                <StudentPaymentCard
+                  key={student.id}
+                  student={student}
+                  onDelete={handleDeleteStudent}
+                  onEdit={handleEditStudent}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>
