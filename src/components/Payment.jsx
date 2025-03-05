@@ -10,7 +10,6 @@ const Payment = () => {
     localStorage.getItem("theme") === "dark"
   );
 
-  // Handle dark mode toggle
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
