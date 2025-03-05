@@ -13,7 +13,6 @@ const Logout = () => {
     }
 
     localStorage.removeItem("token");
-    // localStorage.removeItem("userData"); // Example: Remove additional user data
 
     // Add a delay for better UX
     const logoutTimer = setTimeout(() => {
