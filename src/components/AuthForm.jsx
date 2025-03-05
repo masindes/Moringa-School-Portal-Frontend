@@ -50,7 +50,6 @@ const AuthForm = ({ type }) => {
         setError(null); 
         setLoading(false);
 
-        // Redirect based on role
         switch (role) {
           case 'admin':
             navigate('/admin');
