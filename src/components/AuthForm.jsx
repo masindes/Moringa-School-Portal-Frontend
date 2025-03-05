@@ -10,7 +10,7 @@ const AuthForm = ({ type }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false); 
   const navigate = useNavigate();
 
   const isSignUp = type === "signup";
