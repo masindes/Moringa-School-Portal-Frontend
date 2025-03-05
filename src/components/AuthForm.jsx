@@ -36,7 +36,7 @@ const AuthForm = ({ type }) => {
         email, 
         password,
         first_name: firstName, 
-        last_name: lastName,  // Match backend's expected field name
+        last_name: lastName,  
       };
 
       const response = await axios.post(endpoint, payload);
