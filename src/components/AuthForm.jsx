@@ -35,7 +35,7 @@ const AuthForm = ({ type }) => {
       const payload = { 
         email, 
         password,
-        first_name: firstName, // Match backend's expected field name
+        first_name: firstName, 
         last_name: lastName,  // Match backend's expected field name
       };
 
