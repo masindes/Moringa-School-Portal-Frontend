@@ -20,7 +20,7 @@ const AuthForm = ({ type }) => {
     setError(null);
     setLoading(true);
 
-    // Basic validation
+    
     if (!email || !password || (isSignUp && (!firstName || !lastName))) {
       setError("Please fill in all fields.");
       setLoading(false);
