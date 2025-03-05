@@ -6,7 +6,6 @@ import CurrentPhase from "./CurrentPhase";
 import { Moon, Sun, CreditCard, BarChart2, Layers, LogOut, ArrowLeft } from "lucide-react";
 
 const StudentDashboard = () => {
-  // Theme state
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
