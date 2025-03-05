@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import pexelsImage from "../assets/images/pexels.jpg"; // Import the image
+import pexelsImage from "../assets/images/pexels.jpg"; 
 
 const Contact = () => {
   const [formData, setFormData] = useState({
