@@ -15,7 +15,7 @@ const Logout = () => {
     localStorage.removeItem("token");
 
     const logoutTimer = setTimeout(() => {
-      navigate("/"); // Redirect to home page
+      navigate("/"); 
     }, 1500); 
 
     return () => clearTimeout(logoutTimer);
