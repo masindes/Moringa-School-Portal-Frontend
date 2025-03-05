@@ -7,7 +7,6 @@ const Logout = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      // If no token, notify the user and redirect immediately
       console.log("No token found. You are already logged out.");
       navigate("/");
       return;
