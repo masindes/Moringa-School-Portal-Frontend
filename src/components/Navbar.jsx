@@ -27,7 +27,6 @@ const Navbar = () => {
     setNotifications(mockNotifications);
   };
 
-  // Handle Logout
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
       localStorage.removeItem("token");
