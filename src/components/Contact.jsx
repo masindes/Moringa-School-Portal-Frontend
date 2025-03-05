@@ -15,7 +15,6 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted:", formData);
-    // You can integrate with backend API here
   };
 
   return (
