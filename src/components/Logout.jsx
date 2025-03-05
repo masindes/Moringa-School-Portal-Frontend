@@ -18,7 +18,6 @@ const Logout = () => {
       navigate("/"); // Redirect to home page
     }, 1500); // 1.5 seconds delay
 
-    // Cleanup the timer if the component unmounts
     return () => clearTimeout(logoutTimer);
   }, [navigate]);
 
