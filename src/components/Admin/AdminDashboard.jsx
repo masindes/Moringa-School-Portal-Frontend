@@ -15,7 +15,6 @@ const AdminDashboard = () => {
     }
   }, [showDetails]);
 
-  // Function to navigate to payments
   const handlePaymentsNavigation = (e) => {
     e.stopPropagation();
     navigate("/admin-payments");
