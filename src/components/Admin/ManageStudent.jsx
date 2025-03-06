@@ -2,9 +2,17 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaEdit, FaTrash, FaArrowLeft, FaPlus, FaEye, FaMoon, FaSun } from 'react-icons/fa'; // Icons for actions and dark mode
+import { FaEdit, FaTrash, FaArrowLeft, FaPlus, FaEye, FaMoon, FaSun } from 'react-icons/fa';
 
 const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
+
+const techCourses = [
+  { id: 1, name: 'Web Development' },
+  { id: 2, name: 'Data Science' },
+  { id: 3, name: 'Mobile Development' },
+  { id: 4, name: 'DevOps' },
+  { id: 5, name: 'UI/UX Design' },
+];
 
 const ManageStudent = () => {
   const [students, setStudents] = useState([]);
@@ -13,7 +21,7 @@ const ManageStudent = () => {
     last_name: '',
     email: '',
     phase: '',
-    course_id: '', // Use course_id instead of course
+    course_name: '',
     password: '',
     total_fee: '',
     amount_paid: '',
@@ -22,7 +30,7 @@ const ManageStudent = () => {
   const [editingStudent, setEditingStudent] = useState(null);
   const [activeTab, setActiveTab] = useState('add');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false); // Dark mode state
+  const [darkMode, setDarkMode] = useState(false);
 
   const token = localStorage.getItem('token');
 
@@ -35,7 +43,7 @@ const ManageStudent = () => {
     setDarkMode(!darkMode);
   };
 
-  // 🟢 Read: Fetch Students
+  // 🟢 Fetch Students
   const fetchStudents = async () => {
     try {
       const response = await fetch(API_URL, {
@@ -62,7 +70,7 @@ const ManageStudent = () => {
     }
   };
 
-  // 🟢 Create: Add a New Student
+  // 🟢 Add Student
   const handleAddStudent = async () => {
     if (!Object.values(newStudent).every(value => value)) {
       toast.error("All fields are required!");
@@ -88,7 +96,7 @@ const ManageStudent = () => {
         last_name: '',
         email: '',
         phase: '',
-        course_id: '',
+        course_name: '',
         password: '',
         total_fee: '',
         amount_paid: '',
@@ -100,7 +108,7 @@ const ManageStudent = () => {
     }
   };
 
-  // 🟢 Delete: Remove a Student
+  // 🟢 Delete Student
   const handleDeleteStudent = async (id) => {
     if (!window.confirm("Are you sure you want to delete this student?")) return;
 
@@ -121,13 +129,13 @@ const ManageStudent = () => {
     }
   };
 
-  // 🟢 Prepare Student for Editing
+  // 🟢 Edit Student
   const handleEditStudent = (student) => {
     setEditingStudent(student);
     setIsModalOpen(true);
   };
 
-  // 🟢 Update: Edit Student Details
+  // 🟢 Update Student
   const handleUpdateStudent = async () => {
     if (!Object.values(editingStudent).every(value => value)) {
       toast.error("All fields are required!");
@@ -136,7 +144,7 @@ const ManageStudent = () => {
 
     try {
       const response = await fetch(`${API_URL}/${editingStudent.id}`, {
-        method: 'PATCH', // Changed from 'PUT' to 'PATCH'
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -152,12 +160,6 @@ const ManageStudent = () => {
     } catch (error) {
       toast.error(error.message);
     }
-  };
-
-  // 🟢 Generate a range of numbers for course_id dropdown
-  const generateCourseIds = () => {
-    const numberOfCourses = 10; // Change this to the desired number of course IDs
-    return Array.from({ length: numberOfCourses }, (_, i) => i + 1); // Generates [1, 2, 3, ..., numberOfCourses]
   };
 
   return (
@@ -218,22 +220,22 @@ const ManageStudent = () => {
                 }`}
               />
             ))}
-            {/* Course ID Dropdown */}
+            {/* Course Name Dropdown */}
             <select
-              value={newStudent.course_id}
-              onChange={(e) => setNewStudent({ ...newStudent, course_id: e.target.value })}
+              value={newStudent.course_name}
+              onChange={(e) => setNewStudent({ ...newStudent, course_name: e.target.value })}
               className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
               }`}
             >
-              <option value="">Select Course ID</option>
-              {generateCourseIds().map((id) => (
-                <option key={id} value={id}>
-                  {id}
+              <option value="">Select Course</option>
+              {techCourses.map((course) => (
+                <option key={course.id} value={course.name}>
+                  {course.name}
                 </option>
               ))}
             </select>
-            {/* Add Total Fee Field */}
+            {/* Total Fee Field */}
             <input
               type="number"
               placeholder="Total Fee"
@@ -243,7 +245,7 @@ const ManageStudent = () => {
                 darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
               }`}
             />
-            {/* Add Amount Paid Field */}
+            {/* Amount Paid Field */}
             <input
               type="number"
               placeholder="Amount Paid"
@@ -253,7 +255,7 @@ const ManageStudent = () => {
                 darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
               }`}
             />
-            {/* Add Status Field */}
+            {/* Status Field */}
             <select
               value={newStudent.status}
               onChange={(e) => setNewStudent({ ...newStudent, status: e.target.value })}
@@ -284,7 +286,7 @@ const ManageStudent = () => {
               <h3 className="text-xl font-bold mb-2">
                 {student.first_name} {student.last_name}
               </h3>
-              {["email", "phase", "course_id", "total_fee", "amount_paid", "status"].map((field) => (
+              {["email", "phase", "course_name", "total_fee", "amount_paid", "status"].map((field) => (
                 <p key={field} className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
                   <strong>{field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}:</strong> {student[field]}
                 </p>
@@ -326,17 +328,17 @@ const ManageStudent = () => {
                   }`}
                 />
               ))}
-              {/* Course ID Dropdown in Edit Modal */}
+              {/* Course Name Dropdown in Edit Modal */}
               <select
-                value={editingStudent.course_id}
-                onChange={(e) => setEditingStudent({ ...editingStudent, course_id: e.target.value })}
+                value={editingStudent.course_name}
+                onChange={(e) => setEditingStudent({ ...editingStudent, course_name: e.target.value })}
                 className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
                 }`}
               >
-                {generateCourseIds().map((id) => (
-                  <option key={id} value={id}>
-                    {id}
+                {techCourses.map((course) => (
+                  <option key={course.id} value={course.name}>
+                    {course.name}
                   </option>
                 ))}
               </select>
