@@ -17,6 +17,7 @@ import AdminDashboard from './components/Admin/AdminDashboard';
 import ManageStudent from './components/Admin/ManageStudent';
 import AdminPayments from './components/Admin/AdminPayments';
 import ChatSupport from './components/ChatSupport';
+// import StudentDetails from './components/Admin/StudentDetails'; // Import StudentDetails
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
