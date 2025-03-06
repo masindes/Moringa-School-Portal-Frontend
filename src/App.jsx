@@ -16,6 +16,8 @@ import Logout from "./components/Logout";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ManageStudent from "./components/Admin/ManageStudent";
 import AdminPayments from "./components/Admin/AdminPayments";
+import ChatSupport from "./components/ChatSupport";
+import StudentDetails from "./components/Admin/StudentDetails"; // Import StudentDetails
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,6 +30,9 @@ const App = () => {
 
   return (
     <Router>
+      <div className="App">
+        <ChatSupport />
+      </div>
       <div className="min-h-screen flex flex-col bg-gray-100">
         {/* Pass authentication state to Navbar */}
         <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
@@ -48,6 +53,7 @@ const App = () => {
             <Route path="/current-phase" element={<CurrentPhase />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/" element={<About />} />
 
             {/* Other Routes */}
             <Route path="/contact" element={<Contact />} />
@@ -57,6 +63,7 @@ const App = () => {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/manage-student" element={<ManageStudent />} />
             <Route path="/admin-payments" element={<AdminPayments />} />
+            <Route path="/student/:id" element={<StudentDetails />} /> {/* Add StudentDetails Route */}
           </Routes>
         </div>
 

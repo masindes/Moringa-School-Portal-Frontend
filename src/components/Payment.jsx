@@ -6,18 +6,19 @@ const Payment = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+  const [darkMode, setDarkMode] = useState(false);
 
   // Handle dark mode toggle
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+    if (typeof window !== "undefined") {
+      const isDarkMode = localStorage.getItem("theme") === "dark";
+      setDarkMode(isDarkMode);
+
+      if (isDarkMode) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
   }, [darkMode]);
 
@@ -26,15 +27,47 @@ const Payment = () => {
     setLoading(true);
     setMessage("");
 
-    try {
-      const response = await axios.post("http://localhost:5000/api/mpesa/pay", {
-        phone: phoneNumber,
-        amount: amount,
-      });
+    // Input validation
+    if (!phoneNumber.startsWith("07") || phoneNumber.length !== 10) {
+      setMessage("Please enter a valid phone number starting with 07 and 10 digits long.");
+      setLoading(false);
+      return;
+    }
 
-      setMessage(response.data.message);
+    if (amount <= 0) {
+      setMessage("Please enter a valid amount greater than 0.");
+      setLoading(false);
+      return;
+    }
+
+    // Format phone number to international format (e.g., 2547XXXXXXXX)
+    const formattedPhoneNumber = `254${phoneNumber.substring(1)}`;
+
+    try {
+      const payload = {
+        phone_number: formattedPhoneNumber,
+        amount: amount.toString(),
+      };
+
+      console.log("Sending payload:", payload);
+
+      const response = await axios.post(
+        "https://moringa-school-portal-backend.onrender.com/mpesa/payment",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setMessage(response.data.message || "Payment request successful!");
     } catch (error) {
-      setMessage("Payment request failed. Try again.");
+      console.error("Payment error:", error.response?.data || error.message);
+      setMessage(
+        error.response?.data?.error ||
+        "Payment request failed. Please check your inputs and try again."
+      );
     }
 
     setLoading(false);
@@ -42,8 +75,6 @@ const Payment = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-6 transition-all relative">
-      
-      {/* Title */}
       <h1 className="text-4xl font-bold mb-2 text-center text-gray-900 dark:text-white">
         💳 Make a Payment
       </h1>
@@ -51,7 +82,6 @@ const Payment = () => {
         Enter details to pay your fee balance.
       </p>
 
-      {/* Card */}
       <form
         onSubmit={handlePayment}
         className="bg-white dark:bg-gray-800 p-10 rounded-2xl shadow-2xl w-full max-w-lg"
@@ -64,10 +94,14 @@ const Payment = () => {
           <input
             type="tel"
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, "");
+              setPhoneNumber(numericValue); // Keep phoneNumber as a string
+            }}
             placeholder="07XXXXXXXX"
             className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg w-full text-lg bg-gray-100 dark:bg-gray-700 dark:text-white"
             required
+            aria-label="Phone Number"
           />
         </div>
 
@@ -83,34 +117,33 @@ const Payment = () => {
             placeholder="Enter amount"
             className="p-3 border border-gray-300 dark:border-gray-600 rounded-lg w-full text-lg bg-gray-100 dark:bg-gray-700 dark:text-white"
             required
+            aria-label="Amount"
           />
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-[#ff7d00] hover:bg-orange-600 text-white py-3 rounded-lg text-xl transition-all"
           disabled={loading}
+          aria-label="Pay Now"
         >
           {loading ? "Processing..." : "Pay Now"}
         </button>
 
-        {/* Payment Message */}
         {message && (
-          <p className="mt-4 text-center text-gray-800 dark:text-gray-300 text-lg">
+          <p className="mt-4 text-center text-gray-800 dark:text-gray-300 text-lg" aria-live="polite">
             {message}
           </p>
         )}
       </form>
 
-      {/* Dark Mode Toggle Button */}
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="fixed bottom-100 right-6 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white p-3 rounded-full shadow-md text-sm transition-all"
+        className="fixed bottom-6 right-6 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white p-3 rounded-full shadow-md text-sm transition-all"
+        aria-label="Toggle Dark Mode"
       >
         {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
       </button>
-
     </div>
   );
 };

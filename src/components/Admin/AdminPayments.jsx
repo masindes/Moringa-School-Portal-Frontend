@@ -1,188 +1,284 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { FaMoneyCheckAlt, FaEdit, FaTrash, FaMoon, FaSun } from "react-icons/fa";
+import { FaEdit, FaTrash, FaMoon, FaSun, FaArrowLeft } from "react-icons/fa";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const StudentPaymentCard = ({ student, onEdit, onDelete }) => {
+const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
+
+const StudentPaymentRow = ({ student, onEdit, onDelete }) => {
+  if (!student) {
+    return null;
+  }
+
+  const { first_name, last_name, total_fee = 0, amount_paid = 0, id } = student;
+  const studentName = `${first_name} ${last_name}`;
+  const outstandingBalance = total_fee - amount_paid;
+
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border border-gray-300 dark:border-gray-700">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{student.studentName}</h2>
-      <p className="text-gray-600 dark:text-gray-300">Total Fees: Ksh {student.totalFees.toLocaleString()}</p>
-      <p className="text-green-600 dark:text-green-400">Paid Amount: Ksh {student.paidAmount.toLocaleString()}</p>
-      <p className="text-red-600 dark:text-red-400">Outstanding Balance: Ksh {(student.totalFees - student.paidAmount).toLocaleString()}</p>
-      <div className="mt-3 flex space-x-2">
-        <button
-          className="bg-green-600 text-gray-900 px-3 py-1 rounded flex items-center hover:bg-blue-500"
-          onClick={() => onEdit(student)}
-        >
-          <FaEdit className="mr-1" /> Edit
-        </button>
-        <button
-          className="bg-red-500 text-white px-3 py-1 rounded flex items-center hover:bg-sky-600"
-          onClick={() => onDelete(student.id)}
-        >
-          <FaTrash className="mr-1" /> Delete
-        </button>
-      </div>
-    </div>
+    <tr className="bg-white dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700">
+      <td className="px-4 py-3 text-gray-900 dark:text-white">{studentName}</td>
+      <td className="px-4 py-3 text-gray-600 dark:text-gray-300">Ksh {total_fee.toLocaleString()}</td>
+      <td className="px-4 py-3 text-green-600 dark:text-green-400">Ksh {amount_paid.toLocaleString()}</td>
+      <td className="px-4 py-3 text-red-600 dark:text-red-400">Ksh {outstandingBalance.toLocaleString()}</td>
+      <td className="px-4 py-3">
+        <div className="flex space-x-2">
+          <button
+            className="bg-yellow-500 text-white px-3 py-1 rounded flex items-center hover:bg-yellow-600 transition-colors"
+            onClick={() => onEdit(student)}
+          >
+            <FaEdit className="mr-1" /> Edit
+          </button>
+          <button
+            className="bg-red-500 text-white px-3 py-1 rounded flex items-center hover:bg-red-600 transition-colors"
+            onClick={() => onDelete(id)}
+          >
+            <FaTrash className="mr-1" /> Delete
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 };
 
-// ✅ Define PropTypes for validation
-StudentPaymentCard.propTypes = {
+StudentPaymentRow.propTypes = {
   student: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    studentName: PropTypes.string.isRequired,
-    totalFees: PropTypes.number.isRequired,
-    paidAmount: PropTypes.number.isRequired,
+    first_name: PropTypes.string.isRequired,
+    last_name: PropTypes.string.isRequired,
+    total_fee: PropTypes.number.isRequired,
+    amount_paid: PropTypes.number.isRequired,
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 
-const AdminPayments = () => {
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
-
-  // ✅ Load payments from localStorage
-  const [payments, setPayments] = useState(() => {
-    const savedPayments = localStorage.getItem("payments");
-    return savedPayments ? JSON.parse(savedPayments) : [];
-  });
-
+const ManageStudentPayments = () => {
+  const [students, setStudents] = useState([]);
   const [newPayment, setNewPayment] = useState({
-    studentName: "",
-    totalFees: "",
-    paidAmount: "",
+    first_name: "",
+    last_name: "",
+    total_fee: "",
+    amount_paid: "",
   });
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
+  const [error, setError] = useState(null);
 
-  const [editingPayment, setEditingPayment] = useState(null);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    localStorage.setItem("payments", JSON.stringify(payments));
-  }, [payments]);
+    fetchStudents();
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewPayment({ ...newPayment, [name]: value });
-  };
-
-  const handleAddPayment = (e) => {
-    e.preventDefault();
-    const formattedPayment = {
-      studentName: newPayment.studentName,
-      totalFees: parseFloat(newPayment.totalFees) || 0,
-      paidAmount: parseFloat(newPayment.paidAmount) || 0,
-    };
-
-    if (editingPayment) {
-      setPayments(
-        payments.map((payment) =>
-          payment.id === editingPayment.id ? { ...editingPayment, ...formattedPayment } : payment
-        )
-      );
-      setEditingPayment(null);
-    } else {
-      const newEntry = { id: Date.now(), ...formattedPayment };
-      setPayments([...payments, newEntry]);
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setStudents(response.data);
+      setError(null);
+    } catch (error) {
+      setError("Failed to fetch students. Please try again.");
+      console.error("Error fetching students:", error);
     }
-
-    setNewPayment({ studentName: "", totalFees: "", paidAmount: "" });
   };
 
-  const handleDelete = (id) => {
-    setPayments(payments.filter((payment) => payment.id !== id));
+  const handleAddPayment = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        API_URL,
+        {
+          ...newPayment,
+          outstanding_balance: newPayment.total_fee - newPayment.amount_paid,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setStudents([...students, response.data]);
+      setNewPayment({
+        first_name: "",
+        last_name: "",
+        total_fee: "",
+        amount_paid: "",
+      });
+      toast.success("Payment added successfully!");
+    } catch (error) {
+      setError("Failed to add payment. Please try again.");
+      console.error("Error adding payment:", error);
+    }
   };
 
-  const handleEdit = (payment) => {
-    setEditingPayment(payment);
-    setNewPayment({
-      studentName: payment.studentName,
-      totalFees: payment.totalFees.toString(),
-      paidAmount: payment.paidAmount.toString(),
-    });
+  const handleDeleteStudent = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setStudents(students.filter((student) => student.id !== id));
+      toast.info("Student payment deleted successfully!");
+    } catch (error) {
+      setError("Failed to delete student payment. Please try again.");
+      console.error("Error deleting student payment:", error);
+    }
+  };
+
+  const handleEditStudent = (student) => {
+    setEditingStudent(student);
+    setNewPayment(student);
+  };
+
+  const handleUpdatePayment = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.patch(
+        `${API_URL}/${editingStudent.id}`,
+        {
+          ...newPayment,
+          outstanding_balance: newPayment.total_fee - newPayment.amount_paid,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setStudents(students.map((student) => (student.id === editingStudent.id ? response.data : student)));
+      setEditingStudent(null);
+      setNewPayment({
+        first_name: "",
+        last_name: "",
+        total_fee: "",
+        amount_paid: "",
+      });
+      toast.success("Payment updated successfully!");
+    } catch (error) {
+      setError("Failed to update payment. Please try again.");
+      console.error("Error updating payment:", error);
+    }
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition-all">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold flex items-center">
-          <FaMoneyCheckAlt className="text-green-500 mr-2" /> Payment Management
-        </h2>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded flex items-center"
-        >
-          {darkMode ? <FaSun className="mr-1" /> : <FaMoon className="mr-1" />}
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-      </div>
-
-      {/* Two-Column Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left: Payment Form */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-            {editingPayment ? "Edit Payment" : "Add Payment"}
-          </h3>
-          <form onSubmit={handleAddPayment} className="space-y-4">
-            <input
-              type="text"
-              name="studentName"
-              placeholder="Student Name"
-              value={newPayment.studentName}
-              onChange={handleChange}
-              className="w-full border p-2 rounded bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
-              required
-            />
-            <input
-              type="number"
-              name="totalFees"
-              placeholder="Total Fees"
-              value={newPayment.totalFees}
-              onChange={handleChange}
-              className="w-full border p-2 rounded bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
-              required
-              min="0"
-              step="0.01"
-            />
-            <input
-              type="number"
-              name="paidAmount"
-              placeholder="Paid Amount"
-              value={newPayment.paidAmount}
-              onChange={handleChange}
-              className="w-full border p-2 rounded bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
-              required
-              min="0"
-              step="0.01"
-            />
-            <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-600">
-              {editingPayment ? "Update Payment" : "Add Payment"}
-            </button>
-          </form>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition-all">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <NavLink to="/Admin" className="flex items-center text-blue-500 hover:text-blue-600">
+            <FaArrowLeft className="mr-2" /> Back to Admin Dashboard
+          </NavLink>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 rounded flex items-center hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors"
+          >
+            {darkMode ? <FaSun className="mr-1" /> : <FaMoon className="mr-1" />}
+            {darkMode ? "Light Mode" : "Dark Mode"}
+          </button>
         </div>
 
-        {/* Right: Payment List */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Student Payments</h3>
-          <div className="space-y-4">
-            {payments.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400">No payments recorded yet.</p>
-            ) : (
-              payments.map((payment) => (
-                <StudentPaymentCard
-                  key={payment.id}
-                  student={payment}
-                  onDelete={handleDelete}
-                  onEdit={handleEdit}
-                />
-              ))
-            )}
+        {error && <p className="text-red-500">{error}</p>}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Form Section */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+              {editingStudent ? "Edit Payment" : "Add Payment"}
+            </h3>
+            <form onSubmit={editingStudent ? handleUpdatePayment : handleAddPayment} className="space-y-4">
+              <input
+                type="text"
+                name="first_name"
+                placeholder="First Name"
+                value={newPayment.first_name}
+                onChange={(e) => setNewPayment({ ...newPayment, first_name: e.target.value })}
+                className="w-full border p-2 rounded bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
+                required
+              />
+              <input
+                type="text"
+                name="last_name"
+                placeholder="Last Name"
+                value={newPayment.last_name}
+                onChange={(e) => setNewPayment({ ...newPayment, last_name: e.target.value })}
+                className="w-full border p-2 rounded bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
+                required
+              />
+              <input
+                type="number"
+                name="total_fee"
+                placeholder="Total Fee"
+                value={newPayment.total_fee}
+                onChange={(e) => setNewPayment({ ...newPayment, total_fee: e.target.value })}
+                className="w-full border p-2 rounded bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
+                required
+              />
+              <input
+                type="number"
+                name="amount_paid"
+                placeholder="Amount Paid"
+                value={newPayment.amount_paid}
+                onChange={(e) => setNewPayment({ ...newPayment, amount_paid: e.target.value })}
+                className="w-full border p-2 rounded bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-800"
+                required
+              />
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+              >
+                {editingStudent ? "Update Payment" : "Add Payment"}
+              </button>
+            </form>
+          </div>
+
+          {/* Table Section */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md overflow-x-auto">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Student Payments</h3>
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-200 dark:bg-gray-700">
+                  <th className="px-4 py-2 text-left text-gray-900 dark:text-white">Student Name</th>
+                  <th className="px-4 py-2 text-left text-gray-900 dark:text-white">Total Fee</th>
+                  <th className="px-4 py-2 text-left text-gray-900 dark:text-white">Amount Paid</th>
+                  <th className="px-4 py-2 text-left text-gray-900 dark:text-white">Outstanding Balance</th>
+                  <th className="px-4 py-2 text-left text-gray-900 dark:text-white">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="text-center text-gray-500 dark:text-gray-400 py-4">
+                      No payments found.
+                    </td>
+                  </tr>
+                ) : (
+                  students.map((student) => (
+                    <StudentPaymentRow
+                      key={student.id}
+                      student={student}
+                      onDelete={handleDeleteStudent}
+                      onEdit={handleEditStudent}
+                    />
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -190,4 +286,4 @@ const AdminPayments = () => {
   );
 };
 
-export default AdminPayments;
+export default ManageStudentPayments;

@@ -103,7 +103,7 @@ const AuthForm = ({ type }) => {
                 {isSignUp ? "Create Account" : "Sign In"}
               </h3>
 
-              {error && <p className="text-red-500 text-center">{error}</p>}
+              {error && <p className="text-green-500 text-center">{error}</p>}
 
               <form onSubmit={handleSubmit}>
                 {isSignUp && (
