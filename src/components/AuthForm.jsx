@@ -1,11 +1,9 @@
 import React, { useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 
-const AuthForm = ({ type }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+const AuthForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -13,68 +11,62 @@ const AuthForm = ({ type }) => {
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
-  const isSignUp = type === "signup";
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setError(null);
+      setLoading(true);
 
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    // Basic validation
-    if (!email || !password || (isSignUp && (!firstName || !lastName))) {
-      setError("Please fill in all fields.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const endpoint = isSignUp
-        ? "https://moringa-school-portal-backend.onrender.com/register"
-        : "https://moringa-school-portal-backend.onrender.com/login";
-
-      const payload = { 
-        email, 
-        password,
-        first_name: firstName, // Match backend's expected field name
-        last_name: lastName,  // Match backend's expected field name
-      };
-
-      const response = await axios.post(endpoint, payload);
-      const { access_token, role } = response.data;
-
-      if (access_token) {
-        // Store the token and role in localStorage
-        localStorage.setItem("token", access_token);
-        localStorage.setItem("role", role);
-
-        // Set successful login state
-        setError(null); // Clear any previous errors
+      // Basic validation
+      if (!email || !password) {
+        setError("Please fill in all fields.");
         setLoading(false);
+        return;
+      }
 
-        // Redirect based on role
-        switch (role) {
-          case 'admin':
-            navigate('/admin');
-            break;
-          case 'student':
-            navigate('/home-page');
-            break;
-          default:
-            navigate('/login');
+      try {
+        const endpoint = "https://moringa-school-portal-backend.onrender.com/login";
+
+        const payload = { email, password };
+
+        const response = await axios.post(endpoint, payload);
+        const { access_token, role } = response.data;
+
+        if (access_token) {
+          // Store the token and role in localStorage
+          localStorage.setItem("token", access_token);
+          localStorage.setItem("role", role);
+
+          // Set successful login state
+          setError(null); // Clear any previous errors
+          setLoading(false);
+
+          // Redirect based on role
+          switch (role) {
+            case "admin":
+              navigate("/admin");
+              break;
+            case "student":
+              navigate("/home-page");
+              break;
+            default:
+              navigate("/login");
+          }
+        } else {
+          setError(response.data.message || "Login failed. Please try again.");
         }
-      } else {
-        setError(response.data.message || "Login failed. Please try again.");
+      } catch (err) {
+        if (err.response && err.response.data.message) {
+          setError(err.response.data.message);
+        } else {
+          setError("An error occurred. Please try again.");
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      if (err.response && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("An error occurred. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [email, password, firstName, lastName, isSignUp, navigate]);
+    },
+    [email, password, navigate]
+  );
 
   return (
     <div
@@ -99,42 +91,11 @@ const AuthForm = ({ type }) => {
           <div className="bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden min-h-[500px]">
             {/* Left Form Section */}
             <div className="w-full md:w-1/2 p-6 flex flex-col justify-center overflow-y-auto">
-              <h3 className="text-2xl font-semibold text-center mb-3">
-                {isSignUp ? "Create Account" : "Sign In"}
-              </h3>
+              <h3 className="text-2xl font-semibold text-center mb-3">Sign In</h3>
 
               {error && <p className="text-green-500 text-center">{error}</p>}
 
               <form onSubmit={handleSubmit}>
-                {isSignUp && (
-                  <>
-                    <div className="mb-3">
-                      <label className="block text-black text-sm font-medium">
-                        First Name
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="block text-black text-sm font-medium">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </>
-                )}
-
                 <div className="mb-3">
                   <label className="block text-black text-sm font-medium">
                     Email
@@ -154,7 +115,7 @@ const AuthForm = ({ type }) => {
                   </label>
                   <div className="relative">
                     <input
-                      type={showPassword ? "text" : "password"} // Toggle between text and password
+                      type={showPassword ? "text" : "password"}
                       className="w-full p-2 border border-gray-300 rounded-lg pr-10"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -162,10 +123,10 @@ const AuthForm = ({ type }) => {
                     />
                     <button
                       type="button"
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center h-full" // Center the icon vertically
-                      onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center h-full"
+                      onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle eye icons */}
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
                   </div>
                 </div>
@@ -175,7 +136,7 @@ const AuthForm = ({ type }) => {
                   className="w-full bg-black text-white py-2 rounded-lg hover:bg-[#df872e] transition"
                   disabled={loading}
                 >
-                  {loading ? "Loading..." : isSignUp ? "Create Account" : "Sign In"}
+                  {loading ? "Loading..." : "Sign In"}
                 </button>
 
                 <div className="flex justify-between items-center mt-3 text-sm text-black">
@@ -183,9 +144,6 @@ const AuthForm = ({ type }) => {
                     <input type="checkbox" className="mr-1" />
                     Remember Me
                   </label>
-                  <Link to="/reset-password" className="hover:underline text-black">
-                    Forgot Password?
-                  </Link>
                 </div>
               </form>
             </div>

@@ -3,9 +3,9 @@ import React from "react";
 const Grades = () => {
   // Mock Data
   const grades = [
-    { course: "Web Development", grade: "A" },
-    { course: "Data Science", grade: "B+" },
-    { course: "Cyber Security", grade: "A-" },
+    { course: "Software Development", grade: "Merit" },
+    // { course: "Data Science", grade: "B+" },
+    // { course: "Cyber Security", grade: "A-" },
   ];
 
   return (
