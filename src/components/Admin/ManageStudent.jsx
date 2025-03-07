@@ -10,8 +10,7 @@ const ManageStudent = () => {
   const [students, setStudents] = useState([]);
   const [studentForm, setStudentForm] = useState({
     first_name: '', last_name: '', email: '', password: '',
-    phase: '', total_fee: '', amount_paid: '', status: 'active', course_id: '',
-    profile_photo: '' // New field for profile photo
+    phase: '', total_fee: '', amount_paid: '', status: 'active', course_id: ''
   });
   const [editingStudent, setEditingStudent] = useState(null);
   const [activeTab, setActiveTab] = useState('add');
@@ -46,7 +45,11 @@ const ManageStudent = () => {
       if (!response.ok) throw new Error('Failed to fetch students.');
 
       const data = await response.json();
-      setStudents(Array.isArray(data) ? data : []);
+      const studentsWithCourseNames = data.map(student => ({
+        ...student,
+        course_name: courses.find(course => course.id === student.course_id)?.name || 'Unknown Course'
+      }));
+      setStudents(studentsWithCourseNames);
     } catch (error) {
       toast.error(error.message);
     }
@@ -55,17 +58,6 @@ const ManageStudent = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setStudentForm({ ...studentForm, [name]: value });
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setStudentForm({ ...studentForm, profile_photo: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleSubmit = async () => {
@@ -94,28 +86,35 @@ const ManageStudent = () => {
         }
       );
 
-      if (!response.ok) throw new Error(`Failed to ${editingStudent ? 'update' : 'add'} student.`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Failed to ${editingStudent ? 'update' : 'add'} student.`);
+      }
 
       const updatedStudent = await response.json();
+      const updatedStudentWithCourseName = {
+        ...updatedStudent,
+        course_name: courses.find(course => course.id === updatedStudent.course_id)?.name || 'Unknown Course'
+      };
 
       if (editingStudent) {
-        setStudents(students.map(s => (s.id === updatedStudent.id ? updatedStudent : s)));
+        setStudents(students.map(s => (s.id === updatedStudentWithCourseName.id ? updatedStudentWithCourseName : s)));
         toast.success("Student updated successfully!");
       } else {
-        setStudents([...students, updatedStudent]);
+        setStudents([...students, updatedStudentWithCourseName]);
         toast.success("Student added successfully!");
       }
 
       // Reset form and state
       setStudentForm({
         first_name: '', last_name: '', email: '', password: '',
-        phase: '', total_fee: '', amount_paid: '', status: 'active', course_id: '',
-        profile_photo: '' // Reset profile photo
+        phase: '', total_fee: '', amount_paid: '', status: 'active', course_id: ''
       });
       setEditingStudent(null);
       setActiveTab('view');
       setIsModalOpen(false);
     } catch (error) {
+      console.error('Error:', error);
       toast.error(error.message);
     }
   };
@@ -149,8 +148,7 @@ const ManageStudent = () => {
       total_fee: student.total_fee,
       amount_paid: student.amount_paid,
       status: student.status,
-      course_id: student.course_id,
-      profile_photo: student.profile_photo // Ensure profile photo is included
+      course_id: student.course_id
     });
     setIsModalOpen(true);
   };
@@ -247,16 +245,6 @@ const ManageStudent = () => {
                 <option key={course.id} value={course.id}>{course.name}</option>
               ))}
             </select>
-            {/* Profile Photo Upload */}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
-            />
-            {studentForm.profile_photo && (
-              <img src={studentForm.profile_photo} alt="Profile Preview" className="w-32 h-32 object-cover rounded-full mt-4" />
-            )}
             <button
               onClick={handleSubmit}
               className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-300"
@@ -275,15 +263,14 @@ const ManageStudent = () => {
               <h3 className="text-xl font-bold mb-2">
                 {student.first_name} {student.last_name}
               </h3>
-              {/* Display Profile Photo */}
-              {student.profile_photo && (
-                <img src={student.profile_photo} alt="Profile" className="w-32 h-32 object-cover rounded-full mb-4" />
-              )}
-              {["email", "phase", "course_id", "total_fee", "amount_paid", "status"].map((field) => (
+              {["email", "phase", "total_fee", "amount_paid", "status"].map((field) => (
                 <p key={field} className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
                   <strong>{field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}:</strong> {student[field]}
                 </p>
               ))}
+              <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
+                <strong>Course:</strong> {student.course_name}
+              </p>
               <div className="flex space-x-2 mt-4">
                 <button
                   onClick={() => handleEdit(student)}
