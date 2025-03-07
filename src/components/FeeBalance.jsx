@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 // Mock Data
 const studentFeeData = {
-  studentName: "Masinde Sylvester",
-  totalFees: 50000,
-  paidAmount: 35000,
-  outstandingAmount: 15000,
+  studentName: "Joan wambui",
+  totalFees: 174000,
+  paidAmount: 50000,
+  outstandingAmount: 124000,
 };
 
 const FeeBalance = () => {
