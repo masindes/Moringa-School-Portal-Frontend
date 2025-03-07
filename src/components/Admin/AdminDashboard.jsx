@@ -1,20 +1,47 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Users, UserCheck, CreditCard, BookOpen } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+const API_URL = "https://moringa-school-portal-backend.onrender.com";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
+  const token = localStorage.getItem("token");
 
-  // Load students from localStorage when showDetails is toggled
+  // Fetch students from API when showDetails is toggled
   useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        // Fetch student details
+        const response = await fetch(`${API_URL}/students`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch students: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setStudents(data);
+        console.log("Fetched students:", data);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+        toast.error("Failed to fetch students. Please try again.");
+      }
+    };
+
     if (showDetails) {
-      const storedStudents = JSON.parse(localStorage.getItem("students")) || [];
-      setStudents(storedStudents);
+      fetchStudents();
     }
-  }, [showDetails]);
+  }, [showDetails, token]);
 
   // Function to navigate to payments
   const handlePaymentsNavigation = (e) => {
@@ -22,8 +49,43 @@ const AdminDashboard = () => {
     navigate("/admin-payments");
   };
 
+  // Function to toggle student status (activate/deactivate)
+  const toggleStudentStatus = async (studentId, isActive) => {
+    try {
+      const endpoint = isActive
+        ? `${API_URL}/students/${studentId}/deactivate`
+        : `${API_URL}/students/${studentId}/activate`;
+
+      const response = await fetch(endpoint, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to ${isActive ? "deactivate" : "activate"} student.`);
+      }
+
+      // Update the student's status in the local state
+      setStudents((prev) =>
+        prev.map((student) =>
+          student.id === studentId ? { ...student, isActive: !isActive } : student
+        )
+      );
+
+      toast.success(`Student ${studentId} ${isActive ? "deactivated" : "activated"} successfully.`);
+    } catch (error) {
+      console.error(error);
+      toast.error(`Failed to ${isActive ? "deactivate" : "activate"} student.`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center items-center p-8">
+      <ToastContainer position="top-right" autoClose={3000} />
+
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text inline-block">
@@ -41,10 +103,7 @@ const AdminDashboard = () => {
           <p className="text-gray-400 text-center mb-4">View and manage all student records.</p>
           <button
             className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
-            onClick={() => {
-              navigate("/manage-student");
-              setShowDetails(true); // Show student details when navigating
-            }}
+            onClick={() => navigate("/manage-student")}
           >
             View Students
           </button>
@@ -68,7 +127,7 @@ const AdminDashboard = () => {
           <BookOpen className="w-12 h-12 text-green-400 mb-4" />
           <h2 className="text-xl font-semibold text-gray-100 mb-2">View Student Details</h2>
           <p className="text-gray-400 text-center mb-4">
-            Access detailed student records including grades, fee balances, and phases.
+            Access detailed student records including phases.
           </p>
           <button
             className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300"
@@ -93,23 +152,22 @@ const AdminDashboard = () => {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="text-gray-200">
-                        <strong>Name:</strong> {student.name}
+                        <strong>First Name:</strong> {student.first_name || "N/A"}
                       </p>
                       <p className="text-gray-200">
-                        <strong>Email:</strong> {student.email}
+                        <strong>Last Name:</strong> {student.last_name || "N/A"}
                       </p>
                       <p className="text-gray-200">
-                        <strong>Grade:</strong> {student.grade}
+                        <strong>Email:</strong> {student.email || "N/A"}
                       </p>
-                      <p className="text-gray-200">
-                        <strong>Fee Balance:</strong> KSH {student.feeBalance || "0"}
-                      </p>
-                      <h3 className="font-semibold mt-2 text-gray-200">Current Phase:</h3>
+                      <h3 className="font-semibold mt-2 text-gray-200">Phase:</h3>
                       <ul className="list-disc pl-5 text-gray-300">
-                        {Array.isArray(student.currentPhase) ? (
-                          student.currentPhase.map((course, index) => <li key={index}>{course}</li>)
+                        {Array.isArray(student.phase) ? (
+                          student.phase.map((course, index) => (
+                            <li key={index}>{course}</li>
+                          ))
                         ) : (
-                          <li>{student.currentPhase}</li>
+                          <li>{student.phase || "N/A"}</li>
                         )}
                       </ul>
                       <p className="text-gray-400 mt-2">
@@ -127,13 +185,7 @@ const AdminDashboard = () => {
                           ? "bg-red-600 hover:bg-red-700"
                           : "bg-green-600 hover:bg-green-700"
                       }`}
-                      onClick={() =>
-                        setStudents((prev) =>
-                          prev.map((s) =>
-                            s.id === student.id ? { ...s, isActive: !s.isActive } : s
-                          )
-                        )
-                      }
+                      onClick={() => toggleStudentStatus(student.id, student.isActive)}
                     >
                       {student.isActive ? "Deactivate" : "Activate"}
                     </button>

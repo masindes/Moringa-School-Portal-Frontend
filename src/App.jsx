@@ -1,30 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import AuthForm from "./components/AuthForm";
-import ResetPassword from "./components/ResetPassword";
-import Contact from "./components/Contact";
-import About from "./components/About";
-import HomePage from "./components/HomePage";
-import StudentDashboard from "./components/StudentDashboard";
-import Grades from "./components/Grades";
-import FeeBalance from "./components/FeeBalance";
-import CurrentPhase from "./components/CurrentPhase";
-import Payment from "./components/Payment";
-import Logout from "./components/Logout";
-import AdminDashboard from "./components/Admin/AdminDashboard";
-import ManageStudent from "./components/Admin/ManageStudent";
-import AdminPayments from "./components/Admin/AdminPayments";
-import ChatSupport from "./components/ChatSupport";
-import StudentDetails from "./components/Admin/StudentDetails"; // Import StudentDetails
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import AuthForm from './components/AuthForm';
+import ResetPassword from './components/ResetPassword';
+import Contact from './components/Contact';
+import About from './components/About';
+import HomePage from './components/HomePage';
+import StudentDashboard from './components/StudentDashboard';
+import Grades from './components/Grades';
+import FeeBalance from './components/FeeBalance';
+import CurrentPhase from './components/CurrentPhase';
+import Payment from './components/Payment';
+import Logout from './components/Logout';
+import AdminDashboard from './components/Admin/AdminDashboard';
+import ManageStudent from './components/Admin/ManageStudent';
+import AdminPayments from './components/Admin/AdminPayments';
+import ChatSupport from './components/ChatSupport';
+// import StudentDetails from './components/Admin/StudentDetails'; // Import StudentDetails
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Check if token exists in localStorage
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
   }, []);
 
@@ -63,7 +63,7 @@ const App = () => {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/manage-student" element={<ManageStudent />} />
             <Route path="/admin-payments" element={<AdminPayments />} />
-            <Route path="/student/:id" element={<StudentDetails />} /> {/* Add StudentDetails Route */}
+          
           </Routes>
         </div>
 

@@ -131,7 +131,7 @@ const ManageStudent = () => {
 
   // 🟢 Edit Student
   const handleEditStudent = (student) => {
-    setEditingStudent(student);
+    setEditingStudent({ ...student }); // Ensure a copy of the student object is used
     setIsModalOpen(true);
   };
 
