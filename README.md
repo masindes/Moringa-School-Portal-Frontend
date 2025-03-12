@@ -51,3 +51,4 @@ Mpesa for payments
 1️⃣ Clone the Repository
 $ git clone https://github.com/masindes/Moringa-School-Portal-Backend.git
 $ cd Moringa-School-Portal-Backend
+2️⃣ Create and Activate Virtual Environment
