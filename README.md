@@ -74,3 +74,7 @@ Endpoint: POST /register
   "password": "securepassword",
   "role": "student"
 }
+
+User Login
+
+Endpoint: POST /login
