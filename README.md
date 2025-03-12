@@ -84,5 +84,4 @@ Endpoint: POST /login
 Response includes a JWT token for authentication.
 
 Protected Route Example
-
 Use the JWT token in the request headers:
