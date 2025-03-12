@@ -86,3 +86,11 @@ Response includes a JWT token for authentication.
 Protected Route Example
 Use the JWT token in the request headers:
 Authorization: Bearer your_jwt_token
+
+🎯 Future Enhancements
+
+Notifications: Automated alerts for grade updates, fee payments, and phase progress.
+
+Reporting System: Generate student performance and fee reports.
+
+Chat Support: Allow students to communicate with admins for assistance.
