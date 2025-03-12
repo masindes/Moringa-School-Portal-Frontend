@@ -40,7 +40,6 @@ Flask-CORS (Cross-Origin Resource Sharing)
 React (UI Development)
 
 Redux (State Management) (Optional)
-
 React Router (Navigation)
 Axios / Fetch API (HTTP Requests)
 Tailwind CSS for styling
