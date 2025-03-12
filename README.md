@@ -76,5 +76,8 @@ Endpoint: POST /register
 }
 
 User Login
-
 Endpoint: POST /login
+{
+  "email": "johndoe@example.com",
+  "password": "123"
+}
