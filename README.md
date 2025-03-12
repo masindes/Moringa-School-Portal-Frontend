@@ -33,7 +33,6 @@ Fee & Payment Handling: Manage student payments and track fee records.
 Python + Flask (RESTful API)
 
 PostgreSQL (Database Management)
-
 SQLAlchemy (ORM for database interaction)
 Flask-JWT-Extended (Authentication & Authorization)
 Flask-CORS (Cross-Origin Resource Sharing)
