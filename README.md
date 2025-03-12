@@ -103,3 +103,13 @@ Create a new branch (git checkout -b feature-branch)
 Commit changes (git commit -m 'Add new feature')
 Push to the branch (git push origin feature-branch)
 Open a Pull Request
+
+
+📜 License
+
+This project is licensed under the MIT License.
+
+📞 Contact
+
+For any inquiries, reach out via email: masindesylvester@gmail.com
+
