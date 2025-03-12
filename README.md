@@ -35,6 +35,5 @@ Python + Flask (RESTful API)
 PostgreSQL (Database Management)
 
 SQLAlchemy (ORM for database interaction)
-
 Flask-JWT-Extended (Authentication & Authorization)
 Flask-CORS (Cross-Origin Resource Sharing)
