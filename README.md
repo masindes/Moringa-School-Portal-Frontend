@@ -99,7 +99,18 @@ Authorization: Bearer your_jwt_token
 📌 Frontend Integration
 
 The frontend interacts with the backend via API calls. The base API URL is stored in .env as VITE_API_URL. Example API request using Axios:
+import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+export const loginUser = async (email, password) => {
+  try {
+    const response = await axios.post(`${API_URL}/login`, { email, password });
+    return response.data;
+  } catch (error) {
+    console.error("Login error", error);
+  }
+};
 
 
 🎯 Future Enhancements
