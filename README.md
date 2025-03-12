@@ -38,8 +38,6 @@ Flask-CORS (Cross-Origin Resource Sharing)
 🔹 Frontend
 
 React (UI Development)
-
-
 React Router (Navigation)
 Axios / Fetch API (HTTP Requests)
 Tailwind CSS for styling
