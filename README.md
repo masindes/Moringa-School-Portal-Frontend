@@ -40,3 +40,9 @@ React (UI Development)
 React Router (Navigation)
 Axios / Fetch API (HTTP Requests)
 Tailwind CSS for styling
+
+🔹 Authentication & Payments
+
+JWT (JSON Web Token) for secure user authentication
+
+Mpesa, Stripe, or PayPal for payment processing
