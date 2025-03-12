@@ -34,3 +34,15 @@ PostgreSQL (Database Management)
 SQLAlchemy (ORM for database interaction)
 Flask-JWT-Extended (Authentication & Authorization)
 Flask-CORS (Cross-Origin Resource Sharing)
+
+🔹 Frontend
+
+React (UI Development)
+
+Redux (State Management) (Optional)
+
+React Router (Navigation)
+
+Axios / Fetch API (HTTP Requests)
+
+CSS for styling
