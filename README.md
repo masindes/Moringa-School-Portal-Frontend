@@ -67,3 +67,10 @@ The server will run on http://127.0.0.1:5000/
 
 User Registration
 Endpoint: POST /register
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "johndoe@example.com",
+  "password": "securepassword",
+  "role": "student"
+}
