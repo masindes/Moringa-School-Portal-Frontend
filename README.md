@@ -54,3 +54,4 @@ $ cd Moringa-School-Portal-Backend
 2️⃣ Create and Activate Virtual Environment
 $ pip install pipenv
 $ pipenv shell
+3️⃣ Install Dependencies
