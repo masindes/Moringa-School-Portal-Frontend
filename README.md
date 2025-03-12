@@ -87,8 +87,24 @@ Protected Route Example
 Use the JWT token in the request headers:
 Authorization: Bearer your_jwt_token
 
+
 🎯 Future Enhancements
 
 Notifications: Automated alerts for grade updates, fee payments, and phase progress.
 Reporting System: Generate student performance and fee reports.
 Chat Support: Allow students to communicate with admins for assistance.
+
+
+🤝 Contributing
+
+Want to improve this project? Follow these steps:
+
+Fork the repository
+
+Create a new branch (git checkout -b feature-branch)
+
+Commit changes (git commit -m 'Add new feature')
+
+Push to the branch (git push origin feature-branch)
+
+Open a Pull Request
