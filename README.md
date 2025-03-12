@@ -81,3 +81,4 @@ Endpoint: POST /login
   "email": "johndoe@example.com",
   "password": "123"
 }
+Response includes a JWT token for authentication.
