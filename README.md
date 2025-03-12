@@ -18,3 +18,13 @@ Grades Section: View grades for enrolled courses.
 Fee Management: Check outstanding balances and make payments.
 Current Phase Tracking: See current phase progress and updates.
 Payment Processing: Secure payment integration for fee payments.
+
+🔧 Admin Features
+
+Admin Dashboard: Manage student accounts and records.
+
+Student Management: Add, update, or deactivate student accounts.
+
+Grade Management: Update and view student grades.
+
+Fee & Payment Handling: Manage student payments and track fee records.
