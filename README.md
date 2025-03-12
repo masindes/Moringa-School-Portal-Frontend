@@ -100,7 +100,6 @@ Chat Support: Allow students to communicate with admins for assistance.
 Want to improve this project? Follow these steps:
 
 Fork the repository
-
 Create a new branch (git checkout -b feature-branch)
 Commit changes (git commit -m 'Add new feature')
 Push to the branch (git push origin feature-branch)
