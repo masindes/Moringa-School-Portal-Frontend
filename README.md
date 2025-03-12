@@ -1,9 +1,11 @@
-# React + Vite
+Moringa Students Portal - Backend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🚀 Project Overview
 
-Currently, two official plugins are available:
+Moringa Students Portal is a web application designed to help Moringa School students and administrators manage student information efficiently. Students can register, log in, and access their grades, fee balances, and training phases, while administrators can manage student accounts, payments, and academic records.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# masindes-Moringa-School-Portal-Frontend
+🔗 Deployment
+
+Backend (Flask) hosted on Render: Backend Deployment Link (Replace with actual link)
+
+Frontend (React) hosted on Vercel: Frontend Deployment Link (Replace with actual link)
