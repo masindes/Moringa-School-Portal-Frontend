@@ -24,3 +24,18 @@ Admin Dashboard: Manage student accounts and records.
 Student Management: Add, update, or deactivate student accounts.
 Grade Management: Update and view student grades.
 Fee & Payment Handling: Manage student payments and track fee records.
+
+
+🏗 Tech Stack
+
+🔹 Backend (Flask API)
+
+Python + Flask (RESTful API)
+
+PostgreSQL (Database Management)
+
+SQLAlchemy (ORM for database interaction)
+
+Flask-JWT-Extended (Authentication & Authorization)
+
+Flask-CORS (Cross-Origin Resource Sharing)
