@@ -66,5 +66,4 @@ The server will run on http://127.0.0.1:5000/
 🔒 Authentication & Authorization (JWT)
 
 User Registration
-
 Endpoint: POST /register
