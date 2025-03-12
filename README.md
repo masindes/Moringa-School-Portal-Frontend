@@ -44,4 +44,4 @@ Redux (State Management) (Optional)
 React Router (Navigation)
 
 Axios / Fetch API (HTTP Requests)
-CSS for styling
+Tailwind CSS for styling
