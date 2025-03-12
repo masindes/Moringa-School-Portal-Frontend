@@ -56,4 +56,4 @@ $ pip install pipenv
 $ pipenv shell
 3️⃣ Install Dependencies
 $ pipenv install
-4️⃣
+4️⃣  Run Database Migrations
