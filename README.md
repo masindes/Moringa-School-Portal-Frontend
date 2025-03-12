@@ -44,3 +44,8 @@ Tailwind CSS for styling
 🔹 Authentication & Payments
 JWT (JSON Web Token) for secure user authentication
 Mpesa for payments
+
+
+⚙️ Setup & Installation
+
+1️⃣ Clone the Repository
