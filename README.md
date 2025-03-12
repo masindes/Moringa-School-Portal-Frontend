@@ -60,3 +60,4 @@ $ pipenv install
 $ flask db upgrade
 6️⃣ Start the Server
 $ flask run
+The server will run on http://127.0.0.1:5000/
