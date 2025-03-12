@@ -58,3 +58,4 @@ $ pipenv shell
 $ pipenv install
 4️⃣  Run Database Migrations
 $ flask db upgrade
+6️⃣ Start the Server
