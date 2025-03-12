@@ -57,3 +57,4 @@ $ pipenv shell
 3️⃣ Install Dependencies
 $ pipenv install
 4️⃣  Run Database Migrations
+$ flask db upgrade
