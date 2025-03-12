@@ -47,9 +47,14 @@ Mpesa for payments
 
 ⚙️ Setup & Installation
 
-1️⃣ Clone the Repository
+1️⃣ Clone the Repositories
+Backend:
 $ git clone https://github.com/masindes/Moringa-School-Portal-Backend.git
 $ cd Moringa-School-Portal-Backend
+Frontend:
+$ git clone https://github.com/masindes/Moringa-School-Portal-Frontend.git
+$ cd Moringa-School-Portal-Frontend
+
 2️⃣ Create and Activate Virtual Environment
 $ pip install pipenv
 $ pipenv shell
