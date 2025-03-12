@@ -55,6 +55,7 @@ Frontend:
 $ git clone https://github.com/masindes/Moringa-School-Portal-Frontend.git
 $ cd Moringa-School-Portal-Frontend
 
+Backend:
 2️⃣ Create and Activate Virtual Environment
 $ pip install pipenv
 $ pipenv shell
@@ -65,6 +66,9 @@ $ flask db upgrade
 6️⃣ Start the Server
 $ flask run
 The server will run on http://127.0.0.1:5000/
+
+Frontend:
+$ npm run dev
 
 
 🔒 Authentication & Authorization (JWT)
@@ -90,6 +94,12 @@ Response includes a JWT token for authentication.
 Protected Route Example
 Use the JWT token in the request headers:
 Authorization: Bearer your_jwt_token
+
+
+📌 Frontend Integration
+
+The frontend interacts with the backend via API calls. The base API URL is stored in .env as VITE_API_URL. Example API request using Axios:
+
 
 
 🎯 Future Enhancements
