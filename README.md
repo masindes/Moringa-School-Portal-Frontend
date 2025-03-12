@@ -55,3 +55,4 @@ $ cd Moringa-School-Portal-Backend
 $ pip install pipenv
 $ pipenv shell
 3️⃣ Install Dependencies
+$ pipenv install
