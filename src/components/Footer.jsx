@@ -9,7 +9,7 @@ const Footer = () => {
         {/* Logo Section */}
         <div className="flex items-center space-x-2"> 
           <img 
-            src="src/assets/images/moringa-01.png"  
+            src="/images/moringa-01.png"  
             alt="Moringa Logo" 
             className="w-20 md:w-24" 
           />

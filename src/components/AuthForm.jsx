@@ -72,7 +72,7 @@ const AuthForm = () => {
     <div
       className="flex flex-col min-h-screen"
       style={{
-        backgroundImage: `url('src/assets/images/cod.jpg')`,
+        backgroundImage: `url('/images/cod.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         animation: "moveBackground 20s linear infinite",
@@ -151,7 +151,7 @@ const AuthForm = () => {
             {/* Right Image Section */}
             <div className="md:w-1/2 hidden md:flex justify-center items-end bg-[#df872e] p-4 relative">
               <img
-                src="src/assets/images/student.png"
+                src="/images/student.png"
                 alt="Graduate"
                 className="w-full max-h-[80%] object-contain absolute bottom-0 left-1/2 transform -translate-x-1/2"
               />
