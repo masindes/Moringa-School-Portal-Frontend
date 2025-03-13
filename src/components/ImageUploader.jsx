@@ -8,11 +8,11 @@ const ImageUpload = () => {
     const file = acceptedFiles[0];
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "masinde_watty");
+    formData.append("upload_preset", "masinde_watty"); 
 
     try {
       const response = await fetch(
-        `CLOUDINARY_URL=cloudinary://<your_api_key>:<your_api_secret>@dyzwwqbcg`, 
+        `https://api.cloudinary.com/v1_1/dyzwwqbcg/image/upload`, 
         {
           method: "POST",
           body: formData,
