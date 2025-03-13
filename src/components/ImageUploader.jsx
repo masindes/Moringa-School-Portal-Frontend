@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const ImageUpload = () => {
+const ImageUploader = () => {
   const [imageUrl, setImageUrl] = useState("");
 
   const onDrop = async (acceptedFiles) => {
@@ -37,4 +37,4 @@ const ImageUpload = () => {
   );
 };
 
-export default ImageUpload;
+export default ImageUploader;

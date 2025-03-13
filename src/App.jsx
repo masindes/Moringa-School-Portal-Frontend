@@ -16,6 +16,7 @@ import Logout from './components/Logout';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import ManageStudent from './components/Admin/ManageStudent';
 import AdminPayments from './components/Admin/AdminPayments';
+import ImageUploader from './components/ImageUploader'; 
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -58,6 +59,9 @@ const App = () => {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/manage-student" element={<ManageStudent />} />
             <Route path="/admin-payments" element={<AdminPayments />} />
+
+            {/* Add the ImageUploader route */}
+            <Route path="/upload-image" element={<ImageUploader />} />
           </Routes>
         </div>
 
