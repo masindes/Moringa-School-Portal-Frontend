@@ -134,5 +134,5 @@ Open a Pull Request
 This project is licensed under the MIT License.
 
 📞 Contact
-For any inquiries, reach out via email: masindesylvester@gmail.com
+For any inquiries, reach out via email: masinde.sylvester@yahoo.com
 
