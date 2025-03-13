@@ -15,7 +15,7 @@ const About = () => {
           {/* Image Section */}
           <div className="flex justify-center md:justify-start">
             <img
-              src="src/assets/images/about.jpg" 
+              src="public/images/about.jpg" 
               alt="Moringa School"
               className="w-full max-w-lg rounded-lg shadow-md" 
             />

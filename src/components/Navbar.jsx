@@ -43,7 +43,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
           <img 
-            src="src/assets/images/moringa-01.png" 
+            src="/images/moringa-01.png" 
             alt="Moringa Logo" 
             className="w-48 h-auto object-contain" 
           />
