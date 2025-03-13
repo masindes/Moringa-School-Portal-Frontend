@@ -16,8 +16,7 @@ import Logout from './components/Logout';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import ManageStudent from './components/Admin/ManageStudent';
 import AdminPayments from './components/Admin/AdminPayments';
-import ChatSupport from './components/ChatSupport';
-// import StudentDetails from './components/Admin/StudentDetails'; // Import StudentDetails
+import ImageUploader from './components/ImageUploader'; 
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,9 +29,6 @@ const App = () => {
 
   return (
     <Router>
-      <div className="App">
-        <ChatSupport />
-      </div>
       <div className="min-h-screen flex flex-col bg-gray-100">
         {/* Pass authentication state to Navbar */}
         <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
@@ -63,7 +59,9 @@ const App = () => {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/manage-student" element={<ManageStudent />} />
             <Route path="/admin-payments" element={<AdminPayments />} />
-          
+
+            {/* Add the ImageUploader route */}
+            <Route path="/upload-image" element={<ImageUploader />} />
           </Routes>
         </div>
 
