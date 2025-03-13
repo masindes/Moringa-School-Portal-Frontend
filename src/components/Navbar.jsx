@@ -85,17 +85,17 @@ const Navbar = () => {
               </div>
 
               {/* Logout Button */}
-              <button 
+               <button 
                 onClick={handleLogout} 
                 className="text-red-600 font-semibold hover:text-black transition text-base border border-red-600 px-4 py-2 rounded-lg"
               >
                 Logout
-              </button>
+              </button> 
             </>
           ) : (
             // Sign In Button for Unauthenticated Users
             <Link 
-              to="/login" 
+              to="/" 
               className="bg-[#ff7d00] text-white px-6 py-2 rounded-lg hover:bg-black transition text-base"
             >
               Sign In
@@ -111,12 +111,12 @@ const Navbar = () => {
 
       {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-[#df872e] py-4 text-center">
+        <div className="md:hidden bg-[#ff7d00] py-4 text-center">
           {isAuthenticated ? (
             // Logout Button for Authenticated Users
             <button 
               onClick={handleLogout} 
-              className="block text-red-600 py-2 w-full hover:bg-black text-base"
+              className="block  py-2 w-full hover:bg-black text-base"
             >
               Logout
             </button>
@@ -124,7 +124,7 @@ const Navbar = () => {
             // Sign In Button for Unauthenticated Users
             <Link 
               to="/login" 
-              className="block bg-[#ff7d00] text-white px-6 py-2 mx-4 rounded-lg hover:bg-black transition text-base"
+              className="block  text-white px-6 py-2 mx-4 rounded-l text-base"
             >
               Sign In
             </Link>
