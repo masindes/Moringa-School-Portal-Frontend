@@ -30,7 +30,7 @@ const App = () => {
   return (
     <Router>
       <div className="min-h-screen flex flex-col bg-gray-100">
-        {/* Pass authentication state to Navbar */}
+  
         <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
 
         {/* Main Content */}

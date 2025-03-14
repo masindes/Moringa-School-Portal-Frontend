@@ -38,7 +38,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-[#ffffff] shadow-lg">
+    <nav className=" shadow-lg">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
@@ -69,7 +69,7 @@ const Navbar = () => {
 
                 {/* Notifications Dropdown */}
                 {showDropdown && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-2">
+                  <div className="absolute right-0 mt-2 w-6 shadow-lg rounded-lg p-2">
                     <h3 className="text-gray-700 font-semibold mb-2">Notifications</h3>
                     {notifications.length > 0 ? (
                       notifications.map((notif) => (
