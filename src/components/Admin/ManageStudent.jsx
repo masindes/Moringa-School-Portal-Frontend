@@ -152,8 +152,7 @@ const ManageStudent = () => {
         body: JSON.stringify(editingStudent),
       });
 
-      if (!response.ok) throw new Error('Failed to update student.');
-
+      if (!response.ok) throw new Error('Failed to update student.'); 
       setStudents(students.map(student => (student.id === editingStudent.id ? editingStudent : student)));
       setIsModalOpen(false);
       toast.success("Student updated successfully!");
