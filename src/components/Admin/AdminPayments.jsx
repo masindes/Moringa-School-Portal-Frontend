@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
+const API_URL = `${import.meta.env.VITE_API_URL}/students`;
 
 const StudentPaymentRow = ({ student, onEdit, onDelete }) => {
   if (!student) {

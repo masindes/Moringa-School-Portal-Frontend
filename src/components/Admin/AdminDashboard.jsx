@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, UserCheck, CreditCard, BookOpen } from "lucide-react";
+import { Users, UserCheck, CreditCard, BookOpen, BarChart2, Bell, GraduationCap } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "https://moringa-school-portal-backend.onrender.com";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -134,6 +134,45 @@ const AdminDashboard = () => {
             onClick={() => setShowDetails(!showDetails)}
           >
             {showDetails ? "Hide Details" : "View Details"}
+          </button>
+        </div>
+
+        {/* Reports Card */}
+        <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-blue-500/50">
+          <BarChart2 className="w-12 h-12 text-blue-300 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-100 mb-2">Reports &amp; Stats</h2>
+          <p className="text-gray-400 text-center mb-4">Live overview of students, payments, and activity.</p>
+          <button
+            className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+            onClick={() => navigate("/admin/reports")}
+          >
+            View Reports
+          </button>
+        </div>
+
+        {/* Notifications Card */}
+        <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-orange-500/50">
+          <Bell className="w-12 h-12 text-orange-400 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-100 mb-2">Notifications</h2>
+          <p className="text-gray-400 text-center mb-4">Send announcements and alerts to students.</p>
+          <button
+            className="mt-4 bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-300"
+            onClick={() => navigate("/admin/notifications")}
+          >
+            Send Notification
+          </button>
+        </div>
+
+        {/* Manage Courses Card */}
+        <div className="bg-gray-800 shadow-2xl rounded-lg p-6 flex flex-col items-center transform hover:scale-105 transition-transform duration-300 hover:shadow-purple-500/50">
+          <GraduationCap className="w-12 h-12 text-purple-400 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-100 mb-2">Manage Courses</h2>
+          <p className="text-gray-400 text-center mb-4">Add, edit, and organise available courses.</p>
+          <button
+            className="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-300"
+            onClick={() => navigate("/admin/courses")}
+          >
+            View Courses
           </button>
         </div>
       </div>

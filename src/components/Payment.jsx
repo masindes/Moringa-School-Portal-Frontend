@@ -52,7 +52,7 @@ const Payment = () => {
       console.log("Sending payload:", payload);
 
       const response = await axios.post(
-        "https://moringa-school-portal-backend.onrender.com/mpesa/payment",
+        `${import.meta.env.VITE_API_URL}/mpesa/payment`,
         payload,
         {
           headers: {

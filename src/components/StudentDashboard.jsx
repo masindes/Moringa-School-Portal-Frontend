@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Grades from "./Grades";
 import FeeBalance from "./FeeBalance";
 import CurrentPhase from "./CurrentPhase";
-import { Moon, Sun, CreditCard, BarChart2, Layers, LogOut, ArrowLeft } from "lucide-react";
+import { Moon, Sun, CreditCard, BarChart2, Layers, Bell, ArrowLeft } from "lucide-react";
 
 const StudentDashboard = () => {
   // Theme state
@@ -50,6 +50,13 @@ const StudentDashboard = () => {
               className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition"
             >
               <Layers size={20} /> Current Phase
+            </Link>
+
+            <Link
+              to="/notifications"
+              className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition"
+            >
+              <Bell size={20} /> Notifications
             </Link>
           </nav>
         </div>

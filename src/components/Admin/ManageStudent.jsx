@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit, FaTrash, FaArrowLeft, FaPlus, FaEye, FaMoon, FaSun } from 'react-icons/fa';
 
-const API_URL = "https://moringa-school-portal-backend.onrender.com/students";
+const API_URL = `${import.meta.env.VITE_API_URL}/students`;
 
 const techCourses = [
   { id: 1, name: 'Web Development' },
@@ -21,7 +21,7 @@ const ManageStudent = () => {
     last_name: '',
     email: '',
     phase: '',
-    course_name: '',
+    course_id: '',
     password: '',
     total_fee: '',
     amount_paid: '',
@@ -96,7 +96,7 @@ const ManageStudent = () => {
         last_name: '',
         email: '',
         phase: '',
-        course_name: '',
+        course_id: '',
         password: '',
         total_fee: '',
         amount_paid: '',
@@ -222,15 +222,15 @@ const ManageStudent = () => {
             ))}
             {/* Course Name Dropdown */}
             <select
-              value={newStudent.course_name}
-              onChange={(e) => setNewStudent({ ...newStudent, course_name: e.target.value })}
+              value={newStudent.course_id}
+              onChange={(e) => setNewStudent({ ...newStudent, course_id: parseInt(e.target.value) })}
               className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
               }`}
             >
               <option value="">Select Course</option>
               {techCourses.map((course) => (
-                <option key={course.id} value={course.name}>
+                <option key={course.id} value={course.id}>
                   {course.name}
                 </option>
               ))}
@@ -286,7 +286,7 @@ const ManageStudent = () => {
               <h3 className="text-xl font-bold mb-2">
                 {student.first_name} {student.last_name}
               </h3>
-              {["email", "phase", "course_name", "total_fee", "amount_paid", "status"].map((field) => (
+              {["email", "phase", "total_fee", "amount_paid", "status"].map((field) => (
                 <p key={field} className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
                   <strong>{field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}:</strong> {student[field]}
                 </p>
@@ -330,14 +330,14 @@ const ManageStudent = () => {
               ))}
               {/* Course Name Dropdown in Edit Modal */}
               <select
-                value={editingStudent.course_name}
-                onChange={(e) => setEditingStudent({ ...editingStudent, course_name: e.target.value })}
+                value={editingStudent.course_id}
+                onChange={(e) => setEditingStudent({ ...editingStudent, course_id: parseInt(e.target.value) })}
                 className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
                 }`}
               >
                 {techCourses.map((course) => (
-                  <option key={course.id} value={course.name}>
+                  <option key={course.id} value={course.id}>
                     {course.name}
                   </option>
                 ))}

@@ -16,7 +16,11 @@ import Logout from './components/Logout';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import ManageStudent from './components/Admin/ManageStudent';
 import AdminPayments from './components/Admin/AdminPayments';
-import ImageUploader from './components/ImageUploader'; 
+import Reports from './components/Admin/Reports';
+import AdminNotifications from './components/Admin/Notifications';
+import ManageCourses from './components/Admin/ManageCourses';
+import StudentNotifications from './components/StudentNotifications';
+import ImageUploader from './components/ImageUploader';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -59,6 +63,12 @@ const App = () => {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/manage-student" element={<ManageStudent />} />
             <Route path="/admin-payments" element={<AdminPayments />} />
+            <Route path="/admin/reports" element={<Reports />} />
+            <Route path="/admin/notifications" element={<AdminNotifications />} />
+            <Route path="/admin/courses" element={<ManageCourses />} />
+
+            {/* Student Routes */}
+            <Route path="/notifications" element={<StudentNotifications />} />
 
             {/* Add the ImageUploader route */}
             <Route path="/upload-image" element={<ImageUploader />} />

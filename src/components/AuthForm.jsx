@@ -25,17 +25,18 @@ const AuthForm = () => {
       }
 
       try {
-        const endpoint = "https://moringa-school-portal-backend.onrender.com/login";
+        const endpoint = `${import.meta.env.VITE_API_URL}/login`;
 
         const payload = { email, password };
 
         const response = await axios.post(endpoint, payload);
-        const { access_token, role } = response.data;
+        const { access_token, role, user_id, student_id } = response.data;
 
         if (access_token) {
-          // Store the token and role in localStorage
           localStorage.setItem("token", access_token);
           localStorage.setItem("role", role);
+          localStorage.setItem("user_id", user_id);
+          if (student_id) localStorage.setItem("student_id", student_id);
 
           // Set successful login state
           setError(null); // Clear any previous errors
