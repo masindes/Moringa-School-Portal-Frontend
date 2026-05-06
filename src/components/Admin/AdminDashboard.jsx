@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, UserCheck, CreditCard, BookOpen, BarChart2, Bell, GraduationCap } from "lucide-react";
+import { Users, UserCheck, CreditCard, BookOpen, BarChart2, Bell, GraduationCap, LogOut } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -87,6 +87,14 @@ const AdminDashboard = () => {
       <ToastContainer position="top-right" autoClose={3000} />
 
       {/* Header */}
+      <div className="w-full flex justify-end mb-4">
+        <button
+          onClick={() => { if (window.confirm("Are you sure you want to log out?")) navigate("/logout"); }}
+          className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+        >
+          <LogOut size={16} /> Logout
+        </button>
+      </div>
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text inline-block">
           Admin Dashboard

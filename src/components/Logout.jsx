@@ -1,35 +1,46 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+const clearSession = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  localStorage.removeItem("user_id");
+  localStorage.removeItem("student_id");
+};
 
 const Logout = () => {
   const navigate = useNavigate();
+  const [status, setStatus] = useState("Logging out...");
 
   useEffect(() => {
-    // Check if the token exists
     const token = localStorage.getItem("token");
+
     if (!token) {
-      // If no token, notify the user and redirect immediately
-      console.log("No token found. You are already logged out.");
-      navigate("/");
+      clearSession();
+      navigate("/login");
       return;
     }
 
-    // Remove the token and any other user-related data
-    localStorage.removeItem("token");
-    // localStorage.removeItem("userData"); // Example: Remove additional user data
-
-    // Add a delay for better UX
-    const logoutTimer = setTimeout(() => {
-      navigate("/"); // Redirect to home page
-    }, 1500); // 1.5 seconds delay
-
-    // Cleanup the timer if the component unmounts
-    return () => clearTimeout(logoutTimer);
+    fetch(`${API_URL}/logout`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .catch(() => {})
+      .finally(() => {
+        clearSession();
+        setStatus("Logged out successfully. Redirecting...");
+        setTimeout(() => navigate("/login"), 1200);
+      });
   }, [navigate]);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <h2 className="text-lg font-semibold text-gray-700">Logging out...</h2>
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 gap-4">
+      <div className="bg-white rounded-2xl shadow-lg p-10 flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-orange-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-gray-700 font-semibold text-lg">{status}</p>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Grades from "./Grades";
 import FeeBalance from "./FeeBalance";
 import CurrentPhase from "./CurrentPhase";
-import { Moon, Sun, CreditCard, BarChart2, Layers, Bell, ArrowLeft } from "lucide-react";
+import { Moon, Sun, CreditCard, BarChart2, Layers, Bell, LogOut, ArrowLeft } from "lucide-react";
 
 const StudentDashboard = () => {
-  // Theme state
+  const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
@@ -61,12 +61,20 @@ const StudentDashboard = () => {
           </nav>
         </div>
 
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition"
-        >
-          {darkMode ? <Sun size={20} /> : <Moon size={20} />} Toggle Theme
-        </button>
+        <div className="space-y-2">
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="flex items-center gap-3 text-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded-md transition w-full"
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />} Toggle Theme
+          </button>
+          <button
+            onClick={() => { if (window.confirm("Are you sure you want to log out?")) navigate("/logout"); }}
+            className="flex items-center gap-3 text-lg text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 p-2 rounded-md transition w-full"
+          >
+            <LogOut size={20} /> Logout
+          </button>
+        </div>
 
         {/* <button className="flex items-center gap-3 text-lg text-red-600 hover:bg-red-100 dark:hover:bg-red-90 p-2 rounded-md transition">
           <LogOut size={20} /> Logout
